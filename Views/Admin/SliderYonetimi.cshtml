@@ -1,29 +1,23 @@
 ﻿<style>
-    /* Tablo hücrelerindeki iç boşlukları (padding) azaltarak yazıları yukarı çeker */
+
     .table td, .table th {
         border-top: 0 !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; /* Altına çok ince bir hat ekler */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
         text-transform: uppercase;
         font-size: 0.85rem;
         letter-spacing: 1px;
-        padding-top: 0.5rem !important; /* Üst boşluğu kısalttık */
-        padding-bottom: 0.5rem !important; /* Alt boşluğu kısalttık */
-        vertical-align: middle !important; /* İçeriği dikeyde tam ortalar */
+        padding-top: 0.5rem !important; 
+        padding-bottom: 0.5rem !important;
+        vertical-align: middle !important; 
     }
-
-    /* Başlık satırı (thead) altındaki çizgiyi ve boşluğu minimize eder */
     .table thead th {
         border-bottom-width: 1px !important;
         padding-bottom: 10px !important;
     }
-
-    /* Resimlerin etrafındaki gereksiz boşlukları kaldırır */
     .table img {
         margin: 0 !important;
-        display: block; /* Inline-block'tan kaynaklanan alt boşluğu siler */
+        display: block; 
     }
-
-    /* Kart başlığı ile tablo arasındaki mesafeyi daraltır */
     .card-body {
         padding-top: 10px !important;
     }
