@@ -1,0 +1,490 @@
+﻿@using Restorant_Sitesi.Models
+@model AnasayfaSınıf
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/RestourantLayout.cshtml";
+}
+
+<section class="hero-wrap">
+    <div class="home-slider owl-carousel js-fullheight">
+
+        @foreach (var x in Model.SliderBannerlari)
+        {
+            <div class="slider-item js-fullheight" style=" background-image: url('../../images/@x.Resim');">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+                        <div class="col-md-12 ftco-animate">
+                            <div class="text w-100 mt-5 text-center">
+                                <span class="subheading"> @x.Baslik</span>
+                                <h1>@x.Icerik</h1>
+                                <span class="subheading-2">@x.Aciklama</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</section>
+<section class="ftco-section ftco-wrap-about ftco-no-pb ftco-no-pt">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-sm-4 p-4 p-md-5 d-flex align-items-center justify-content-center bg-primary">
+
+                <form action="/Index/RezarvasyonYap" method="post" class="appointment-form">
+                    <h3 class="mb-3">REZERVASYON YAPIN</h3>
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" name="MusteriAdSoyad" class="form-control" placeholder="Ad Soyad" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="email" name="Mail" class="form-control" placeholder="Mail Adresi" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="tel" name="MusteriTelefon" class="form-control" placeholder="Telefon Giriniz" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-wrap">
+                                    <div class="icon"><span class="fa fa-calendar"></span></div>
+                                    <input type="text" class="form-control book_date" name="Tarih" placeholder="Tarih Seçiniz" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-wrap">
+                                    <div class="icon"><span class="fa fa-clock-o"></span></div>
+                                    <input type="text" id="timepicker" class="form-control book_time" name="Saat" placeholder="Saat Seçiniz" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-wrap">
+                                    <div class="icon"><span class="fa fa-user"></span></div>
+                                    <input type="number"
+                                           name="KisiSayisi"
+                                           class="form-control"
+                                           placeholder="Kişi Sayısı (Örn: 4)"
+                                           min="1"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="submit" value="Masayı Ayırt" class="btn btn-white py-3 px-4">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-sm-8 wrap-about py-5 ftco-animate img" style="background-image: url('../../images/@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Resim');">
+                <div class="row pb-5 pb-md-0">
+                    <div class="col-md-12 col-lg-7">
+                        <div class="heading-section mt-5 mb-4">
+                            <div class="pl-lg-3 ml-md-5">
+                                <span class="subheading">Hakkımızda</span>
+                                <h2 class="mb-4">@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Baslik</h2>
+                            </div>
+                        </div>
+                        <div class="pl-lg-3 ml-md-5">
+                            <p>@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Icerik</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section ftco-intro" style="background-image:  url(../../images/bg_3.jpg);">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <span>Rezervasyonlar Açıldı</span>
+                <h2>
+                    Özel Akşam Yemekleri &amp; Mutlu Saatler
+                </h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="ftco-section menu-section-custom">
+    <div class="container-fluid px-5">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading" style="color: #cda45e; font-size: 22px;">Özel Seçenekler</span>
+                <h2 class="mb-4" style="color: #ffffff; font-size: 40px; font-weight: 800;">Gurme Menümüz</h2>
+                <div style="width: 100px; height: 4px; background: #cda45e; margin: 0 auto;"></div>
+            </div>
+        </div>
+
+        <div class="menu-container">
+            @if (Model.Kategoriler != null)
+            {
+                foreach (var kategori in Model.Kategoriler)
+                {
+                    <div class="menu-wrap-custom ftco-animate">
+                        <div class="text-center">
+                            <h3 class="category-title">@kategori.KategoriAd</h3>
+                        </div>
+
+                        @{
+                            var buKategorininUrunleri = Model.urunler
+                                .Where(u => u.KategoriID == kategori.KategoriID)
+                                .ToList();
+                        }
+
+                        @if (buKategorininUrunleri != null)
+                        {
+                            foreach (var urun in buKategorininUrunleri)
+                            {
+                                <div class="menus d-flex ftco-animate mb-4 align-items-center">
+                                    <div class="menu-img img menu-img-circle" style="background-image: url(../../@urun.Resim);"></div>
+
+                                    <div class="text pl-3 w-100">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="one-half">
+                                                <h3 class="product-name">@urun.UrunAd</h3>
+                                            </div>
+                                            <div class="one-forth">
+                                                <span class="menu-price-tag">@urun.Fiyat.ToString("0.##")₺</span>
+                                            </div>
+                                        </div>
+
+                                        <p class="ingredients-text">
+                                            @{
+                                                if (!string.IsNullOrEmpty(urun.Icindekiler))
+                                                {
+                                                    var malzemeler = urun.Icindekiler.Split(',');
+                                                    for (int i = 0; i < malzemeler.Length; i++)
+                                                    {
+                                                        <span>@malzemeler[i].Trim()</span>@(i < malzemeler.Length - 1 ? ", " : "")
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+
+<section class="ftco-section testimony-section" style="background-image: url(../../images/bg_5.jpg);">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-6 p-4 p-md-5 order-md-last ftco-animate">
+                <div class="heading-section heading-section-white mb-4">
+                    <span class="subheading">Bize Yazın</span>
+                    <h2 class="mb-4">Düşüncelerinizi Paylaşın</h2>
+                </div>
+
+                @if (TempData["Hata"] != null)
+                {
+                    <div class="alert alert-danger text-center mb-3">
+                        <i class="icon-warning"></i> @TempData["Hata"]
+                    </div>
+                }
+                @if (TempData["Mesaj"] != null)
+                {
+                    <div class="alert alert-success text-center mb-3">
+                        <i class="icon-check"></i> @TempData["Mesaj"]
+                    </div>
+                }
+
+                <form action="/Index/YorumYap" method="post" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="AdSoyad" placeholder="Adınız Soyadınız" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="Mail" placeholder="E-Posta Adresiniz" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="YorumIcerik" cols="30" rows="4" class="form-control" placeholder="Mesajınız..." required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-white font-weight-bold" style="text-shadow: 1px 1px 2px black;">
+                            Güvenlik Kodu: <span class="text-warning" style="font-size: 18px; letter-spacing: 3px;">@ViewBag.GosterilenKod</span>
+                        </label>
+                        <input type="text" name="KullaniciKodu" class="form-control" placeholder="Yukarıdaki kodu giriniz" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Yorumu Gönder" class="btn btn-primary py-3 px-5">
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-lg-6 ftco-animate">
+                <div class="heading-section heading-section-white mb-5">
+                    <span class="subheading">Referanslar</span>
+                    <h2 class="mb-4">Mutlu Müşteriler</h2>
+                </div>
+
+                <div class="carousel-testimony owl-carousel ftco-owl">
+
+                    @if (Model.MusteriYorumlari != null)
+                    {
+                        foreach (var item in Model.MusteriYorumlari)
+                        {
+                            <div class="item">
+                                <div class="testimony-wrap p-4 pb-5">
+                                    <div class="user-img mb-5" style="background-image: url(../images/person_1.jpg)">
+                                        <span class="quote d-flex align-items-center justify-content-center">
+                                            <i class="icon-quote-left"></i>
+                                        </span>
+                                    </div>
+                                    <div class="text text-center">
+                                        <p class="mb-5 pl-4 line">@item.YorumMetni</p>
+                                        <p class="name">@item.MusteriAdSoyad</p>
+                                        <span class="position">Müşteri</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="item">
+                        <div class="testimony-wrap p-4 pb-5">
+                            <div class="user-img mb-5" style="background-image: url(../images/person_2.jpg)">
+                                <span class="quote d-flex align-items-center justify-content-center">
+                                    <i class="icon-quote-left"></i>
+                                </span>
+                            </div>
+                            <div class="text text-center">
+                                <p class="mb-5 pl-4 line">Yemekler harikaydı, servis çok hızlıydı. Kesinlikle tavsiye ederim!</p>
+                                <p class="name">Örnek Müşteri</p>
+                                <span class="position">Misafir</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="ftco-section" style="background: linear-gradient(to bottom, #434343 0%, #000000 100%); color: #ffffff;">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading">Şeflerimiz</span>
+                <h2 class="mb-4" style="color: #ffffff;">Kurucu & Şeflerimiz</h2>
+            </div>
+        </div>
+        <div class="row">
+
+            @if (Model.Seflerimiz != null)
+            {
+                foreach (var sef in Model.Seflerimiz.Take(4))
+                {
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="staff" style="background-color: #1a1a1a;">
+                            <div class="img" style="background-image: url(/@sef.Resim);"></div>
+                            <div class="text px-4 pt-2">
+                                <h3 style="color: #135805;">@sef.SefAdSoyad</h3>
+                                <span class="position mb-2" style="color: #661212;">@sef.Uzmanlik</span>
+
+                                <div class="faded">
+                                    <p style="color: #0c3535;">@sef.Aciklama</p>
+
+                                    <ul class="ftco-social d-flex">
+                                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                                        <li class="ftco-animate"><a href="#"><span class="icon-google-plus"></span></a></li>
+                                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</section>
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+
+
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-md-6 d-flex">
+                <div class="img img-2 w-100 mr-md-2" style="background-image: url(../../images/bg_6.jpg);"></div>
+                <div class="img img-2 w-100 ml-md-2" style="background-image: url(../../images/bg_4.jpg);"></div>
+            </div>
+            <div class="col-md-6 ftco-animate makereservation p-4 p-md-5">
+                <div class="heading-section ftco-animate mb-5">
+                    <span class="subheading">İşte Sırrımız</span>
+                    <h2 class="mb-4">Mükemmel Malzemeler</h2>
+                    <p style="color:#351422">
+                        Lezzetimizin sırrı, özenle seçilmiş taze ve doğal malzemelerde gizli. Her tabakta sizlere en iyisini sunabilmek için yöresel ve mevsiminde toplanmış ürünleri, usta şeflerimizin ellerinde eşsiz tatlara dönüştürüyoruz.
+                    </p>
+                    <p><a href="#" class="btn btn-primary">Daha Fazlasını Keşfet</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@*MÜKEMMEL LEZZETLER*@
+
+
+
+<style>
+    .large-blog-card {
+        border-radius: 15px;
+        overflow: hidden;
+        background: #ffffff; /* Temanın yazıları bozmaması için içi beyaz kalıyor */
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+        /* Fareyle üzerine gelince kart biraz büyür ve yukarı kalkar */
+        .large-blog-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+
+    .large-blog-img {
+        height: 280px !important; /* Orijinalinden daha büyük bir resim alanı */
+        display: block;
+    }
+</style>
+
+<section class="ftco-section" style="background: linear-gradient(to bottom, #3a3a3a 0%, #121212 100%);">
+    <div class="container">
+
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading" style="color: #cda45e;">Güncel</span>
+                <h2 class="mb-4" style="color: #ffffff;">Haberler & Blog Yazıları</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            @if (Model.SonBlogYazilari != null)
+            {
+                foreach (var blog in Model.SonBlogYazilari)
+                {
+                    <div class="col-md-4 ftco-animate mb-4">
+                        <div class="blog-entry large-blog-card">
+
+                            <a href="#" class="block-20 large-blog-img" style="background-image: url(/@blog.Resim);"></a>
+
+                            <div class="text px-4 pt-4 pb-4">
+                                <div class="meta mb-2">
+                                    <div><a href="#"><span class="fa fa-calendar mr-1"></span> @Convert.ToDateTime(blog.Tarih).ToString("dd MMMM yyyy")</a></div>
+                                    <div><a href="#"><span class="fa fa-user mr-1"></span> @blog.Yazar</a></div>
+                                </div>
+
+                                <h3 class="heading"><a href="#">@blog.Baslik</a></h3>
+
+                                <p class="text-muted" style="font-size: 14px;">
+                                    @{
+                                        string icerikOzet = blog.Icerik;
+                                        if (!string.IsNullOrEmpty(icerikOzet) && icerikOzet.Length > 70)
+                                        {
+                                            icerikOzet = icerikOzet.Substring(0, 70) + "...";
+                                        }
+                                    }
+                                    @icerikOzet
+                                </p>
+
+                                <p class="clearfix mt-3 mb-0">
+                                    <a href="#" class="float-left read btn btn-primary" style="border-radius: 20px; font-size: 12px; padding: 5px 15px;">Devamını Oku</a>
+
+                                    <a href="#" class="float-right meta-chat" style="font-weight: 600;">
+                                        <span class="fa fa-comment mr-1"></span> @blog.DuyuruID
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+
+<!-- Contact Start -->
+<section class="ftco-section" style="background: linear-gradient(to bottom, #ffffff 0%, #000000 100%);">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading" style="color: #e70f0f;">İLETİŞİM</span>
+                <h2 class="mb-4" style="color: #222222;">Bize Ulaşın</h2>
+            </div>
+        </div>
+
+        <div class="row d-flex">
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="info p-4 p-md-5 w-100" style="background-color: #121212; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+
+                    <div class="mb-4">
+                        <span class="fa fa-map-marker mb-2" style="color: #cda45e; font-size: 24px;"></span>
+                        <h4 style="color: #ffffff; font-size: 18px;">Adres</h4>
+                        <p style="color: #aaaaaa;">Şht. İsmail Deniz Sk. No:15, 60100 Tokat Merkez/Tokat</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="fa fa-phone mb-2" style="color: #cda45e; font-size: 24px;"></span>
+                        <h4 style="color: #ffffff; font-size: 18px;">Telefon</h4>
+                        <p><a href="#" style="color: #aaaaaa;">+90 (555) 123 45 67</a></p>
+                    </div>
+
+                    <div class="mb-0">
+                        <span class="fa fa-envelope mb-2" style="color: #cda45e; font-size: 24px;"></span>
+                        <h4 style="color: #ffffff; font-size: 18px;">E-Posta</h4>
+                        <p><a href="#" style="color: #aaaaaa;">info@restoran.com</a></p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-8 d-flex ftco-animate">
+                <div class="map-wrap w-100" style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    <iframe class="position-relative w-100 h-100"
+                            src="https://maps.google.com/maps?q=Şht.%20İsmail%20Deniz%20Sk.%20No:15,%20Mehmetpaşa,%2060100%20Tokat%20Merkez/Tokat&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                            frameborder="0" style="min-height: 450px; border:0;" allowfullscreen="" aria-hidden="false"
+                            tabindex="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+}

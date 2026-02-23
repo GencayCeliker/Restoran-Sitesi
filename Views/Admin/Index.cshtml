@@ -1,0 +1,410 @@
+﻿@using Restorant_Sitesi.Models
+@model Tuple<List<REZARVASYONLAR>, List<YORUMLAR>, List<DUYURUBLOGYORUMLARI>>
+
+@{
+    ViewBag.Title = "Yönetim Paneli";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="card mt-3">
+    <div class="card-content">
+        <div class="row row-group m-0">
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                    <h5 class="text-white mb-0">@ViewBag.ToplamRezervasyon <span class="float-right"><i class="fa fa-calendar-check-o"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                        <div class="progress-bar" style="width:55%"></div>
+                    </div>
+                    <p class="mb-0 text-white small-font">Toplam Rezervasyon</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                    <h5 class="text-white mb-0">@ViewBag.ToplamUrun <span class="float-right"><i class="fa fa-cutlery"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                        <div class="progress-bar" style="width:55%"></div>
+                    </div>
+                    <p class="mb-0 text-white small-font">Menüdeki Ürünler</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                    <h5 class="text-white mb-0">@ViewBag.ToplamZiyaretci <span class="float-right"><i class="fa fa-eye"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                        <div class="progress-bar" style="width:55%"></div>
+                    </div>
+                    <p class="mb-0 text-white small-font">Günlük Ziyaretçi</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                    <h5 class="text-white mb-0">@ViewBag.BekleyenYorum <span class="float-right"><i class="fa fa-comment-o"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                        <div class="progress-bar" style="width:55%"></div>
+                    </div>
+                    <p class="mb-0 text-white small-font">Bekleyen Yorumlar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8 col-xl-8">
+        <div class="card">
+            <div class="card-header">
+                Site Trafiği & Rezervasyonlar
+            </div>
+            <div class="card-body">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><i class="fa fa-circle mr-2 text-white"></i>Rezervasyonlar</li>
+                    <li class="list-inline-item"><i class="fa fa-circle mr-2 text-light"></i>Ziyaretçiler</li>
+                </ul>
+                <div class="chart-container-1">
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+            <div class="row m-0 row-group text-center border-top border-light-3">
+                <div class="col-12 col-lg-4">
+                    <div class="p-3">
+                        <h5 class="mb-0">12.5%</h5>
+                        <small class="mb-0">Doluluk Oranı</small>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="p-3">
+                        <h5 class="mb-0">450</h5>
+                        <small class="mb-0">Haftalık Müşteri</small>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="p-3">
+                        <h5 class="mb-0">4.8</h5>
+                        <small class="mb-0">Müşteri Puanı</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4 col-xl-4">
+        <div class="card">
+            <div class="card-header">Haftalık Menü İlgisi</div>
+            <div class="card-body">
+                <div class="chart-container-2">
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center">
+                    <tbody>
+                        <tr>
+                            <td><i class="fa fa-circle text-white mr-2"></i> Ana Yemek</td>
+                            <td>%55</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-circle text-light-1 mr-2"></i> Tatlılar</td>
+                            <td>%25</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-circle text-light-2 mr-2"></i> İçecekler</td>
+                            <td>%15</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-circle text-light-3 mr-2"></i> Diğer</td>
+                            <td>%5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                Bekleyen Rezervasyonlar / Son İşlemler
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Müşteri Adı</th>
+                            <th>Kişi</th>
+                            <th>Tarih</th>
+                            <th>Saat</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model.Item1)
+                        {
+                            <tr>
+                                <td>@x.MusteriAdSoyad</td>
+                                <td>@x.KisiSayisi</td>
+                                <td>@(x.Tarih.HasValue ? x.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
+                                <td>@x.Saat</td>
+
+                                <td>
+                                    @if (x.DurumID == 1)
+                                    {<span class="badge badge-warning">Beklemede</span> }
+                                    else if (x.DurumID == 2)
+                                    { <span class="badge badge-success">Onaylandı</span> }
+                                    else if (x.DurumID == 3)
+                                    { <span class="badge badge-danger">İptal Edildi</span> }
+                                    else if (x.DurumID == 4)
+                                    { <span class="badge badge-primary">Tamamlandı</span> }
+                                    else if (x.DurumID == 5)
+                                    { <span class="badge badge-dark">Gelmedi</span>}
+                                </td>
+
+                                <td>
+                                    @if (x.DurumID == 1) // BEKLİYORSA
+                                    {
+                                        <button type="button" class="btn btn-sm btn-light"
+                                                onclick="ModalAc(@x.RezervasyonID, @x.KisiSayisi, '@x.MusteriAdSoyad')">
+                                            Onayla
+                                        </button>
+                                        <a href="/Admin/RezervasyonIptal/@x.RezervasyonID" class="btn btn-sm btn-light">İptal</a>
+                                    }
+                                    else if (x.DurumID == 2) // ONAYLIYSA (Müşteri Masadaysa)
+                                    {
+                                        <div style="margin-bottom:5px;">
+                                            <span class="badge badge-success" style="font-size: 12px;">MASA: @(x.MASALAR != null ? x.MASALAR.MasaNo.ToString() : "?")</span>
+                                        </div>
+
+                                        <div class="btn-group" role="group">
+
+                                            <a href="/Admin/RezervasyonTamamla/@x.RezervasyonID" class="btn btn-sm btn-info" title="Müşteri Kalktı / Hesabı Kesti">
+                                                <i class="fa fa-check-square-o"></i> Kalktı
+                                            </a>
+
+                                            <a href="/Admin/RezervasyonGelmedi/@x.RezervasyonID" class="btn btn-sm btn-dark" title="Müşteri Gelmedi">
+                                                Gelmedi
+                                            </a>
+
+                                            <a href="/Admin/RezervasyonIptal/@x.RezervasyonID" class="btn btn-sm btn-danger" title="İptal Et">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                    else if (x.DurumID == 4) // TAMAMLANDIYSA
+                                    {
+                                        <span class="text-white-50" style="font-size:11px;">İşlem Tamam</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="MasaSecimModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color: #1a2035; color: white; border: 1px solid rgba(255,255,255,0.1);">
+
+            <div class="modal-header border-light-2">
+                <h5 class="modal-title text-white">Rezervasyon Onayla</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="/Admin/RezervasyonOnayla" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="rezervasyonId" id="hiddenRezId" />
+
+                    <h6 class="text-white" id="musteriAdiLabel" style="font-weight: bold;"></h6>
+                    <hr style="background-color: rgba(255,255,255,0.2);" />
+
+                    <div class="form-group">
+                        <label class="text-white">Uygun Masayı Seçin:</label>
+                        <select class="form-control" name="masaId" id="masaSelect" required
+                                style="background-color: #2a3042; color: white; border: 1px solid #444;">
+                            <option value="">Masa Aranıyor...</option>
+                        </select>
+                        <small class="text-white-50">Sadece uygun kapasiteli boş masalar listelenir.</small>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-light-2">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-success">Onayla ve Mail Gönder</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                Son Yorumlar (Onaylı & Bekleyen)
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Mail</th>
+                            <th>Tarih</th>
+                            <th>Yorum</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var y in Model.Item2) // YORUMLAR LİSTESİ
+                        {
+                            <tr>
+                                <td>@y.MusteriAdSoyad</td>
+                                <td>@y.Mail</td>
+                                <td>@(y.Tarih.HasValue ? y.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
+
+                                <td title="@y.YorumMetni">
+                                    @if (y.YorumMetni != null && y.YorumMetni.Length > 20)
+                                    {
+                                        @y.YorumMetni.Substring(0, 20) <text>...</text>
+                                    }
+                                    else
+                                    {
+                                        @y.YorumMetni
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (y.Durum == true)
+                                    {
+                                        <span class="badge badge-success">Yayında</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">Onay Bekliyor</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (y.Durum == false)
+                                    {
+                                        // Eğer Bekliyorsa -> YAYINLA butonu göster
+                                        <a href="/Admin/YorumOnayla/@y.YorumID" class="btn btn-sm btn-success">
+                                            <i class="fa fa-check"></i> Yayınla
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        // Eğer Zaten Yayındaysa -> KALDIR (Geri Al) butonu göster
+                                        <a href="/Admin/YorumKaldir/@y.YorumID" class="btn btn-sm btn-warning">
+                                            <i class="fa fa-minus-circle"></i> Kaldır
+                                        </a>
+                                    }
+
+                                    <a href="/Admin/YorumSil/@y.YorumID" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i> Sil
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (Model.Item2.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Henüz yorum yok.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/AdminTemplate/assets/plugins/Chart.js/Chart.min.js"></script>
+
+    <script>
+        // --- 1. MODAL VE MASA GETİRME SCRİPTİ ---
+        function ModalAc(rezId, kisiSayisi, musteriAdi) {
+            $('#hiddenRezId').val(rezId);
+            $('#musteriAdiLabel').text(musteriAdi + " (" + kisiSayisi + " Kişilik)");
+            $('#MasaSecimModal').modal('show');
+
+            $.ajax({
+                url: '/Admin/GetUygunMasalar',
+                type: 'GET',
+                data: { kisiSayisi: kisiSayisi },
+                success: function (data) {
+                    var options = '<option value="">Lütfen Masa Seçiniz</option>';
+                    if (data.length > 0) {
+                        $.each(data, function (index, item) {
+                            options += '<option value="' + item.MasaID + '">Masa ' + item.MasaNo + ' (' + item.Kapasite + ' Kişilik)</option>';
+                        });
+                    } else {
+                        options = '<option value="">Uygun boş masa yok!</option>';
+                    }
+                    $('#masaSelect').html(options);
+                },
+                error: function () { alert("Hata oluştu."); }
+            });
+        }
+
+        // --- 2. GRAFİKLERİ ÇİZEN SCRİPT (EKSİK OLAN KISIM BUYDU) ---
+        $(function () {
+            "use strict";
+            // GRAFİK 1: Çizgi Grafik
+            var ctx = document.getElementById('chart1').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
+                    datasets: [{
+                        label: 'Ziyaretçi',
+                        data: [3, 25, 10, 5, 20, 30, 45], // Örnek Veriler
+                        backgroundColor: "rgba(255, 255, 255, 0.2)",
+                        borderColor: "rgba(255, 255, 255, 1)",
+                        pointBackgroundColor: "rgba(255, 255, 255, 1)",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: { display: false },
+                    scales: {
+                        xAxes: [{ ticks: { fontColor: "white" }, gridLines: { color: "rgba(255, 255, 255, 0.1)" } }],
+                        yAxes: [{ ticks: { fontColor: "white" }, gridLines: { color: "rgba(255, 255, 255, 0.1)" } }]
+                    }
+                }
+            });
+
+            // GRAFİK 2: Yuvarlak Grafik (Doughnut)
+            var ctx2 = document.getElementById("chart2").getContext('2d');
+            var myChart2 = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ["Ana Yemek", "Tatlı", "İçecek", "Diğer"],
+                    datasets: [{
+                        backgroundColor: ["#ffffff", "rgba(255, 255, 255, 0.7)", "rgba(255, 255, 255, 0.5)", "rgba(255, 255, 255, 0.2)"],
+                        data: [55, 25, 15, 5],
+                        borderWidth: [0, 0, 0, 0]
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: { position: "bottom", labels: { fontColor: '#ddd', boxWidth: 15 } }
+                }
+            });
+        });
+    </script>
+}

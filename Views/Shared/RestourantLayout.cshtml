@@ -1,0 +1,376 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Moly RS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="~/images/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    
+
+    <link rel="stylesheet" href="~/tasteit-master/css/animate.css">
+
+    <link rel="stylesheet" href="~/tasteit-master/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/tasteit-master/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/tasteit-master/css/magnific-popup.css">
+
+    <link rel="stylesheet" href="~/tasteit-master/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/tasteit-master/css/jquery.timepicker.css">
+
+
+    <link rel="stylesheet" href="~/tasteit-master/css/flaticon.css">
+    <link rel="stylesheet" href="~/tasteit-master/css/style.css">
+</head>
+<body>
+
+    <div class="wrap">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-12 col-md d-flex align-items-center">
+                    <p class="mb-0 phone"><span class="mailus">Telefon numarası:</span> <a href="#">+90 538 452 57 50</a> veya <span class="mailus">e-posta adresimiz:</span> <a href="mailto:gencayceliker@gmail.com">gencayceliker@gmail.com</a></p>
+                </div>
+                <div class="col-12 col-md d-flex justify-content-md-end">
+                    <p class="mb-0">Pzt - Cum / 9:00-21:00, Cmt - Paz / 10:00-20:00</p>
+                    <div class="social-media">
+                        <p class="mb-0 d-flex">
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+
+            <a href="@Url.Action("Index", "Index")" class="navbar-brand">
+                <img src="~/images/logo.png" height="60" alt="Moly Logo" />
+            </a>
+    <a class="navbar-brand" href="@Url.Action("Index", "Index")">&ensp;Moly<span>RS</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Navigasyonu aç/kapat">
+        <span class="oi oi-menu"></span> Menü
+    </button>
+    <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a href="@Url.Action("Index", "Index")" class="nav-link">Ana Sayfa</a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Hakkımızda</a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Menü</a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Rezervasyon</a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Şefimiz</a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">İletişim</a></li>
+        </ul>
+    </div>
+</div>
+    </nav>
+    <!-- END nav -->
+
+
+    @RenderBody()
+
+    <footer class="ftco-footer ftco-no-pb ftco-section" style="background-color: #000000;">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">MolyRS</h2>
+                        <p>Tokat'ın kalbinde, en taze malzemeler ve usta şeflerin dokunuşuyla hazırlanan eşsiz lezzetleri sizlerle buluşturuyoruz.</p>
+                        <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
+                            <li class="ftco-animate"><a href="#"><span class="fa fa-twitter"></span></a></li>
+                            <li class="ftco-animate"><a href="#"><span class="fa fa-facebook"></span></a></li>
+                            <li class="ftco-animate"><a href="#"><span class="fa fa-instagram"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Çalışma Saatleri</h2>
+                        <ul class="list-unstyled open-hours">
+                            <li class="d-flex" style="color: #aaaaaa;"><span>Pazartesi</span><span class="ml-auto">09:00 - 24:00</span></li>
+                            <li class="d-flex" style="color: #aaaaaa;"><span>Salı</span><span class="ml-auto">09:00 - 24:00</span></li>
+                            <li class="d-flex" style="color: #aaaaaa;"><span>Çarşamba</span><span class="ml-auto">09:00 - 24:00</span></li>
+                            <li class="d-flex" style="color: #aaaaaa;"><span>Perşembe</span><span class="ml-auto">09:00 - 24:00</span></li>
+                            <li class="d-flex" style="color: #aaaaaa;"><span>Cuma</span><span class="ml-auto">09:00 - 02:00</span></li>
+                            <li class="d-flex" style="color: #aaaaaa;"><span>Cumartesi</span><span class="ml-auto">09:00 - 02:00</span></li>
+                            <li class="d-flex" style="color: #cda45e;"><span>Pazar</span><span class="ml-auto">Kapalı</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Instagram</h2>
+                        <div class="thumb d-sm-flex">
+                            <a href="#" class="thumb-menu img" style="background-image: url(/images/insta-1.jpg); margin-right: 5px; margin-bottom: 5px;"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(/images/insta-2.jpg); margin-right: 5px; margin-bottom: 5px;"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(/images/insta-3.jpg); margin-bottom: 5px;"></a>
+                        </div>
+                        <div class="thumb d-flex">
+                            <a href="#" class="thumb-menu img" style="background-image: url(/images/insta-4.jpg); margin-right: 5px;"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(/images/insta-5.jpg); margin-right: 5px;"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(/images/insta-6.jpg);"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">MOLYRS AİLESİ</h2>
+                        <p>En yeni lezzetlerimizden ve kampanyalarımızdan haberdar olmak için takipte kalın.</p>
+                        <form action="#" class="subscribe-form">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid px-0 py-3" style="background-color: #111111;">
+            <div class="row no-gutters">
+                <div class="col-md-12 text-center">
+                    <p class="mb-0" style="color: #666666; font-size: 14px;">
+                        Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> Tüm Hakları Saklıdır |
+                        Bu proje <b>Gencay Çeliker Yusuf Erdoğan Emrah Çapkan </b> tarafından geliştirilmiştir.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
+
+
+    <script src="~/tasteit-master/js/jquery.min.js"></script>
+    <script src="~/tasteit-master/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/tasteit-master/js/popper.min.js"></script>
+    <script src="~/tasteit-master/js/bootstrap.min.js"></script>
+    <script src="~/tasteit-master/js/jquery.easing.1.3.js"></script>
+    <script src="~/tasteit-master/js/jquery.waypoints.min.js"></script>
+    <script src="~/tasteit-master/js/jquery.stellar.min.js"></script>
+    <script src="~/tasteit-master/js/owl.carousel.min.js"></script>
+    <script src="~/tasteit-master/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/tasteit-master/js/jquery.animateNumber.min.js"></script>
+    <script src="~/tasteit-master/js/bootstrap-datepicker.js"></script>
+    <script src="~/tasteit-master/js/jquery.timepicker.min.js"></script>
+    <script src="~/tasteit-master/js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="~/tasteit-master/js/google-map.js"></script>
+    <script src="~/tasteit-master/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <style>
+        #bildirim-kutusu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999 !important; /* HER ŞEYİN ÜSTÜNDE DURMASI İÇİN */
+            background-color: white;
+            min-width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            animation: slideIn 0.5s ease;
+            font-family: Arial, sans-serif;
+        }
+
+            /* Başarılı (Yeşil) */
+            #bildirim-kutusu.basarili {
+                border-left: 6px solid #28a745;
+            }
+
+                #bildirim-kutusu.basarili .ikon {
+                    color: #28a745;
+                }
+
+            /* Hatalı (Kırmızı) */
+            #bildirim-kutusu.hatali {
+                border-left: 6px solid #dc3545;
+            }
+
+                #bildirim-kutusu.hatali .ikon {
+                    color: #dc3545;
+                }
+
+        .ikon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .metin {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .metin strong {
+                font-size: 16px;
+                color: #333;
+            }
+
+            .metin span {
+                font-size: 13px;
+                color: #666;
+            }
+
+        .kapat {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #aaa;
+            margin-left: 10px;
+        }
+
+        @@keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    @if (TempData["Mesaj"] != null)
+    {
+        <div id="bildirim-kutusu" class="bildirim basarili">
+            <div class="ikon">✔️</div> <div class="metin">
+                <strong>Başarılı!</strong>
+                <span>@TempData["Mesaj"]</span>
+            </div>
+            <button class="kapat" onclick="buKutuyuKapat(this)">×</button>
+        </div>
+    }
+
+    @if (TempData["Hata"] != null)
+    {
+        <div id="bildirim-kutusu" class="bildirim hatali">
+            <div class="ikon">❌</div> <div class="metin">
+                <strong>Hata!</strong>
+                <span>@TempData["Hata"]</span>
+            </div>
+            <button class="kapat" onclick="buKutuyuKapat(this)">×</button>
+        </div>
+    }
+
+    <script>
+        // Sayfa yüklendiğinde çalışır
+        document.addEventListener("DOMContentLoaded", function () {
+            var kutu = document.getElementById("bildirim-kutusu");
+            if (kutu) {
+                // 5 saniye sonra kaldır
+                setTimeout(function () {
+                    kutu.style.transition = "opacity 0.5s";
+                    kutu.style.opacity = "0";
+                    setTimeout(function () { kutu.remove(); }, 500);
+                }, 5000);
+            }
+        });
+
+        function buKutuyuKapat(btn) {
+            var kutu = document.getElementById("bildirim-kutusu");
+            if (kutu) kutu.remove();
+        }
+    </script>
+
+
+
+    <style>
+        .menu-section-custom {
+            background: linear-gradient(135deg, #1a1a2e 0%, #121212 100%);
+            padding: 80px 0;
+        }
+
+        /* Kartları yan yana ve aynı boyda yapmak için flex kullanıyoruz */
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .menu-wrap-custom {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            /* Kart genişliği 3'lü dizilim için ayarlandı */
+            flex: 0 1 calc(33.333% - 20px);
+            min-width: 320px; /* Mobilde patlamasın diye */
+            min-height: 550px; /* KARTLARIN BOYUNU EŞİTLEMEK İÇİN SABİTLEDİK */
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+            .menu-wrap-custom:hover {
+                transform: translateY(-10px);
+            }
+
+        .category-title {
+            color: #222222;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+            font-size: 22px;
+            border-bottom: 3px solid #cda45e;
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 25px;
+        }
+
+        .product-name {
+            color: #111111;
+            font-size: 20px !important;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .menu-price-tag {
+            color: #cda45e;
+            font-weight: 800;
+            font-size: 18px;
+            background: rgba(205, 164, 94, 0.1);
+            padding: 4px 10px;
+            border-radius: 10px;
+        }
+
+        .ingredients-text {
+            color: #666666;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .menu-img-circle {
+            border: 2px solid #cda45e;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+    </style>
+
+
+</body>
+</html>
