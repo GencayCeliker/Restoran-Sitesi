@@ -91,10 +91,19 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-info"
-                                                onclick="sliderDuzenle('@item.AnasayfaID', '@item.Baslik', '@item.Icerik', '@item.Aciklama', '@item.Durum.ToString()')">
+                                                onclick="sliderDuzenle('@item.AnasayfaID',
+                                                '@HttpUtility.JavaScriptStringEncode(item.Baslik)',
+                                                '@HttpUtility.JavaScriptStringEncode(item.Icerik)',
+                                                '@HttpUtility.JavaScriptStringEncode(item.Aciklama)',
+                                                '@HttpUtility.JavaScriptStringEncode(item.Resim)',
+                                                '@item.Durum.ToString().ToLower()')">
                                             DÜZENLE
                                         </button>
-                                        <button class="btn btn-sm btn-danger">Sil</button>
+                                        <a href="/Admin/SliderSil/@item.AnasayfaID"
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Bu slider kaydını silmek istediğinize emin misiniz? (Resim dosyanız silinmeyecektir)')">
+                                            SİL
+                                        </a>
                                     </td>
                                 </tr>
                             }
@@ -111,6 +120,7 @@
             <div class="card-body">
                 @using (Html.BeginForm("SliderKaydet", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
+                    <input type="hidden" name="EskiResimYolu" id="EskiResimYolu" />
                     <input type="hidden" name="AnasayfaID" id="AnasayfaID" value="0" />
                     <div class="form-group">
                         <label>Başlık</label>
@@ -142,19 +152,25 @@
     </div>
 </div>
 
-
-
-
-<script>function sliderDuzenle(id, baslik, icerik, aciklama, durum) {
-        $('#AnasayfaID').val(id);
-        $('input[name="AnasayfaID"]').val(id);
+<script>
+    function sliderDuzenle(id, baslik, icerik, aciklama, resimYolu, durum) {
        
+        $('#AnasayfaID').val(id);
+        $('#EskiResimYolu').val(resimYolu);
+
+   
         $('input[name="Baslik"]').val(baslik);
         $('input[name="Icerik"]').val(icerik);
         $('textarea[name="Aciklama"]').val(aciklama);
-        $('select[name="Durum"]').val(durum.toLowerCase());
-        $('.btn-block').text("Değişiklikleri Güncelle").removeClass("btn-primary").addClass("btn-info");
+
+       
+        $('select[name="Durum"]').val(durum);
+
+      
+        $('.btn-block').text("GÜNCELLE").removeClass("btn-primary").addClass("btn-warning");
+
         $('html, body').animate({
             scrollTop: $(".col-lg-5").offset().top - 100
         }, 500);
-    }</script>
+    }
+</script>

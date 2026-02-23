@@ -302,20 +302,34 @@ namespace Restorant_Sitesi.Controllers
         }
 
         [HttpPost]
-        public ActionResult SliderKaydet(ANASAYFA veri, HttpPostedFileBase ResimDosyasi)
+        public ActionResult SliderKaydet(ANASAYFA veri, HttpPostedFileBase ResimDosyasi, string EskiResimYolu)
         {
-            if (ResimDosyasi != null)
+            if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
             {
                 string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
-                string yol = Path.Combine(Server.MapPath("~/images/slider/"), dosyaAdi);
+                string yol = Path.Combine(Server.MapPath("~/images/"), dosyaAdi);
                 ResimDosyasi.SaveAs(yol);
-                veri.Resim = "/images/slider/" + dosyaAdi;
+                veri.Resim = "/images/" + dosyaAdi;
+            }
+            else
+            {
+                veri.Resim = EskiResimYolu;
             }
             if (veri.AnasayfaID == 0)
                 db.ANASAYFA.Add(veri);
             else
                 db.Entry(veri).State = System.Data.Entity.EntityState.Modified; 
             db.SaveChanges();
+            return RedirectToAction("SliderYonetimi");
+        }
+        public ActionResult SliderSil(int id)
+        {
+            var veri = db.ANASAYFA.Find(id);
+            if (veri != null)
+            {
+                db.ANASAYFA.Remove(veri);
+                db.SaveChanges();
+            }
             return RedirectToAction("SliderYonetimi");
         }
     }
