@@ -298,7 +298,10 @@
 	});
 
 	// --- BURADA BİTİR ---
-
-
-
 })(jQuery);
+function changeChefPage(pageIndex, element) {
+	$('.chef-page').hide();
+	$('#chef-page-' + pageIndex).fadeIn(600);
+	$('.chef-dot').removeClass('active');
+	$(element).addClass('active');
+}

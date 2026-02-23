@@ -12290,3 +12290,32 @@ a.close.disabled {
     height: max-content !important;
     align-self: flex-start !important;
 }
+.chef-dot {
+    height: 18px;
+    width: 18px;
+    margin: 0 6px;
+    background-color: transparent;
+    border: 2px solid #555; /* İçi boş gri çember */
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+    /* Seçili (Aktif) Olan Nokta */
+    .chef-dot.active {
+        border-color: #e53935; /* Kırmızı dış çember */
+    }
+
+        /* Aktif noktanın içindeki küçük kırmızı top */
+        .chef-dot.active::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 10px;
+            height: 10px;
+            background-color: #e53935;
+            border-radius: 50%;
+        }

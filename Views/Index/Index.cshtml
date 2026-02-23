@@ -133,6 +133,13 @@
 
 <section class="ftco-section menu-section-custom">
     <div class="container-fluid px-5">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading" style="color: #cda45e; font-size: 22px;">Özel Seçenekler</span>
+                <h2 class="mb-4" style="color: #ffffff; font-size: 40px; font-weight: 800;">Menülerimiz</h2>
+                <div style="width: 100px; height: 4px; background: #cda45e; margin: 0 auto;"></div>
+            </div>
+        </div>
         <div class="menu-container">
             @if (Model.Kategoriler != null)
             {
@@ -297,7 +304,6 @@
     </div>
 </section>
 
-
 <section class="ftco-section" style="background: linear-gradient(to bottom, #434343 0%, #000000 100%); color: #ffffff;">
     <div class="container">
         <div class="row justify-content-center mb-5 pb-2">
@@ -306,36 +312,58 @@
                 <h2 class="mb-4" style="color: #ffffff;">Kurucu & Şeflerimiz</h2>
             </div>
         </div>
-        <div class="row">
 
+        <div id="chef-slider-container">
             @if (Model.Seflerimiz != null)
             {
-                foreach (var sef in Model.Seflerimiz)
+                var sefList = Model.Seflerimiz.ToList();
+                int pageSize = 4; // Her sayfada 4 şef
+                int totalPages = (int)Math.Ceiling((double)sefList.Count / pageSize);
+
+                for (int p = 0; p < totalPages; p++)
                 {
-                    <div class="col-md-6 col-lg-3 ftco-animate">
-                        <div class="staff" style="background-color: #1a1a1a;">
-                            <div class="img" style="background-image: url(/@sef.Resim);"></div>
-                            <div class="text px-4 pt-2">
-                                <h3 style="color: #135805;">@sef.SefAdSoyad</h3>
-                                <span class="position mb-2" style="color: #661212;">@sef.Uzmanlik</span>
+                    <div class="row chef-page" id="chef-page-@p" style="@(p == 0 ? "" : "display:none;")">
 
-                                <div class="faded">
-                                    <p style="color: #0c3535;">@sef.Aciklama</p>
-
-                                    <ul class="ftco-social d-flex">
-                                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                                        <li class="ftco-animate"><a href="#"><span class="icon-google-plus"></span></a></li>
-                                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                                    </ul>
+                        @foreach (var sef in sefList.Skip(p * pageSize).Take(pageSize))
+                        {
+                            <div class="col-md-6 col-lg-3 ftco-animate">
+                                <div class="staff" style="background-color: #1a1a1a;">
+                                    <div class="img" style="background-image: url(/@sef.Resim);"></div>
+                                    <div class="text px-4 pt-2">
+                                        <h3 style="color: #135805;">@sef.SefAdSoyad</h3>
+                                        <span class="position mb-2" style="color: #661212;">@sef.Uzmanlik</span>
+                                        <div class="faded">
+                                            <p style="color: #0c3535;">@sef.Aciklama</p>
+                                            <ul class="ftco-social d-flex">
+                                                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                                                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                                                <li class="ftco-animate"><a href="#"><span class="icon-google-plus"></span></a></li>
+                                                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                if (totalPages > 1)
+                {
+                    <div class="row mt-5">
+                        <div class="col text-center">
+                            <div class="chef-pagination">
+                                @for (int p = 0; p < totalPages; p++)
+                                {
+                                    <span class="chef-dot @(p == 0 ? "active" : "")" onclick="changeChefPage(@p, this)"></span>
+                                }
                             </div>
                         </div>
                     </div>
                 }
             }
-
         </div>
+
     </div>
 </section>
 <section class="ftco-section ftco-no-pt ftco-no-pb">
