@@ -12248,3 +12248,45 @@ a.close.disabled {
         text-shadow: none !important;
         padding: 0 !important;
     }
+
+
+.animated-arrow {
+    display: inline-block;
+    animation: bounce 1.8s infinite;
+    transition: all 0.3s ease;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-8px);
+    }
+
+    60% {
+        transform: translateY(-4px);
+    }
+}
+
+.show-all-btn:hover .animated-arrow {
+    color: #fff !important; /* Üzerine gelince renk değişsin */
+}
+
+.animated-arrow {
+    display: inline-block;
+    transition: transform 0.4s ease !important; /* Okun yumuşak dönmesi için */
+}
+/* Kutuların birbirine bakarak uzamasını engeller */
+.menu-container {
+    align-items: flex-start !important;
+}
+
+/* Her beyaz kutu, sadece kendi içindeki içerik kadar yer kaplasın */
+.menu-wrap-custom {
+    height: fit-content !important;
+    height: -moz-max-content !important;
+    height: max-content !important;
+    align-self: flex-start !important;
+}
