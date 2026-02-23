@@ -305,3 +305,27 @@ function changeChefPage(pageIndex, element) {
 	$('.chef-dot').removeClass('active');
 	$(element).addClass('active');
 }
+function smartToggle(buton) {
+	var anaKutu = $(buton).closest('.menu-wrap-custom');
+	var gizliUrunler = anaKutu.find('.extra-items-container');
+	var yazi = anaKutu.find('.toggle-text');
+	var ikon = anaKutu.find('.animated-arrow');
+
+	if (gizliUrunler.is(':visible')) {
+		// Liste Kapanırken
+		gizliUrunler.slideUp(400);
+		yazi.text("DAHA FAZLA GÖSTER");
+		ikon.css("transform", "rotate(0deg)");
+
+		// Ekranı o menünün en üstüne yumuşakça kaydır (-100 piksel üstten boşluk bırakarak)
+		$('html, body').animate({
+			scrollTop: anaKutu.offset().top - 100
+		}, 400);
+
+	} else {
+		// Liste Açılırken
+		gizliUrunler.slideDown(400);
+		yazi.text("KAPAT");
+		ikon.css("transform", "rotate(180deg)");
+	}
+}

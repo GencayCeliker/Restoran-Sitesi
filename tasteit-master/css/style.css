@@ -12319,3 +12319,20 @@ a.close.disabled {
             background-color: #e53935;
             border-radius: 50%;
         }
+.large-blog-card {
+    border-radius: 15px;
+    overflow: hidden;
+    background: #ffffff; /* Temanın yazıları bozmaması için içi beyaz kalıyor */
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+    /* Fareyle üzerine gelince kart biraz büyür ve yukarı kalkar */
+    .large-blog-card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+    }
+
+.large-blog-img {
+    height: 280px !important; /* Orijinalinden daha büyük bir resim alanı */
+    display: block;
+}

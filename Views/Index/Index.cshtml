@@ -7,7 +7,6 @@
 
 <section class="hero-wrap">
     <div class="home-slider owl-carousel js-fullheight">
-
         @foreach (var x in Model.SliderBannerlari)
         {
             <div class="slider-item js-fullheight" style=" background-image: url('@x.Resim');">
@@ -25,7 +24,6 @@
                 </div>
             </div>
         }
-
     </div>
 </section>
 <section class="ftco-section ftco-wrap-about ftco-no-pb ftco-no-pt">
@@ -36,25 +34,21 @@
                 <form action="/Index/RezarvasyonYap" method="post" class="appointment-form">
                     <h3 class="mb-3">REZERVASYON YAPIN</h3>
                     <div class="row">
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="text" name="MusteriAdSoyad" class="form-control" placeholder="Ad Soyad" required>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="email" name="Mail" class="form-control" placeholder="Mail Adresi" required>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="tel" name="MusteriTelefon" class="form-control" placeholder="Telefon Giriniz" required>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-wrap">
@@ -63,7 +57,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-wrap">
@@ -72,7 +65,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-wrap">
@@ -86,16 +78,13 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="submit" value="Masayı Ayırt" class="btn btn-white py-3 px-4">
                             </div>
                         </div>
-
                     </div>
                 </form>
-
             </div>
             <div class="col-sm-8 wrap-about py-5 ftco-animate img" style="background-image: url('../../images/@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Resim');">
                 <div class="row pb-5 pb-md-0">
@@ -388,29 +377,8 @@
         </div>
     </div>
 </section>
-@*MÜKEMMEL LEZZETLER*@
 
 
-
-<style>
-    .large-blog-card {
-        border-radius: 15px;
-        overflow: hidden;
-        background: #ffffff; /* Temanın yazıları bozmaması için içi beyaz kalıyor */
-        transition: all 0.4s ease;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-    }
-        /* Fareyle üzerine gelince kart biraz büyür ve yukarı kalkar */
-        .large-blog-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
-        }
-
-    .large-blog-img {
-        height: 280px !important; /* Orijinalinden daha büyük bir resim alanı */
-        display: block;
-    }
-</style>
 
 <section class="ftco-section" style="background: linear-gradient(to bottom, #3a3a3a 0%, #121212 100%);">
     <div class="container">
@@ -467,7 +435,6 @@
     </div>
 </section>
 
-
 <!-- Contact Start -->
 <section class="ftco-section" style="background: linear-gradient(to bottom, #ffffff 0%, #000000 100%);">
     <div class="container">
@@ -514,25 +481,3 @@
         </div>
     </div>
 </section>
-<script>
-    function smartToggle(buton) {
-        // Tıklanan butonun en yakınındaki kategori ana kutusunu bul
-        var anaKutu = $(buton).closest('.menu-wrap-custom');
-
-        // Sadece o ana kutunun içindeki gizli ürünleri ve yazıları bul
-        var gizliUrunler = anaKutu.find('.extra-items-container');
-        var yazi = anaKutu.find('.toggle-text');
-        var ikon = anaKutu.find('.animated-arrow');
-
-        // Kutunun durumuna göre aç veya kapat
-        if (gizliUrunler.is(':visible')) {
-            gizliUrunler.slideUp(400);
-            yazi.text("DAHA FAZLA GÖSTER");
-            ikon.css("transform", "rotate(0deg)");
-        } else {
-            gizliUrunler.slideDown(400);
-            yazi.text("KAPAT");
-            ikon.css("transform", "rotate(180deg)");
-        }
-    }
-</script>
