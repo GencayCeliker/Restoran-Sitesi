@@ -1,0 +1,160 @@
+﻿<style>
+    /* Tablo hücrelerindeki iç boşlukları (padding) azaltarak yazıları yukarı çeker */
+    .table td, .table th {
+        border-top: 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; /* Altına çok ince bir hat ekler */
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        padding-top: 0.5rem !important; /* Üst boşluğu kısalttık */
+        padding-bottom: 0.5rem !important; /* Alt boşluğu kısalttık */
+        vertical-align: middle !important; /* İçeriği dikeyde tam ortalar */
+    }
+
+    /* Başlık satırı (thead) altındaki çizgiyi ve boşluğu minimize eder */
+    .table thead th {
+        border-bottom-width: 1px !important;
+        padding-bottom: 10px !important;
+    }
+
+    /* Resimlerin etrafındaki gereksiz boşlukları kaldırır */
+    .table img {
+        margin: 0 !important;
+        display: block; /* Inline-block'tan kaynaklanan alt boşluğu siler */
+    }
+
+    /* Kart başlığı ile tablo arasındaki mesafeyi daraltır */
+    .card-body {
+        padding-top: 10px !important;
+    }
+</style>
+
+
+@model IEnumerable<Restorant_Sitesi.Models.ANASAYFA>
+@{
+    ViewBag.Title = "SliderYonetimi";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <div class="card bg-dark">
+            <div class="card-header">Canlı Slider Önizlemesi</div>
+            <div class="card-body">
+                <div id="sliderPreview" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner" style="height: 250px;">
+                        @{ int i = 0; }
+                        @foreach (var item in Model)
+                        {
+                            
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@item.Resim" class="d-block w-100" style="object-fit: cover; height: 250px; opacity:0.6">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>@item.Baslik</h5>
+                                    <p>@item.Icerik</p>
+                                </div>
+                            </div>
+                            i++;
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header">Mevcut Kayıtlar</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Resim</th>
+                                <th>Başlık</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><img src="@item.Resim" width="60" class="rounded" /></td>
+                                    <td>@item.Baslik</td>
+                                    <td>
+                                        <span class="badge @(item.Durum ? "badge-success" : "badge-danger")">
+                                            @(item.Durum ? "Aktif" : "Pasif")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-info"
+                                                onclick="sliderDuzenle('@item.AnasayfaID', '@item.Baslik', '@item.Icerik', '@item.Aciklama', '@item.Durum.ToString()')">
+                                            DÜZENLE
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">Sil</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">Slider Ekle / Güncelle</div>
+            <div class="card-body">
+                @using (Html.BeginForm("SliderKaydet", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <input type="hidden" name="AnasayfaID" id="AnasayfaID" value="0" />
+                    <div class="form-group">
+                        <label>Başlık</label>
+                        <input type="text" name="Baslik" class="form-control" placeholder="Ana başlık..." required />
+                    </div>
+                    <div class="form-group">
+                        <label>İçerik</label>
+                        <input type="text" name="Icerik" class="form-control" placeholder="Kısa içerik yazısı..." required />
+                    </div>
+                    <div class="form-group">
+                        <label>Açıklama (Detay)</label>
+                        <textarea name="Aciklama" class="form-control" rows="3" placeholder="Geniş açıklama metni..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Resim Yükle</label>
+                        <input type="file" name="ResimDosyasi" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Yayın Durumu</label>
+                        <select name="Durum" class="form-control">
+                            <option value="true">Aktif (Sitede Görünsün)</option>
+                            <option value="false">Pasif (Gizle)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Değişiklikleri Kaydet</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>function sliderDuzenle(id, baslik, icerik, aciklama, durum) {
+        $('#AnasayfaID').val(id);
+        $('input[name="AnasayfaID"]').val(id);
+       
+        $('input[name="Baslik"]').val(baslik);
+        $('input[name="Icerik"]').val(icerik);
+        $('textarea[name="Aciklama"]').val(aciklama);
+        $('select[name="Durum"]').val(durum.toLowerCase());
+        $('.btn-block').text("Değişiklikleri Güncelle").removeClass("btn-primary").addClass("btn-info");
+        $('html, body').animate({
+            scrollTop: $(".col-lg-5").offset().top - 100
+        }, 500);
+    }</script>

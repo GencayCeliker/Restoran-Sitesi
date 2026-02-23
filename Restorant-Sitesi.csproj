@@ -1273,6 +1273,7 @@
     <Content Include="Views\Shared\AdminLayout.cshtml" />
     <Content Include="Views\Admin\BildirimKutusu.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\SliderYonetimi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

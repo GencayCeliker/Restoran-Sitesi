@@ -1,21 +1,18 @@
-﻿using System;
+﻿using Restorant_Sitesi.Models;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Restorant_Sitesi.Models;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
+using System.Web;
+using System.Web.Mvc;
 namespace Restorant_Sitesi.Controllers
 {
     public class AdminController : Controller
     {
-
         WRestourantDBEntities db = new WRestourantDBEntities();
-       
-
-
         public AdminController()
         {
 
@@ -269,7 +266,6 @@ namespace Restorant_Sitesi.Controllers
 
         public void MailGonder(string aliciMail, string konu, string icerik)
         {
-            // Web.config içindeki anahtarları kullanarak değerleri çekiyoruz
             string gonderenMail = ConfigurationManager.AppSettings["EmailAdresi"];
             string sifre = ConfigurationManager.AppSettings["UygulamaSifresi"];
 
@@ -277,7 +273,6 @@ namespace Restorant_Sitesi.Controllers
             {
                 if (string.IsNullOrWhiteSpace(gonderenMail) || string.IsNullOrWhiteSpace(sifre))
                 {
-                    // Konfigürasyon eksikse göndermeyi deneme
                     return;
                 }
 
@@ -296,8 +291,32 @@ namespace Restorant_Sitesi.Controllers
             }
             catch (Exception ex)
             {
-                // Hata olursa buraya düşer
+               
             }
+        }
+     
+        public ActionResult SliderYonetimi()
+        {
+            var liste = db.ANASAYFA.ToList();
+            return View(liste);
+        }
+
+        [HttpPost]
+        public ActionResult SliderKaydet(ANASAYFA veri, HttpPostedFileBase ResimDosyasi)
+        {
+            if (ResimDosyasi != null)
+            {
+                string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
+                string yol = Path.Combine(Server.MapPath("~/images/slider/"), dosyaAdi);
+                ResimDosyasi.SaveAs(yol);
+                veri.Resim = "/images/slider/" + dosyaAdi;
+            }
+            if (veri.AnasayfaID == 0)
+                db.ANASAYFA.Add(veri);
+            else
+                db.Entry(veri).State = System.Data.Entity.EntityState.Modified; 
+            db.SaveChanges();
+            return RedirectToAction("SliderYonetimi");
         }
     }
 }
