@@ -288,20 +288,14 @@
             </div>
         </div>
 
-        <div id="chef-slider-container">
-            @if (Model.Seflerimiz != null)
-            {
-                var sefList = Model.Seflerimiz.ToList();
-                int pageSize = 4; // Her sayfada 4 şef
-                int totalPages = (int)Math.Ceiling((double)sefList.Count / pageSize);
-
-                for (int p = 0; p < totalPages; p++)
-                {
-                    <div class="row chef-page" id="chef-page-@p" style="@(p == 0 ? "" : "display:none;")">
-
-                        @foreach (var sef in sefList.Skip(p * pageSize).Take(pageSize))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chef-slider owl-carousel ftco-owl">
+                    @if (Model.Seflerimiz != null)
+                    {
+                        foreach (var sef in Model.Seflerimiz)
                         {
-                            <div class="col-md-6 col-lg-3 ftco-animate">
+                            <div class="item">
                                 <div class="staff" style="background-color: #1a1a1a;">
                                     <div class="img" style="background-image: url(/@sef.Resim);"></div>
                                     <div class="text px-4 pt-2">
@@ -320,28 +314,14 @@
                                 </div>
                             </div>
                         }
-                    </div>
-                }
-
-                if (totalPages > 1)
-                {
-                    <div class="row mt-5">
-                        <div class="col text-center">
-                            <div class="chef-pagination">
-                                @for (int p = 0; p < totalPages; p++)
-                                {
-                                    <span class="chef-dot @(p == 0 ? "active" : "")" onclick="changeChefPage(@p, this)"></span>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
+                    }
+                </div>
+            </div>
         </div>
-
     </div>
 </section>
-<section class="ftco-section ftco-no-pt ftco-no-pb">
+
+<section class="ftco-section ftco-no-pt owl-carousel ftco-no-pb">
 
 
     <div class="container">

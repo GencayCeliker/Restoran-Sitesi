@@ -175,56 +175,93 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <style>
-    /* Bildirimleri alt alta dizecek sabit alan */
-    #bildirim-alani {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 99999;
-        display: flex;
-        flex-direction: column;
-        gap: 15px; /* Mesajlar arası boşluk */
-        pointer-events: none; /* Tıklamaların alttaki elementlere geçmesi için */
-    }
+        /* Bildirimleri alt alta dizecek sabit alan */
+        #bildirim-alani {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Mesajlar arası boşluk */
+            pointer-events: none; /* Tıklamaların alttaki elementlere geçmesi için */
+        }
 
-    /* Tekil Bildirim Kutusu */
-    .bildirim-kutusu {
-        background-color: white;
-        min-width: 300px;
-        border-radius: 5px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        font-family: Arial, sans-serif;
-        pointer-events: auto; /* Kutunun tıklanabilir olması için */
+        /* Tekil Bildirim Kutusu */
+        .bildirim-kutusu {
+            background-color: white;
+            min-width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            pointer-events: auto; /* Kutunun tıklanabilir olması için */
+            /* Sağdan içeri kayma animasyonu */
+            animation: slideInRight 0.5s ease forwards;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
 
-        /* Sağdan içeri kayma animasyonu */
-        animation: slideInRight 0.5s ease forwards;
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
+            /* Renkler ve İkonlar */
+            .bildirim-kutusu.basarili {
+                border-left: 5px solid #28a745;
+            }
 
-    /* Renkler ve İkonlar */
-    .bildirim-kutusu.basarili { border-left: 5px solid #28a745; }
-    .bildirim-kutusu.hatali { border-left: 5px solid #dc3545; }
-    .bildirim-kutusu.basarili .ikon { color: #28a745; font-size: 24px; margin-right: 15px; }
-    .bildirim-kutusu.hatali .ikon { color: #dc3545; font-size: 24px; margin-right: 15px; }
+            .bildirim-kutusu.hatali {
+                border-left: 5px solid #dc3545;
+            }
 
-    /* Metin Yapısı */
-    .bildirim-kutusu .metin { flex-grow: 1; display: flex; flex-direction: column; }
-    .bildirim-kutusu .metin strong { font-size: 16px; color: #333; }
-    .bildirim-kutusu .metin span { font-size: 13px; color: #666; }
+            .bildirim-kutusu.basarili .ikon {
+                color: #28a745;
+                font-size: 24px;
+                margin-right: 15px;
+            }
 
-    /* Kapat Butonu */
-    .bildirim-kutusu .kapat {
-        background: none; border: none; font-size: 20px;
-        cursor: pointer; color: #aaa; margin-left: 10px;
-    }
+            .bildirim-kutusu.hatali .ikon {
+                color: #dc3545;
+                font-size: 24px;
+                margin-right: 15px;
+            }
 
-    @@keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
+            /* Metin Yapısı */
+            .bildirim-kutusu .metin {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+                .bildirim-kutusu .metin strong {
+                    font-size: 16px;
+                    color: #333;
+                }
+
+                .bildirim-kutusu .metin span {
+                    font-size: 13px;
+                    color: #666;
+                }
+
+            /* Kapat Butonu */
+            .bildirim-kutusu .kapat {
+                background: none;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                color: #aaa;
+                margin-left: 10px;
+            }
+
+        @@keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
     </style>
 
     <div id="bildirim-alani">

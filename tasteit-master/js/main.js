@@ -62,6 +62,8 @@
 		$('.carousel-testimony').owlCarousel({
 			center: true,
 			loop: true,
+			autoplay: true,           // <-- BU SATIRI EKLE (Otomatik oynatmayı açar)
+			autoplayTimeout: 4000,    // <-- BU SATIRI EKLE (4 saniyede bir değişir)
 			items:1,
 			margin: 30,
 			stagePadding: 0,
@@ -299,14 +301,22 @@
 
 	// --- BURADA BİTİR ---
 })(jQuery);
-// CHEF BÖLÜMÜNDEKİ SAYFA DEĞİŞTİRME FONKSİYONU
-function changeChefPage(pageIndex, element) {
-	$('.chef-page').hide();
-	$('#chef-page-' + pageIndex).fadeIn(600);
-	$('.chef-dot').removeClass('active');
-	$(element).addClass('active');
-}
-
+$(document).ready(function () {
+	$('.chef-slider').owlCarousel({
+		autoplay: true,
+		autoplayTimeout: 4000,
+		autoplayHoverPause: true,
+		loop: true,
+		margin: 30,
+		nav: false,
+		dots: true, // Noktaları OTOMATİK oluşturur
+		responsive: {
+			0: { items: 1 },    // Mobilde 1 şef
+			600: { items: 2 },  // Tablette 2 şef
+			1000: { items: 4 }  // Bilgisayarda 4 şef yan yana
+		}
+	});
+});
 //MENÜLERİN ALTINDAKİ "DAHA FAZLA GÖSTER" BUTONUNUN FONKSİYONU
 function smartToggle(buton) {
 	var anaKutu = $(buton).closest('.menu-wrap-custom');
