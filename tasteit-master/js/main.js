@@ -299,12 +299,15 @@
 
 	// --- BURADA BİTİR ---
 })(jQuery);
+// CHEF BÖLÜMÜNDEKİ SAYFA DEĞİŞTİRME FONKSİYONU
 function changeChefPage(pageIndex, element) {
 	$('.chef-page').hide();
 	$('#chef-page-' + pageIndex).fadeIn(600);
 	$('.chef-dot').removeClass('active');
 	$(element).addClass('active');
 }
+
+//MENÜLERİN ALTINDAKİ "DAHA FAZLA GÖSTER" BUTONUNUN FONKSİYONU
 function smartToggle(buton) {
 	var anaKutu = $(buton).closest('.menu-wrap-custom');
 	var gizliUrunler = anaKutu.find('.extra-items-container');

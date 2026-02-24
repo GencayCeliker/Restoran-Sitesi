@@ -204,20 +204,6 @@
                     <span class="subheading">Bize Yazın</span>
                     <h2 class="mb-4">Düşüncelerinizi Paylaşın</h2>
                 </div>
-
-                @if (TempData["Hata"] != null)
-                {
-                    <div class="alert alert-danger text-center mb-3">
-                        <i class="icon-warning"></i> @TempData["Hata"]
-                    </div>
-                }
-                @if (TempData["Mesaj"] != null)
-                {
-                    <div class="alert alert-success text-center mb-3">
-                        <i class="icon-check"></i> @TempData["Mesaj"]
-                    </div>
-                }
-
                 <form action="/Index/YorumYap" method="post" class="contact-form">
                     <div class="form-group">
                         <input type="text" class="form-control" name="AdSoyad" placeholder="Adınız Soyadınız" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">

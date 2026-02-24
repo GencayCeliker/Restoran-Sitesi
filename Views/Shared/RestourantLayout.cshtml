@@ -59,22 +59,22 @@
             <a href="@Url.Action("Index", "Index")" class="navbar-brand">
                 <img src="~/images/logo.png" height="60" alt="Moly Logo" />
             </a>
-    <a class="navbar-brand" href="@Url.Action("Index", "Index")">&ensp;Moly<span>RS</span></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Navigasyonu aç/kapat">
-        <span class="oi oi-menu"></span> Menü
-    </button>
-    <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active"><a href="@Url.Action("Index", "Index")" class="nav-link">Ana Sayfa</a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Hakkımızda</a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Menü</a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Rezervasyon</a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Şefimiz</a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Blog</a></li>
-            <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">İletişim</a></li>
-        </ul>
-    </div>
-</div>
+            <a class="navbar-brand" href="@Url.Action("Index", "Index")">&ensp;Moly<span>RS</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Navigasyonu aç/kapat">
+                <span class="oi oi-menu"></span> Menü
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a href="@Url.Action("Index", "Index")" class="nav-link">Ana Sayfa</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Hakkımızda</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Menü</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Rezervasyon</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Şefimiz</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">Blog</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Index", "Index")" class="nav-link">İletişim</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
     <!-- END nav -->
 
@@ -175,125 +175,116 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <style>
-        #bildirim-kutusu {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 99999 !important; /* HER ŞEYİN ÜSTÜNDE DURMASI İÇİN */
-            background-color: white;
-            min-width: 300px;
-            border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            animation: slideIn 0.5s ease;
-            font-family: Arial, sans-serif;
-        }
+    /* Bildirimleri alt alta dizecek sabit alan */
+    #bildirim-alani {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Mesajlar arası boşluk */
+        pointer-events: none; /* Tıklamaların alttaki elementlere geçmesi için */
+    }
 
-            /* Başarılı (Yeşil) */
-            #bildirim-kutusu.basarili {
-                border-left: 6px solid #28a745;
-            }
+    /* Tekil Bildirim Kutusu */
+    .bildirim-kutusu {
+        background-color: white;
+        min-width: 300px;
+        border-radius: 5px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        font-family: Arial, sans-serif;
+        pointer-events: auto; /* Kutunun tıklanabilir olması için */
 
-                #bildirim-kutusu.basarili .ikon {
-                    color: #28a745;
-                }
+        /* Sağdan içeri kayma animasyonu */
+        animation: slideInRight 0.5s ease forwards;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
 
-            /* Hatalı (Kırmızı) */
-            #bildirim-kutusu.hatali {
-                border-left: 6px solid #dc3545;
-            }
+    /* Renkler ve İkonlar */
+    .bildirim-kutusu.basarili { border-left: 5px solid #28a745; }
+    .bildirim-kutusu.hatali { border-left: 5px solid #dc3545; }
+    .bildirim-kutusu.basarili .ikon { color: #28a745; font-size: 24px; margin-right: 15px; }
+    .bildirim-kutusu.hatali .ikon { color: #dc3545; font-size: 24px; margin-right: 15px; }
 
-                #bildirim-kutusu.hatali .ikon {
-                    color: #dc3545;
-                }
+    /* Metin Yapısı */
+    .bildirim-kutusu .metin { flex-grow: 1; display: flex; flex-direction: column; }
+    .bildirim-kutusu .metin strong { font-size: 16px; color: #333; }
+    .bildirim-kutusu .metin span { font-size: 13px; color: #666; }
 
-        .ikon {
-            font-size: 24px;
-            margin-right: 15px;
-        }
+    /* Kapat Butonu */
+    .bildirim-kutusu .kapat {
+        background: none; border: none; font-size: 20px;
+        cursor: pointer; color: #aaa; margin-left: 10px;
+    }
 
-        .metin {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-            .metin strong {
-                font-size: 16px;
-                color: #333;
-            }
-
-            .metin span {
-                font-size: 13px;
-                color: #666;
-            }
-
-        .kapat {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #aaa;
-            margin-left: 10px;
-        }
-
-        @@keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
+    @@keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
     </style>
 
-    @if (TempData["Mesaj"] != null)
-    {
-        <div id="bildirim-kutusu" class="bildirim basarili">
-            <div class="ikon">✔️</div> <div class="metin">
-                <strong>Başarılı!</strong>
-                <span>@TempData["Mesaj"]</span>
+    <div id="bildirim-alani">
+        @if (TempData["Mesaj"] != null)
+        {
+            <div class="bildirim-kutusu basarili">
+                <div class="ikon">✔️</div>
+                <div class="metin">
+                    <strong>İşlem Başarılı</strong>
+                    <span>@TempData["Mesaj"]</span>
+                </div>
+                <button class="kapat" onclick="bildirimKapat(this)">×</button>
             </div>
-            <button class="kapat" onclick="buKutuyuKapat(this)">×</button>
-        </div>
-    }
+        }
 
-    @if (TempData["Hata"] != null)
-    {
-        <div id="bildirim-kutusu" class="bildirim hatali">
-            <div class="ikon">❌</div> <div class="metin">
-                <strong>Hata!</strong>
-                <span>@TempData["Hata"]</span>
+        @if (TempData["Hata"] != null)
+        {
+            <div class="bildirim-kutusu hatali">
+                <div class="ikon">❌</div>
+                <div class="metin">
+                    <strong>Bir Sorun Oluştu</strong>
+                    <span>@TempData["Hata"]</span>
+                </div>
+                <button class="kapat" onclick="bildirimKapat(this)">×</button>
             </div>
-            <button class="kapat" onclick="buKutuyuKapat(this)">×</button>
-        </div>
-    }
+        }
+    </div>
 
     <script>
-        // Sayfa yüklendiğinde çalışır
         document.addEventListener("DOMContentLoaded", function () {
-            var kutu = document.getElementById("bildirim-kutusu");
-            if (kutu) {
-                // 5 saniye sonra kaldır
+            var bildirimler = document.querySelectorAll(".bildirim-kutusu");
+
+            bildirimler.forEach(function (kutu) {
+                // Her kutu için 5 saniye bekle
                 setTimeout(function () {
-                    kutu.style.transition = "opacity 0.5s";
                     kutu.style.opacity = "0";
-                    setTimeout(function () { kutu.remove(); }, 500);
+                    kutu.style.transform = "translateX(100%)";
+
+                    // Animasyon bitince HTML'den tamamen sil
+                    setTimeout(function () {
+                        if (kutu.parentNode) {
+                            kutu.parentNode.removeChild(kutu);
+                        }
+                    }, 500);
                 }, 5000);
-            }
+            });
         });
 
-        function buKutuyuKapat(btn) {
-            var kutu = document.getElementById("bildirim-kutusu");
-            if (kutu) kutu.remove();
+        // Çarpı butonuna basıldığında manuel kapatma
+        function bildirimKapat(btn) {
+            var kutu = btn.closest(".bildirim-kutusu");
+            if (kutu) {
+                kutu.style.opacity = "0";
+                kutu.style.transform = "translateX(100%)";
+                setTimeout(function () {
+                    if (kutu.parentNode) kutu.parentNode.removeChild(kutu);
+                }, 500);
+            }
         }
     </script>
-
 
 
     <style>
