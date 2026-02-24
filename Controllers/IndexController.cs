@@ -35,7 +35,7 @@ namespace Restorant_Sitesi.Controllers
 
             model.Seflerimiz = db.SEFLER.Where(x => x.Durum == true).ToList();
 
-            model.SonBlogYazilari = db.DUYURULABLOGLAR.OrderByDescending(x => x.Tarih).Take(3).ToList();
+            model.SonBlogYazilari = db.DUYURULABLOGLAR.OrderByDescending(x => x.Tarih).ToList();
             model.MusteriYorumlari = db.YORUMLAR.Where(x => x.Durum == true).ToList();
             model.Hakkımda = db.HAKKIMDA.ToList();
 

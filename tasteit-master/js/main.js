@@ -342,3 +342,18 @@ function smartToggle(buton) {
 		ikon.css("transform", "rotate(180deg)");
 	}
 }
+// Blog (Haberler) Slider Motoru
+$('.blog-slider').owlCarousel({
+	autoplay: true,
+	autoplayTimeout: 5000, // Bloglar 5 saniyede bir geçsin (okuması uzun sürer)
+	autoplayHoverPause: true,
+	loop: true,
+	margin: 30, // Kartlar arası boşluk
+	nav: false,
+	dots: true, // Altındaki kırmızı noktalar
+	responsive: {
+		0: { items: 1 },    // Mobilde 1 blog
+		600: { items: 2 },  // Tablette 2 blog
+		1000: { items: 3 }  // Bilgisayarda 3 blog yan yana (Şeflerden farklı olarak 3 daha şık durur)
+	}
+});

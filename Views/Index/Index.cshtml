@@ -357,47 +357,52 @@
         </div>
 
         <div class="row">
-            @if (Model.SonBlogYazilari != null)
-            {
-                foreach (var blog in Model.SonBlogYazilari)
-                {
-                    <div class="col-md-4 ftco-animate mb-4">
-                        <div class="blog-entry large-blog-card">
+            <div class="col-md-12">
+                <div class="blog-slider owl-carousel ftco-owl">
+                    @if (Model.SonBlogYazilari != null)
+                    {
+                        foreach (var blog in Model.SonBlogYazilari)
+                        {
+                            <div class="item">
+                                <div class="blog-entry large-blog-card" style="margin-bottom: 0;">
 
-                            <a href="#" class="block-20 large-blog-img" style="background-image: url(/@blog.Resim);"></a>
+                                    <a href="#" class="block-20 large-blog-img" style="background-image: url(/@blog.Resim);"></a>
 
-                            <div class="text px-4 pt-4 pb-4">
-                                <div class="meta mb-2">
-                                    <div><a href="#"><span class="fa fa-calendar mr-1"></span> @Convert.ToDateTime(blog.Tarih).ToString("dd MMMM yyyy")</a></div>
-                                    <div><a href="#"><span class="fa fa-user mr-1"></span> @blog.Yazar</a></div>
+                                    <div class="text px-4 pt-4 pb-4">
+                                        <div class="meta mb-2">
+                                            <div><a href="#"><span class="fa fa-calendar mr-1"></span> @Convert.ToDateTime(blog.Tarih).ToString("dd MMMM yyyy")</a></div>
+                                            <div><a href="#"><span class="fa fa-user mr-1"></span> @blog.Yazar</a></div>
+                                        </div>
+
+                                        <h3 class="heading"><a href="#">@blog.Baslik</a></h3>
+
+                                        <p class="text-muted" style="font-size: 14px;">
+                                            @{
+                                                string icerikOzet = blog.Icerik;
+                                                if (!string.IsNullOrEmpty(icerikOzet) && icerikOzet.Length > 70)
+                                                {
+                                                    icerikOzet = icerikOzet.Substring(0, 70) + "...";
+                                                }
+                                            }
+                                            @icerikOzet
+                                        </p>
+
+                                        <p class="clearfix mt-3 mb-0">
+                                            <a href="#" class="float-left read btn btn-primary" style="border-radius: 20px; font-size: 12px; padding: 5px 15px;">Devamını Oku</a>
+
+                                            <a href="#" class="float-right meta-chat" style="font-weight: 600;">
+                                                <span class="fa fa-comment mr-1"></span> @blog.DuyuruID
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
-
-                                <h3 class="heading"><a href="#">@blog.Baslik</a></h3>
-
-                                <p class="text-muted" style="font-size: 14px;">
-                                    @{
-                                        string icerikOzet = blog.Icerik;
-                                        if (!string.IsNullOrEmpty(icerikOzet) && icerikOzet.Length > 70)
-                                        {
-                                            icerikOzet = icerikOzet.Substring(0, 70) + "...";
-                                        }
-                                    }
-                                    @icerikOzet
-                                </p>
-
-                                <p class="clearfix mt-3 mb-0">
-                                    <a href="#" class="float-left read btn btn-primary" style="border-radius: 20px; font-size: 12px; padding: 5px 15px;">Devamını Oku</a>
-
-                                    <a href="#" class="float-right meta-chat" style="font-weight: 600;">
-                                        <span class="fa fa-comment mr-1"></span> @blog.DuyuruID
-                                    </a>
-                                </p>
                             </div>
-                        </div>
-                    </div>
-                }
-            }
+                        }
+                    }
+                </div>
+            </div>
         </div>
+
     </div>
 </section>
 

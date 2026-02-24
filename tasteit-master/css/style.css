@@ -12304,9 +12304,9 @@ a.close.disabled {
 }
 
     /* Seçili (Aktif) Olan Nokta */
-    .chef-dot.active {
+        .chef-dot.active {
         border-color: #e53935; /* Kırmızı dış çember */
-    }
+         }
 
         /* Aktif noktanın içindeki küçük kırmızı top */
         .chef-dot.active::after {
@@ -12335,4 +12335,8 @@ a.close.disabled {
 .large-blog-img {
     height: 280px !important; /* Orijinalinden daha büyük bir resim alanı */
     display: block;
+}
+.blog-slider .owl-stage-outer {
+    padding-top: 15px !important;
+    padding-bottom: 35px !important;
 }
