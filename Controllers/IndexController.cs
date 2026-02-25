@@ -106,6 +106,12 @@ namespace Restorant_Sitesi.Controllers
 
             return RedirectToAction("Index");
         }
+        public PartialViewResult UstIletisimPartial()
+        {
+            WRestourantDBEntities db = new WRestourantDBEntities();
+            var veriler = db.USTILETISIM.FirstOrDefault(x => x.UstID == 1);
+            return PartialView(veriler);
+        }
 
 
     }
