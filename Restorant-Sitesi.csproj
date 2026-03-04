@@ -1297,6 +1297,7 @@
     <Content Include="Views\Admin\SliderYonetimi.cshtml" />
     <Content Include="Views\Index\UstIletisimPartial.cshtml" />
     <Content Include="Views\Index\DUYURULABLOGLARDETAY.cshtml" />
+    <Content Include="Views\Index\Bloglar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

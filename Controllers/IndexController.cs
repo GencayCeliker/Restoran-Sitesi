@@ -144,14 +144,24 @@ namespace Restorant_Sitesi.Controllers
             yeni.Mail = y.Mail;
             yeni.YorumMetni = y.YorumMetni;
             yeni.DuyuruID = y.DuyuruID;
-            yeni.Durum = true; // Veya onaya düşsün istersen false yap
+            yeni.Durum = false; 
             yeni.Tarih = DateTime.Now;
 
             db.DUYURUBLOGYORUMLARI.Add(yeni);
             db.SaveChanges();
-
-            TempData["Mesaj"] = "Yorumunuz başarıyla eklendi.";
+           
+            TempData["Mesaj"] = "Yorumunuz başarıyla gönderildi.Yönetici onayından sonra yayınlanacaktır.";
             return RedirectToAction("DUYURULABLOGLARDETAY", new { id = y.DuyuruID });
+        }
+        public ActionResult Bloglar()
+        {
+           
+            var tumBloglar = db.DUYURULABLOGLAR
+                               .Where(x => x.Durum == true)
+                               .OrderByDescending(x => x.Tarih)
+                               .ToList();
+
+            return View(tumBloglar);
         }
     }
 }
