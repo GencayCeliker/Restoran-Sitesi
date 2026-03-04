@@ -338,5 +338,56 @@ namespace Restorant_Sitesi.Controllers
             var bloglar = db.DUYURULABLOGLAR.OrderByDescending(x => x.DuyuruID).ToList();
             return View(bloglar);
         }
+        [HttpPost]
+        public ActionResult BlogKaydet(DUYURULABLOGLAR b, HttpPostedFileBase resimDosyasi)
+        {
+            // 1. RESİM YÜKLEME KONTROLÜ
+            if (resimDosyasi != null && resimDosyasi.ContentLength > 0)
+            {
+                string dosyaAdi = Path.GetFileName(resimDosyasi.FileName);
+                string yol = Path.Combine(Server.MapPath("~/images/"), dosyaAdi);
+                resimDosyasi.SaveAs(yol);
+                b.Resim = "images/" + dosyaAdi;
+            }
+            if (b.DuyuruID == 0 || b.DuyuruID == null)
+            {
+                b.Tarih = DateTime.Now; 
+                db.DUYURULABLOGLAR.Add(b);
+            }
+            else
+            {
+                var guncellenecek = db.DUYURULABLOGLAR.Find(b.DuyuruID);
+                if (guncellenecek != null)
+                {
+                    guncellenecek.Baslik = b.Baslik;
+                    guncellenecek.Yazar = b.Yazar;
+                    guncellenecek.Icerik = b.Icerik;
+                    guncellenecek.Durum = b.Durum;
+                    if (resimDosyasi != null)
+                    {
+                        guncellenecek.Resim = b.Resim;
+                    }
+                }
+            }
+
+          
+            db.SaveChanges();
+
+           
+            return RedirectToAction("BlogVeDuyuru");
+        }
+
+  
+        public ActionResult BlogSil(int id)
+        {
+            var silinecek = db.DUYURULABLOGLAR.Find(id);
+            if (silinecek != null)
+            {
+              
+                silinecek.Durum = false;
+                db.SaveChanges();
+            }
+            return RedirectToAction("BlogVeDuyuru");
+        }
     }
 }

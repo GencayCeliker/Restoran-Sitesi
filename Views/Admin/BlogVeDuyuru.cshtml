@@ -55,7 +55,7 @@
                                     </td>
 
                                     <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; text-align: center;">
-                                    
+
                                         @if (x.Durum == true)
                                         {
                                             <span class="badge" style="background-color: #28a745; padding: 6px 12px; border-radius: 4px;">AKTİF</span>
@@ -66,7 +66,16 @@
                                         }
                                     </td>
                                     <td class="align-middle">
-                                        <a href="/Admin/BlogGetir/@x.DuyuruID" class="btn btn-info btn-sm" style="border-radius: 4px; font-weight: bold; padding: 5px 15px;">DÜZENLE</a>
+                                        <button type="button" class="btn btn-sm shadow-sm mr-2"
+                                                style="background: #00a8ff; color: white; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; border-radius: 4px; padding: 8px 16px; border: none; transition: 0.3s;"
+                                                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"
+                                                onclick="blogDuzenle('@x.DuyuruID',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Baslik)',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Yazar)',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Icerik)',
+                                                '@x.Durum.ToString().ToLower()')">
+                                            DÜZENLE
+                                        </button>
                                         <a href="/Admin/BlogSil/@x.DuyuruID" class="btn btn-danger btn-sm" style="border-radius: 4px; font-weight: bold; padding: 5px 15px;" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">SİL</a>
                                     </td>
                                 </tr>
@@ -87,21 +96,21 @@
 
                 <form action="/Admin/BlogKaydet" method="post" enctype="multipart/form-data">
 
-                    <input type="hidden" name="DuyuruID" id="DuyuruID" value="" />
+                    <input type="hidden" name="DuyuruID" id="DuyuruID" value="0" />
 
                     <div class="form-group">
                         <label style="font-size: 12px; font-weight: bold; color: #ccc;">BAŞLIK</label>
-                        <input type="text" class="form-control" name="Baslik" placeholder="Blog başlığı..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
+                        <input type="text" class="form-control" id="Baslik" name="Baslik" placeholder="Blog başlığı..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
                     </div>
 
                     <div class="form-group">
                         <label style="font-size: 12px; font-weight: bold; color: #ccc;">YAZAR</label>
-                        <input type="text" class="form-control" name="Yazar" placeholder="Yazar adı (Örn: Admin)" style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
+                        <input type="text" class="form-control" id="Yazar" name="Yazar" placeholder="Yazar adı (Örn: Admin)" style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
                     </div>
 
                     <div class="form-group">
                         <label style="font-size: 12px; font-weight: bold; color: #ccc;">İÇERİK (DETAY)</label>
-                        <textarea class="form-control" name="Icerik" rows="5" placeholder="Geniş açıklama ve blog metni..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required></textarea>
+                        <textarea class="form-control" id="Icerik" name="Icerik" rows="5" placeholder="Geniş açıklama ve blog metni..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required></textarea>
                     </div>
 
                     <div class="form-group">
@@ -109,7 +118,7 @@
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="resimDosyasi" name="resimDosyasi" style="cursor: pointer;">
-                                <label class="custom-file-label" for="resimDosyasi" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">DOSYA SEÇİLMEDİ</label>
+                                <label class="custom-file-label" id="resimLabel" for="resimDosyasi" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">DOSYA SEÇİLMEDİ</label>
                             </div>
                         </div>
                         <small style="color: #aaa; font-size: 11px;">Seçmek için tıklayın</small>
@@ -117,14 +126,18 @@
 
                     <div class="form-group mt-3">
                         <label style="font-size: 12px; font-weight: bold; color: #ccc;">YAYIN DURUMU</label>
-                        <select class="form-control" name="Durum" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">
+                        <select class="form-control" id="Durum" name="Durum" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">
                             <option value="true" style="color: black;">Aktif (Sitede Görünsün)</option>
                             <option value="false" style="color: black;">Pasif (Gizle)</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-block mt-4" style="background: linear-gradient(90deg, #9b59b6, #8e44ad); color: white; font-weight: bold; border-radius: 4px; padding: 12px;">
+                    <button type="submit" class="btn btn-block mt-4 shadow-sm" style="background: linear-gradient(90deg, #9b59b6, #8e44ad); color: white; font-weight: bold; border-radius: 4px; padding: 12px; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                         DEĞİŞİKLİKLERİ KAYDET
+                    </button>
+
+                    <button type="button" class="btn btn-block mt-2" onclick="formuTemizle()" style="background: transparent; color: #a0aec0; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 10px;">
+                        Formu Temizle (Yeni Kayıt)
                     </button>
 
                 </form>
@@ -148,3 +161,26 @@
         display: none !important;
     }
 </style>
+<script>
+    function blogDuzenle(id, baslik, yazar, icerik, durum) {
+       
+        document.getElementById('DuyuruID').value = id;
+
+     
+        document.querySelector('input[name="Baslik"]').value = baslik;
+        document.querySelector('input[name="Yazar"]').value = yazar;
+        document.querySelector('textarea[name="Icerik"]').value = icerik;
+
+       
+        var durumSelect = document.querySelector('select[name="Durum"]');
+        if (durum === "true" || durum === "True") {
+            durumSelect.value = "true";
+        } else {
+            durumSelect.value = "false";
+        }
+
+       
+        document.querySelector('.custom-file-label').innerText = "Mevcut Resim Korunuyor...";
+        document.querySelector('.custom-file-label').style.color = "#00a8ff"; 
+    }
+</script>
