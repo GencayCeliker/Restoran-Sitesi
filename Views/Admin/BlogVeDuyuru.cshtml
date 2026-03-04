@@ -1,0 +1,150 @@
+﻿@model List<Restorant_Sitesi.Models.DUYURULABLOGLAR>
+@{
+    ViewBag.Title = "BlogVeDuyuru";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
+            <div class="card-header py-3" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">Blog Ve Duyuru Listesi</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table text-white mb-0" width="100%" cellspacing="0" style="table-layout: fixed;">
+                        <thead style="background: rgba(0, 0, 0, 0.4); border-bottom: 2px solid rgba(255, 255, 255, 0.15);">
+                            <tr style="text-transform: uppercase; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; color: #ffffff;">
+                                <th style="border: none; padding: 18px 15px; width: 12%; text-align: center;">Resim</th>
+                                <th style="border: none; padding: 18px 15px; width: 18%; text-align: left;">Başlık</th>
+                                <th style="border: none; padding: 18px 15px; width: 30%; text-align: left;">İçerik</th>
+                                <th style="border: none; padding: 18px 15px; width: 12%; text-align: center;">Tarih</th>
+                                <th style="border: none; padding: 18px 15px; width: 13%; text-align: center;">Durum</th>
+                                <th style="border: none; padding: 18px 15px; width: 15%; text-align: center;">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in Model)
+                            {
+                                <tr style="transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
+
+                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; text-align: center;">
+                                        <div style="width: 80px; height: 50px; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: inline-block;">
+                                            <img src="/@x.Resim" alt="Resim" style="width: 100%; height: 100%; object-fit: cover;" />
+                                        </div>
+                                    </td>
+
+                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; font-weight: 500; color: #e2e8f0; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        @x.Baslik
+                                    </td>
+
+                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; font-size: 13px; color: #cbd5e1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        @if (x.Icerik != null && x.Icerik.Length > 60)
+                                        {
+                                            @(x.Icerik.Substring(0, 60) + "...")
+                                        }
+                                        else
+                                        {
+                                            @x.Icerik
+                                        }
+                                    </td>
+
+                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; font-size: 13px; color: #cbd5e1; text-align: center;">
+                                        @x.Tarih.Value.ToString("dd.MM.yyyy")
+                                    </td>
+
+                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; text-align: center;">
+                                    
+                                        @if (x.Durum == true)
+                                        {
+                                            <span class="badge" style="background-color: #28a745; padding: 6px 12px; border-radius: 4px;">AKTİF</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge" style="background-color: #dc3545; padding: 6px 12px; border-radius: 4px;">PASİF</span>
+                                        }
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="/Admin/BlogGetir/@x.DuyuruID" class="btn btn-info btn-sm" style="border-radius: 4px; font-weight: bold; padding: 5px 15px;">DÜZENLE</a>
+                                        <a href="/Admin/BlogSil/@x.DuyuruID" class="btn btn-danger btn-sm" style="border-radius: 4px; font-weight: bold; padding: 5px 15px;" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">SİL</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
+            <div class="card-header py-3" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">Blog Ekle / Güncelle</h6>
+            </div>
+            <div class="card-body">
+
+                <form action="/Admin/BlogKaydet" method="post" enctype="multipart/form-data">
+
+                    <input type="hidden" name="DuyuruID" id="DuyuruID" value="" />
+
+                    <div class="form-group">
+                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">BAŞLIK</label>
+                        <input type="text" class="form-control" name="Baslik" placeholder="Blog başlığı..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">YAZAR</label>
+                        <input type="text" class="form-control" name="Yazar" placeholder="Yazar adı (Örn: Admin)" style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">İÇERİK (DETAY)</label>
+                        <textarea class="form-control" name="Icerik" rows="5" placeholder="Geniş açıklama ve blog metni..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">RESİM YÜKLE</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="resimDosyasi" name="resimDosyasi" style="cursor: pointer;">
+                                <label class="custom-file-label" for="resimDosyasi" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">DOSYA SEÇİLMEDİ</label>
+                            </div>
+                        </div>
+                        <small style="color: #aaa; font-size: 11px;">Seçmek için tıklayın</small>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">YAYIN DURUMU</label>
+                        <select class="form-control" name="Durum" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">
+                            <option value="true" style="color: black;">Aktif (Sitede Görünsün)</option>
+                            <option value="false" style="color: black;">Pasif (Gizle)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-block mt-4" style="background: linear-gradient(90deg, #9b59b6, #8e44ad); color: white; font-weight: bold; border-radius: 4px; padding: 12px;">
+                        DEĞİŞİKLİKLERİ KAYDET
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        var fileName = document.getElementById("resimDosyasi").files[0].name;
+        var nextSibling = e.target.nextElementSibling;
+        nextSibling.innerText = fileName;
+    });
+</script>
+<style>
+    /* Bootstrap'in otomatik eklediği BROWSE butonunu tamamen gizler */
+    .custom-file-label::after {
+        display: none !important;
+    }
+</style>

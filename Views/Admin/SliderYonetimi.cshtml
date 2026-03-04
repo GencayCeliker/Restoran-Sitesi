@@ -38,14 +38,14 @@
                 <div id="sliderPreview" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner" style="height: 250px;">
                         @{ int i = 0; }
-                        @foreach (var item in Model)
+                        @foreach (var x in Model)
                         {
                             
                             <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <img src="@item.Resim" class="d-block w-100" style="object-fit: cover; height: 250px; opacity:0.6">
+                                <img src="@x.Resim" class="d-block w-100" style="object-fit: cover; height: 250px; opacity:0.6">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h5>@item.Baslik</h5>
-                                    <p>@item.Icerik</p>
+                                    <h5>@x.Baslik</h5>
+                                    <p>@x.Icerik</p>
                                 </div>
                             </div>
                             i++;
@@ -73,27 +73,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var x in Model)
                             {
                                 <tr>
-                                    <td><img src="@item.Resim" width="60" class="rounded" /></td>
-                                    <td>@item.Baslik</td>
+                                    <td><img src="@x.Resim" width="60" class="rounded" /></td>
+                                    <td>@x.Baslik</td>
                                     <td>
-                                        <span class="badge @(item.Durum ? "badge-success" : "badge-danger")">
-                                            @(item.Durum ? "Aktif" : "Pasif")
+                                        <span class="badge @(x.Durum ? "badge-success" : "badge-danger")">
+                                            @(x.Durum ? "Aktif" : "Pasif")
                                         </span>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-info"
-                                                onclick="sliderDuzenle('@item.AnasayfaID',
-                                                '@HttpUtility.JavaScriptStringEncode(item.Baslik)',
-                                                '@HttpUtility.JavaScriptStringEncode(item.Icerik)',
-                                                '@HttpUtility.JavaScriptStringEncode(item.Aciklama)',
-                                                '@HttpUtility.JavaScriptStringEncode(item.Resim)',
-                                                '@item.Durum.ToString().ToLower()')">
+                                                onclick="sliderDuzenle('@x.AnasayfaID',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Baslik)',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Icerik)',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Aciklama)',
+                                                '@HttpUtility.JavaScriptStringEncode(x.Resim)',
+                                                '@x.Durum.ToString().ToLower()')">
                                             DÜZENLE
                                         </button>
-                                        <a href="/Admin/SliderSil/@item.AnasayfaID"
+                                        <a href="/Admin/SliderSil/@x.AnasayfaID"
                                            class="btn btn-sm btn-danger"
                                            onclick="return confirm('Bu slider kaydını silmek istediğinize emin misiniz? (Resim dosyanız silinmeyecektir)')">
                                             SİL

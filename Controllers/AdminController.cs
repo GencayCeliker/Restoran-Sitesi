@@ -332,5 +332,11 @@ namespace Restorant_Sitesi.Controllers
             }
             return RedirectToAction("SliderYonetimi");
         }
+        public ActionResult BlogVeDuyuru()
+        {
+           
+            var bloglar = db.DUYURULABLOGLAR.OrderByDescending(x => x.DuyuruID).ToList();
+            return View(bloglar);
+        }
     }
 }
