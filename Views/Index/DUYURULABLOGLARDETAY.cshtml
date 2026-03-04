@@ -1,0 +1,185 @@
+﻿@model Restorant_Sitesi.Models.DUYURULABLOGLAR
+
+@{
+    
+    var yorumlar = ViewBag.BlogYorumlari as List<Restorant_Sitesi.Models.DUYURUBLOGYORUMLARI>;
+    int yorumSayisi = yorumlar != null ? yorumlar.Count : 0;
+}
+
+@{
+    ViewBag.Title = "DUYURULABLOGLARDETAY";
+    Layout = "~/Views/Shared/RestourantLayout.cshtml";
+}
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center mb-5">
+                <h1 class="mb-2 bread">Blog Detayı</h1>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="/Index/Index">Ana Sayfa <i class="fa fa-chevron-right"></i></a></span>
+                    <span class="mr-2"><a href="/Blog">Blog <i class="fa fa-chevron-right"></i></a></span>
+                    <span>Detay <i class="fa fa-chevron-right"></i></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8 ftco-animate">
+
+                <div class="d-flex justify-content-between align-items-baseline mb-3 pb-3 border-bottom">
+                    <h2 class="mb-0" style="font-weight: bold; color: #333;">@Model.Baslik</h2>
+                    <span style="font-size: 14px; color: #999; font-weight: 500;">
+                        <i class="fa fa-user"></i> @Model.Yazar &nbsp;|&nbsp;
+                        <i class="fa fa-calendar"></i> @Model.Tarih.Value.ToString("dd.MM.yyyy")
+                    </span>
+                </div>
+
+                <p>
+                    <img src="../../@Model.Resim" alt="Blog Visual" class="img-fluid rounded shadow-sm">
+                </p>
+                <p style="line-height: 1.8; font-size: 16px; color: #555;">@Model.Icerik</p>
+
+                <div class="tag-widget post-tag-container mb-5 mt-5">
+                    <div class="tagcloud">
+                        <a href="#" class="tag-cloud-link">Yemek</a>
+                        <a href="#" class="tag-cloud-link">İçecek</a>
+                        <a href="#" class="tag-cloud-link">Tarif</a>
+                    </div>
+                </div>
+
+                <div class="pt-5 mt-5 border-top">
+
+                    <h3 class="mb-5 h4 font-weight-bold">@yorumSayisi Yorum</h3>
+
+                    <ul class="comment-list">
+                        @if (yorumlar != null && yorumSayisi > 0)
+                        {
+                            foreach (var yorum in yorumlar.OrderByDescending(x => x.YorumID))
+                            {
+                                <li class="comment">
+                                    <div class="vcard bio">
+                                        <img src="/images/person_1.jpg" alt="Kullanıcı" class="rounded-circle shadow-sm">
+                                    </div>
+                                    <div class="comment-body p-4 bg-light rounded shadow-sm mb-4">
+                                        <h3 style="font-size: 18px; color: #d65106;">@yorum.MusteriAdSoyad</h3>
+                                        <div class="meta text-muted mb-2" style="font-size: 13px;">@yorum.Tarih.Value.ToString("dd MMMM yyyy, HH:mm")</div>
+                                        <p class="mb-0">@yorum.YorumMetni</p>
+                                    </div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="comment">
+                                <div class="comment-body p-4 bg-light rounded text-center">
+                                    <p class="text-muted mb-0">Bu yazıya henüz yorum yapılmamış. İlk yorumu siz yapın!</p>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="comment-form-wrap pt-5">
+                        <h3 class="mb-4 h4 font-weight-bold">Bir Yorum Bırakın</h3>
+
+                        <form action="/Index/YorumKaydet" method="post" class="p-4 p-md-5 bg-light rounded shadow-sm">
+                            <input type="hidden" name="DuyuruID" value="@Model.DuyuruID" />
+
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="name" class="font-weight-bold">İsim Soyisim *</label>
+                                    <input type="text" class="form-control" id="name" name="MusteriAdSoyad" required placeholder="Adınız Soyadınız">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="email" class="font-weight-bold">E-posta *</label>
+                                    <input type="email" class="form-control" id="email" name="Mail" required placeholder="E-posta Adresiniz">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message" class="font-weight-bold">Mesajınız *</label>
+                                <textarea name="YorumMetni" id="message" cols="30" rows="5" class="form-control" required placeholder="Düşüncelerinizi buraya yazın..."></textarea>
+                            </div>
+
+                            <div class="form-group p-3 mb-4" style="background-color: #fff3cd; border-left: 5px solid #ffecb5; border-radius: 4px;">
+                                <label for="securityCode" class="font-weight-bold text-dark mb-1">
+                                    Güvenlik Doğrulaması <span class="text-danger">*</span>
+                                </label>
+
+                                <p class="text-muted small mb-2">Lütfen aşağıdaki kelimeyi kutucuğa yazınız: <strong class="text-danger" style="font-size:16px; letter-spacing: 2px;">@ViewBag.GosterilenKod</strong></p>
+
+                                <input type="text" class="form-control" id="securityCode" name="GirilenDogrulamaKodu" required placeholder="Kelimeyi giriniz" autocomplete="off" style="text-transform: uppercase;"
+                                       oninput="this.value = this.value.toUpperCase();">
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <button type="submit" class="btn btn-primary py-3 px-5 shadow-sm" style="border-radius: 30px;">
+                                    <i class="fa fa-paper-plane mr-2"></i> Yorumu Gönder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div> <div class="col-lg-4 sidebar ftco-animate pl-lg-5">
+                <div class="sidebar-box mt-4 mt-lg-0">
+                    
+                </div>
+
+                <div class="sidebar-box ftco-animate">
+                    <h3 class="heading-sidebar">Kategoriler</h3>
+                    <ul class="categories">
+                        <li><a href="#">Kahvaltı <span>(6)</span></a></li>
+                        <li><a href="#">Öğle Yemeği <span>(8)</span></a></li>
+                        <li><a href="#">Akşam Yemeği <span>(2)</span></a></li>
+                        <li><a href="#">Tatlılar <span>(2)</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-box ftco-animate">
+                    <h3 class="heading-sidebar">Popüler Yazılar</h3>
+                    @{
+                        var onerilenler = ViewBag.PopulerYazilar as List<Restorant_Sitesi.Models.DUYURULABLOGLAR>;
+                    }
+                    @if (onerilenler != null)
+                    {
+                        foreach (var x in onerilenler)
+                        {
+                            <div class="block-21 mb-4 d-flex">
+                                <a class="blog-img mr-4" style="background-image: url('../../@x.Resim'); border-radius: 5px;"></a>
+                                <div class="text">
+                                    <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@x.Icerik</a></h3>
+                                    <div class="meta">
+                                        <div><a href="#"><span class="icon-calendar"></span> @x.Tarih.Value.ToString("dd.MM.yyyy")</a></div>
+                                        <div><a href="#"><span class="icon-person"></span> @x.Yazar</a></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+                </div>
+                <div class="sidebar-box ftco-animate">
+                    <h3 class="heading-sidebar">Etiket Bulutu</h3>
+                    <ul class="tagcloud m-0 p-0">
+                        <a href="#" class="tag-cloud-link">Tabak</a>
+                        <a href="#" class="tag-cloud-link">Gıda</a>
+                        <a href="#" class="tag-cloud-link">Menü</a>
+                        <a href="#" class="tag-cloud-link">Tatlı</a>
+                    </ul>
+                </div>
+
+                <div class="sidebar-box ftco-animate">
+                    <h3 class="heading-sidebar">Hakkımızda</h3>
+                    <p>Lezzet yolculuğumuzu ve restoranımızdaki en özel anları sizinle paylaşıyoruz.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

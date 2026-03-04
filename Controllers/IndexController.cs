@@ -15,14 +15,7 @@ namespace Restorant_Sitesi.Controllers
 
         public ActionResult Index()
         {
-            
-            string[] kelimeler = { "MOLY", "RS", "RESTORANT", "YEMEK", "HİJYEN", "GUVEN", "LEZZET" };
-            Random rnd = new Random();
-            string secilenKelime = kelimeler[rnd.Next(kelimeler.Length)];
-
-            Session["DogrulamaKodu"] = secilenKelime;
-            ViewBag.GosterilenKod = secilenKelime;
-
+            GuvenlikKoduUret(); 
             AnasayfaSınıf model = new AnasayfaSınıf();
 
             model.SliderBannerlari = db.ANASAYFA.Where(x => x.Durum == true).ToList();
@@ -42,6 +35,15 @@ namespace Restorant_Sitesi.Controllers
             model.IletisimBilgileri = db.USTILETISIM.FirstOrDefault();
 
             return View(model);
+        }
+        private void GuvenlikKoduUret()
+        {
+            string[] kelimeler = { "MOLY", "RS", "RESTORANT", "YEMEK", "HİJYEN", "GUVEN", "LEZZET" };
+            Random rnd = new Random();
+            string secilenKelime = kelimeler[rnd.Next(kelimeler.Length)];
+
+            Session["DogrulamaKodu"] = secilenKelime;
+            ViewBag.GosterilenKod = secilenKelime;
         }
 
         [HttpPost]
@@ -110,9 +112,46 @@ namespace Restorant_Sitesi.Controllers
         {
             WRestourantDBEntities db = new WRestourantDBEntities();
             var veriler = db.USTILETISIM.FirstOrDefault(x => x.UstID == 1);
+            
             return PartialView(veriler);
         }
+        public ActionResult DUYURULABLOGLARDETAY(int id)
+        {
+      
+            var deger = db.DUYURULABLOGLAR.Find(id);
+            ViewBag.BlogYorumlari = db.DUYURUBLOGYORUMLARI.Where(x => x.DuyuruID == id && x.Durum == true).ToList();
+            GuvenlikKoduUret();
+            ViewBag.PopulerYazilar = db.DUYURULABLOGLAR
+                               .Where(x => x.DuyuruID != id && x.Durum == true)
+                               .OrderBy(x => Guid.NewGuid())
+                               .Take(3)
+                               .ToList();
+            return View(deger);
+        }
+        [HttpPost]
+        public ActionResult YorumKaydet(DUYURUBLOGYORUMLARI y, string GirilenDogrulamaKodu)
+        {
+            // 1. GÜVENLİK KONTROLÜ
+            if (Session["DogrulamaKodu"] == null || GirilenDogrulamaKodu != Session["DogrulamaKodu"].ToString())
+            {
+                TempData["Hata"] = "Güvenlik kodunu yanlış girdiniz, lütfen tekrar deneyin.";
+                return RedirectToAction("DUYURULABLOGLARDETAY", new { id = y.DuyuruID });
+            }
 
+            // 2. KOD DOĞRUYSA KAYDETME İŞLEMİ
+            DUYURUBLOGYORUMLARI yeni = new DUYURUBLOGYORUMLARI();
+            yeni.MusteriAdSoyad = y.MusteriAdSoyad;
+            yeni.Mail = y.Mail;
+            yeni.YorumMetni = y.YorumMetni;
+            yeni.DuyuruID = y.DuyuruID;
+            yeni.Durum = true; // Veya onaya düşsün istersen false yap
+            yeni.Tarih = DateTime.Now;
 
+            db.DUYURUBLOGYORUMLARI.Add(yeni);
+            db.SaveChanges();
+
+            TempData["Mesaj"] = "Yorumunuz başarıyla eklendi.";
+            return RedirectToAction("DUYURULABLOGLARDETAY", new { id = y.DuyuruID });
+        }
     }
 }

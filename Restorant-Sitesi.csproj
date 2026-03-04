@@ -867,6 +867,7 @@
     <Content Include="images\bg_4.jpg" />
     <Content Include="images\bg_5.jpg" />
     <Content Include="images\bg_6.jpg" />
+    <Content Include="images\bosyıyldız.png" />
     <Content Include="images\breakfast-1.jpg" />
     <Content Include="images\breakfast-2.jpg" />
     <Content Include="images\breakfast-3.jpg" />
@@ -894,6 +895,7 @@
     <Content Include="images\dinner-4.jpg" />
     <Content Include="images\dinner-5.jpg" />
     <Content Include="images\dinner-6.jpg" />
+    <Content Include="images\doluyıldız.png" />
     <Content Include="images\drink-1.jpg" />
     <Content Include="images\drink-2.jpg" />
     <Content Include="images\drink-3.jpg" />
@@ -989,6 +991,7 @@
     <Content Include="images\wine-6.jpg" />
     <Content Include="images\wine-7.jpg" />
     <Content Include="images\wine-8.jpg" />
+    <Content Include="images\yarımyıldız.png" />
     <Content Include="images\yceo.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -1293,6 +1296,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\SliderYonetimi.cshtml" />
     <Content Include="Views\Index\UstIletisimPartial.cshtml" />
+    <Content Include="Views\Index\DUYURULABLOGLARDETAY.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
