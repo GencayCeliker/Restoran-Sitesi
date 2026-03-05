@@ -349,11 +349,17 @@ namespace Restorant_Sitesi.Controllers
                 resimDosyasi.SaveAs(yol);
                 b.Resim = "images/" + dosyaAdi;
             }
+
+            // 2. EKLEME İŞLEMİ
             if (b.DuyuruID == 0 || b.DuyuruID == null)
             {
-                b.Tarih = DateTime.Now; 
+                b.Tarih = DateTime.Now;
                 db.DUYURULABLOGLAR.Add(b);
+
+                
+                TempData["ekle"] = 1;
             }
+            // 3. GÜNCELLEME İŞLEMİ
             else
             {
                 var guncellenecek = db.DUYURULABLOGLAR.Find(b.DuyuruID);
@@ -367,24 +373,20 @@ namespace Restorant_Sitesi.Controllers
                     {
                         guncellenecek.Resim = b.Resim;
                     }
+                    TempData["güncelle"] = 1;
                 }
             }
-
-          
             db.SaveChanges();
-
-           
             return RedirectToAction("BlogVeDuyuru");
         }
 
-  
+
         public ActionResult BlogSil(int id)
         {
             var silinecek = db.DUYURULABLOGLAR.Find(id);
             if (silinecek != null)
             {
-              
-                silinecek.Durum = false;
+                db.DUYURULABLOGLAR.Remove(silinecek);
                 db.SaveChanges();
             }
             return RedirectToAction("BlogVeDuyuru");

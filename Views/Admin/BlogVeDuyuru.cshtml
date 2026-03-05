@@ -4,6 +4,11 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<script src="~/Scripts/toastr.min.js"></script>
+<link href="~/Content/toastr.min.css" rel="stylesheet" />
+
 <div class="row">
 
     <div class="col-lg-12">
@@ -163,15 +168,15 @@
 </style>
 <script>
     function blogDuzenle(id, baslik, yazar, icerik, durum) {
-       
+
         document.getElementById('DuyuruID').value = id;
 
-     
+
         document.querySelector('input[name="Baslik"]').value = baslik;
         document.querySelector('input[name="Yazar"]').value = yazar;
         document.querySelector('textarea[name="Icerik"]').value = icerik;
 
-       
+
         var durumSelect = document.querySelector('select[name="Durum"]');
         if (durum === "true" || durum === "True") {
             durumSelect.value = "true";
@@ -179,8 +184,58 @@
             durumSelect.value = "false";
         }
 
-       
+
         document.querySelector('.custom-file-label').innerText = "Mevcut Resim Korunuyor...";
-        document.querySelector('.custom-file-label').style.color = "#00a8ff"; 
+        document.querySelector('.custom-file-label').style.color = "#00a8ff";
     }
 </script>
+@if (TempData["ekle"] != null)
+{
+    <script>
+
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        Command: toastr["success"]("Blog & Duyuru Başarıyla Eklendi")
+    </script>
+}
+@if (TempData["güncelle"] != null)
+{
+    <script>
+
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        Command: toastr["success"]("Blog & Duyuru Başarıyla Güncellendi")
+    </script>
+}
