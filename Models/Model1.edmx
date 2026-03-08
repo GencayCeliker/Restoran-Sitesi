@@ -66,6 +66,16 @@
           <Property Name="Kapasite" Type="int" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="NAVBAR">
+          <Key>
+            <PropertyRef Name="NavbarID" />
+          </Key>
+          <Property Name="NavbarID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuAd" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Sira" Type="int" />
+          <Property Name="Durum" Type="bit" />
+        </EntityType>
         <EntityType Name="REZARVASYONDURUM">
           <Key>
             <PropertyRef Name="DurumID" />
@@ -98,6 +108,25 @@
           <Property Name="Aciklama" Type="nvarchar(max)" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="SIFRE_SIFIRLAMA">
+          <Key>
+            <PropertyRef Name="TalepID" />
+          </Key>
+          <Property Name="TalepID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UyeID" Type="int" />
+          <Property Name="SifirlamaKodu" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OlusturmaTarihi" Type="datetime" />
+          <Property Name="GecerlilikTarihi" Type="datetime" Nullable="false" />
+          <Property Name="KullanildiMi" Type="bit" />
+        </EntityType>
+        <EntityType Name="SITE_AYARLARI">
+          <Key>
+            <PropertyRef Name="AyarID" />
+          </Key>
+          <Property Name="AyarID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Logo" Type="nvarchar(max)" />
+          <Property Name="SiteAd" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="URUNLER">
           <Key>
             <PropertyRef Name="UrunID" />
@@ -123,6 +152,19 @@
           <Property Name="Twitter" Type="nvarchar" MaxLength="100" />
           <Property Name="Linkedin" Type="nvarchar" MaxLength="100" />
           <Property Name="Durum" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UYELER">
+          <Key>
+            <PropertyRef Name="UyeID" />
+          </Key>
+          <Property Name="UyeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdSoyad" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Mail" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sifre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Yetki" Type="nvarchar" MaxLength="20" />
+          <Property Name="SozlesmeOnay" Type="bit" />
+          <Property Name="KayitTarihi" Type="date" />
+          <Property Name="Durum" Type="bit" />
         </EntityType>
         <EntityType Name="YORUMLAR">
           <Key>
@@ -171,6 +213,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__SIFRE_SIF__UyeID__2FCF1A8A">
+          <End Role="UYELER" Type="Self.UYELER" Multiplicity="0..1" />
+          <End Role="SIFRE_SIFIRLAMA" Type="Self.SIFRE_SIFIRLAMA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UYELER">
+              <PropertyRef Name="UyeID" />
+            </Principal>
+            <Dependent Role="SIFRE_SIFIRLAMA">
+              <PropertyRef Name="UyeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__URUNLER__Kategor__4CA06362">
           <End Role="KATEGORILER" Type="Self.KATEGORILER" Multiplicity="0..1" />
           <End Role="URUNLER" Type="Self.URUNLER" Multiplicity="*" />
@@ -190,11 +244,15 @@
           <EntitySet Name="HAKKIMDA" EntityType="Self.HAKKIMDA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KATEGORILER" EntityType="Self.KATEGORILER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MASALAR" EntityType="Self.MASALAR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NAVBAR" EntityType="Self.NAVBAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REZARVASYONDURUM" EntityType="Self.REZARVASYONDURUM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REZARVASYONLAR" EntityType="Self.REZARVASYONLAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SEFLER" EntityType="Self.SEFLER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SIFRE_SIFIRLAMA" EntityType="Self.SIFRE_SIFIRLAMA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SITE_AYARLARI" EntityType="Self.SITE_AYARLARI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="URUNLER" EntityType="Self.URUNLER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USTILETISIM" EntityType="Self.USTILETISIM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UYELER" EntityType="Self.UYELER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YORUMLAR" EntityType="Self.YORUMLAR" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__DUYURUBLO__Duyur__6B24EA82" Association="Self.FK__DUYURUBLO__Duyur__6B24EA82">
             <End Role="DUYURULABLOGLAR" EntitySet="DUYURULABLOGLAR" />
@@ -207,6 +265,10 @@
           <AssociationSet Name="FK__REZARVASY__MasaI__5441852A" Association="Self.FK__REZARVASY__MasaI__5441852A">
             <End Role="MASALAR" EntitySet="MASALAR" />
             <End Role="REZARVASYONLAR" EntitySet="REZARVASYONLAR" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SIFRE_SIF__UyeID__2FCF1A8A" Association="Self.FK__SIFRE_SIF__UyeID__2FCF1A8A">
+            <End Role="UYELER" EntitySet="UYELER" />
+            <End Role="SIFRE_SIFIRLAMA" EntitySet="SIFRE_SIFIRLAMA" />
           </AssociationSet>
           <AssociationSet Name="FK__URUNLER__Kategor__4CA06362" Association="Self.FK__URUNLER__Kategor__4CA06362">
             <End Role="KATEGORILER" EntitySet="KATEGORILER" />
@@ -392,13 +454,86 @@
             <End Role="REZARVASYONDURUM" EntitySet="REZARVASYONDURUM" />
             <End Role="REZARVASYONLAR" EntitySet="REZARVASYONLAR" />
           </AssociationSet>
+          <EntitySet Name="HAKKIMDA" EntityType="WRestourantDBModel.HAKKIMDA" />
+          <EntitySet Name="NAVBAR" EntityType="WRestourantDBModel.NAVBAR" />
+          <EntitySet Name="SIFRE_SIFIRLAMA" EntityType="WRestourantDBModel.SIFRE_SIFIRLAMA" />
+          <EntitySet Name="SITE_AYARLARI" EntityType="WRestourantDBModel.SITE_AYARLARI" />
+          <EntitySet Name="UYELER" EntityType="WRestourantDBModel.UYELER" />
+          <AssociationSet Name="FK__SIFRE_SIF__UyeID__2FCF1A8A" Association="WRestourantDBModel.FK__SIFRE_SIF__UyeID__2FCF1A8A">
+            <End Role="UYELER" EntitySet="UYELER" />
+            <End Role="SIFRE_SIFIRLAMA" EntitySet="SIFRE_SIFIRLAMA" />
+          </AssociationSet>
           <EntitySet Name="DUYURUBLOGYORUMLARI" EntityType="WRestourantDBModel.DUYURUBLOGYORUMLARI" />
           <AssociationSet Name="FK__DUYURUBLO__Duyur__6B24EA82" Association="WRestourantDBModel.FK__DUYURUBLO__Duyur__6B24EA82">
             <End Role="DUYURULABLOGLAR" EntitySet="DUYURULABLOGLAR" />
             <End Role="DUYURUBLOGYORUMLARI" EntitySet="DUYURUBLOGYORUMLARI" />
           </AssociationSet>
-          <EntitySet Name="HAKKIMDA" EntityType="WRestourantDBModel.HAKKIMDA" />
         </EntityContainer>
+        <EntityType Name="HAKKIMDA">
+          <Key>
+            <PropertyRef Name="HakkimdaID" />
+          </Key>
+          <Property Name="HakkimdaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Resim" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Baslik" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Icerik" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="NAVBAR">
+          <Key>
+            <PropertyRef Name="NavbarID" />
+          </Key>
+          <Property Name="NavbarID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuAd" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sira" Type="Int32" />
+          <Property Name="Durum" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SIFRE_SIFIRLAMA">
+          <Key>
+            <PropertyRef Name="TalepID" />
+          </Key>
+          <Property Name="TalepID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UyeID" Type="Int32" />
+          <Property Name="SifirlamaKodu" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OlusturmaTarihi" Type="DateTime" Precision="3" />
+          <Property Name="GecerlilikTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="KullanildiMi" Type="Boolean" />
+          <NavigationProperty Name="UYELER" Relationship="WRestourantDBModel.FK__SIFRE_SIF__UyeID__2FCF1A8A" FromRole="SIFRE_SIFIRLAMA" ToRole="UYELER" />
+        </EntityType>
+        <EntityType Name="SITE_AYARLARI">
+          <Key>
+            <PropertyRef Name="AyarID" />
+          </Key>
+          <Property Name="AyarID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Logo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SiteAd" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UYELER">
+          <Key>
+            <PropertyRef Name="UyeID" />
+          </Key>
+          <Property Name="UyeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdSoyad" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Mail" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sifre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Yetki" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SozlesmeOnay" Type="Boolean" />
+          <Property Name="KayitTarihi" Type="DateTime" Precision="0" />
+          <Property Name="Durum" Type="Boolean" />
+          <NavigationProperty Name="SIFRE_SIFIRLAMA" Relationship="WRestourantDBModel.FK__SIFRE_SIF__UyeID__2FCF1A8A" FromRole="UYELER" ToRole="SIFRE_SIFIRLAMA" />
+        </EntityType>
+        <Association Name="FK__SIFRE_SIF__UyeID__2FCF1A8A">
+          <End Type="WRestourantDBModel.UYELER" Role="UYELER" Multiplicity="0..1" />
+          <End Type="WRestourantDBModel.SIFRE_SIFIRLAMA" Role="SIFRE_SIFIRLAMA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UYELER">
+              <PropertyRef Name="UyeID" />
+            </Principal>
+            <Dependent Role="SIFRE_SIFIRLAMA">
+              <PropertyRef Name="UyeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="DUYURUBLOGYORUMLARI">
           <Key>
             <PropertyRef Name="YorumID" />
@@ -424,15 +559,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="HAKKIMDA">
-          <Key>
-            <PropertyRef Name="HakkimdaID" />
-          </Key>
-          <Property Name="HakkimdaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Resim" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Baslik" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Icerik" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -558,6 +684,62 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="HAKKIMDA">
+            <EntityTypeMapping TypeName="WRestourantDBModel.HAKKIMDA">
+              <MappingFragment StoreEntitySet="HAKKIMDA">
+                <ScalarProperty Name="Icerik" ColumnName="Icerik" />
+                <ScalarProperty Name="Baslik" ColumnName="Baslik" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="HakkimdaID" ColumnName="HakkimdaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NAVBAR">
+            <EntityTypeMapping TypeName="WRestourantDBModel.NAVBAR">
+              <MappingFragment StoreEntitySet="NAVBAR">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Sira" ColumnName="Sira" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="MenuAd" ColumnName="MenuAd" />
+                <ScalarProperty Name="NavbarID" ColumnName="NavbarID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SIFRE_SIFIRLAMA">
+            <EntityTypeMapping TypeName="WRestourantDBModel.SIFRE_SIFIRLAMA">
+              <MappingFragment StoreEntitySet="SIFRE_SIFIRLAMA">
+                <ScalarProperty Name="KullanildiMi" ColumnName="KullanildiMi" />
+                <ScalarProperty Name="GecerlilikTarihi" ColumnName="GecerlilikTarihi" />
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+                <ScalarProperty Name="SifirlamaKodu" ColumnName="SifirlamaKodu" />
+                <ScalarProperty Name="UyeID" ColumnName="UyeID" />
+                <ScalarProperty Name="TalepID" ColumnName="TalepID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SITE_AYARLARI">
+            <EntityTypeMapping TypeName="WRestourantDBModel.SITE_AYARLARI">
+              <MappingFragment StoreEntitySet="SITE_AYARLARI">
+                <ScalarProperty Name="SiteAd" ColumnName="SiteAd" />
+                <ScalarProperty Name="Logo" ColumnName="Logo" />
+                <ScalarProperty Name="AyarID" ColumnName="AyarID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UYELER">
+            <EntityTypeMapping TypeName="WRestourantDBModel.UYELER">
+              <MappingFragment StoreEntitySet="UYELER">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="KayitTarihi" ColumnName="KayitTarihi" />
+                <ScalarProperty Name="SozlesmeOnay" ColumnName="SozlesmeOnay" />
+                <ScalarProperty Name="Yetki" ColumnName="Yetki" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="UyeID" ColumnName="UyeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="DUYURUBLOGYORUMLARI">
             <EntityTypeMapping TypeName="WRestourantDBModel.DUYURUBLOGYORUMLARI">
               <MappingFragment StoreEntitySet="DUYURUBLOGYORUMLARI">
@@ -568,16 +750,6 @@
                 <ScalarProperty Name="MusteriAdSoyad" ColumnName="MusteriAdSoyad" />
                 <ScalarProperty Name="DuyuruID" ColumnName="DuyuruID" />
                 <ScalarProperty Name="YorumID" ColumnName="YorumID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="HAKKIMDA">
-            <EntityTypeMapping TypeName="WRestourantDBModel.HAKKIMDA">
-              <MappingFragment StoreEntitySet="HAKKIMDA">
-                <ScalarProperty Name="Icerik" ColumnName="Icerik" />
-                <ScalarProperty Name="Baslik" ColumnName="Baslik" />
-                <ScalarProperty Name="Resim" ColumnName="Resim" />
-                <ScalarProperty Name="HakkimdaID" ColumnName="HakkimdaID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

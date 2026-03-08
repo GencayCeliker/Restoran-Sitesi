@@ -291,10 +291,10 @@ namespace Restorant_Sitesi.Controllers
             }
             catch (Exception ex)
             {
-               
+
             }
         }
-     
+
         public ActionResult SliderYonetimi()
         {
             var liste = db.ANASAYFA.ToList();
@@ -318,7 +318,7 @@ namespace Restorant_Sitesi.Controllers
             if (veri.AnasayfaID == 0)
                 db.ANASAYFA.Add(veri);
             else
-                db.Entry(veri).State = System.Data.Entity.EntityState.Modified; 
+                db.Entry(veri).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("SliderYonetimi");
         }
@@ -334,9 +334,11 @@ namespace Restorant_Sitesi.Controllers
         }
         public ActionResult BlogVeDuyuru()
         {
-           
+
             var bloglar = db.DUYURULABLOGLAR.OrderByDescending(x => x.DuyuruID).ToList();
-            return View(bloglar);
+            var yorumlar = db.DUYURUBLOGYORUMLARI.OrderByDescending(x => x.YorumID).ToList();
+            var model = Tuple.Create(bloglar, yorumlar);
+            return View(model);
         }
         [HttpPost]
         public ActionResult BlogKaydet(DUYURULABLOGLAR b, HttpPostedFileBase resimDosyasi)
@@ -356,7 +358,7 @@ namespace Restorant_Sitesi.Controllers
                 b.Tarih = DateTime.Now;
                 db.DUYURULABLOGLAR.Add(b);
 
-                
+
                 TempData["ekle"] = 1;
             }
             // 3. GÜNCELLEME İŞLEMİ
@@ -387,6 +389,45 @@ namespace Restorant_Sitesi.Controllers
             if (silinecek != null)
             {
                 db.DUYURULABLOGLAR.Remove(silinecek);
+                db.SaveChanges();
+            }
+            TempData["sil"] = 1;
+            return RedirectToAction("BlogVeDuyuru");
+        }
+        public ActionResult BlogYorumYonetim()
+        {
+            var yorumlar = db.DUYURUBLOGYORUMLARI.OrderByDescending(x => x.YorumID).ToList();
+            return View(yorumlar);
+        }
+        public ActionResult BlogYorumOnayla(int id)
+        {
+            var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
+            if (yorum != null)
+            {
+                yorum.Durum = true;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("BlogVeDuyuru");
+        }
+        public ActionResult BlogYorumSil(int id)
+        {
+            var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
+            if (yorum != null)
+            {
+                db.DUYURUBLOGYORUMLARI.Remove(yorum);
+                db.SaveChanges();
+            }
+            TempData["bysil"] = 1;
+            return RedirectToAction("BlogVeDuyuru");
+           
+        }
+        public ActionResult BlogYorumKaldir(int id)
+        {
+            var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
+            if (yorum != null)
+            {
+                yorum.Durum = false;
                 db.SaveChanges();
             }
             return RedirectToAction("BlogVeDuyuru");

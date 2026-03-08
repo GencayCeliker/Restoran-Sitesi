@@ -1,4 +1,7 @@
-﻿@model List<Restorant_Sitesi.Models.DUYURULABLOGLAR>
+﻿
+@using Restorant_Sitesi.Models
+@model Tuple<List<DUYURULABLOGLAR>, List<DUYURUBLOGYORUMLARI>>
+
 @{
     ViewBag.Title = "BlogVeDuyuru";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
@@ -30,7 +33,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var x in Model)
+                            @foreach (var x in Model.Item1)
                             {
                                 <tr style="transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
 
@@ -153,6 +156,96 @@
 
 </div>
 
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                Blog Yorumları (Onaylı & Bekleyen)
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Mail</th>
+                            <th>Tarih</th>
+                            <th>Yorum</th>
+                            <th>Blog & Duyuru</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var y in Model.Item2) // YORUMLAR LİSTESİ
+                        {
+                            <tr>
+                                <td>@y.MusteriAdSoyad</td>
+                                <td>@y.Mail</td>
+                                <td>@(y.Tarih.HasValue ? y.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
+
+                                <td title="@y.YorumMetni">
+                                    @if (y.YorumMetni != null && y.YorumMetni.Length > 20)
+                                    {
+                                        @y.YorumMetni.Substring(0, 20) <text>...</text>
+                                    }
+                                    else
+                                    {
+                                        @y.YorumMetni
+                                    }
+                                </td>
+                                <td>@y.DUYURULABLOGLAR.Baslik</td>
+                                <td>
+                                    @if (y.Durum == true)
+                                    {
+                                        <span class="badge badge-success">Yayında</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">Onay Bekliyor</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (y.Durum == false)
+                                    {
+                                        // Eğer Bekliyorsa -> YAYINLA butonu göster
+                                        <a href="/Admin/BlogYorumOnayla/@y.YorumID" class="btn btn-sm btn-success">
+                                            <i class="fa fa-check"></i> Yayınla
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        // Eğer Zaten Yayındaysa -> KALDIR (Geri Al) butonu göster
+                                        <a href="/Admin/BlogYorumKaldir/@y.YorumID" class="btn btn-sm btn-warning">
+                                            <i class="fa fa-minus-circle"></i> Kaldır
+                                        </a>
+                                    }
+
+                                    <a href="/Admin/BlogYorumSil/@y.YorumID" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i> Sil
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (Model.Item2.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Henüz yorum yok.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <script>
     document.querySelector('.custom-file-input').addEventListener('change', function (e) {
         var fileName = document.getElementById("resimDosyasi").files[0].name;
@@ -237,5 +330,55 @@
             "hideMethod": "fadeOut"
         }
         Command: toastr["success"]("Blog & Duyuru Başarıyla Güncellendi")
+    </script>
+}
+@if (TempData["sil"] != null)
+{
+    <script>
+
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        Command: toastr["success"]("Blog & Duyuru Başarıyla Silindi")
+    </script>
+}
+@if (TempData["bysil"] != null)
+{
+    <script>
+
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        Command: toastr["success"]("Blogtaki Yorum Başarıyla Silindi")
     </script>
 }

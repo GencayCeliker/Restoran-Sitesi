@@ -1,0 +1,150 @@
+﻿@model List<Restorant_Sitesi.Models.HAKKIMDA>
+@{
+    ViewBag.Title = "Hakkimizda";
+    Layout = "~/Views/Shared/RestourantLayout.cshtml";
+}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay" style="background: rgba(0,0,0,0.6);"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center mb-5">
+                <h1 class="mb-2 bread" style="font-weight: 800; letter-spacing: 2px;">Hikayemiz</h1>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="/Index/Index" style="color: #ffb400;">Ana Sayfa <i class="fa fa-chevron-right"></i></a></span>
+                    <span style="color: #ccc;">Hakkımızda <i class="fa fa-chevron-right"></i></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section ftco-no-pt ftco-no-pb mt-5">
+    <div class="container">
+        <div class="row d-flex">
+
+            <div class="col-md-6 d-flex">
+                @if (Model.Count >= 1)
+                {
+                    <div class="img img-2 w-100 mr-md-2 shadow" style="background-image: url('/images/@Model[0].Resim'); border-radius: 8px;"></div>
+                }
+
+                @if (Model.Count >= 2)
+                {
+                    <div class="img img-2 w-100 mr-md-2 shadow" style="background-image: url('/images/@Model[1].Resim'); border-radius: 8px;"></div>
+                }
+
+                @if (Model.Count >= 3)
+                {
+                    <div class="img img-2 w-100 ml-md-2 shadow" style="background-image: url('/images/@Model[2].Resim'); border-radius: 8px;"></div>
+                }
+            </div>
+
+            <div class="col-md-6 ftco-animate makereservation p-4 p-md-5">
+                <div class="heading-section ftco-animate mb-5">
+                    <span class="subheading" style="color: #ffb400; font-weight: bold; letter-spacing: 2px;">Sırrımız Ekibimizde</span>
+                    <h2 class="mb-4" style="font-weight: 800;">Kurucularımız</h2>
+
+                    @foreach (var kisi in Model)
+                    {
+                        <div class="mb-4">
+                            <h4 style="color: #cda434; font-weight: bold; margin-bottom: 5px;">
+                                <i class="fas fa-utensils" style="font-size: 14px; margin-right: 5px;"></i> @kisi.Baslik
+                            </h4>
+                            <p style="color: #666; font-size: 15px; line-height: 1.6;">
+                                @kisi.Icerik
+                            </p>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<section class="ftco-section ftco-counter img" id="section-counter" style="background-image: url('/images/bg_4.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay" style="background: rgba(0,0,0,0.7);"></div>
+    <div class="container">
+        <div class="row d-md-flex align-items-center justify-content-center">
+            <div class="col-lg-10">
+                <div class="row d-md-flex align-items-center">
+                    <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="120" style="color: #ffb400;">0</strong>
+                                <span style="color: #fff; font-weight: bold; letter-spacing: 1px;">Özel Lezzet</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="5400" style="color: #ffb400;">0</strong>
+                                <span style="color: #fff; font-weight: bold; letter-spacing: 1px;">Mutlu Misafir</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="15" style="color: #ffb400;">0</strong>
+                                <span style="color: #fff; font-weight: bold; letter-spacing: 1px;">Yıllık Tecrübe</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="8" style="color: #ffb400;">0</strong>
+                                <span style="color: #fff; font-weight: bold; letter-spacing: 1px;">Usta Şef</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section testimony-section" style="background-image: url('/images/bg_5.jpg');">
+    <div class="overlay" style="background: rgba(0,0,0,0.8);"></div>
+    <div class="container">
+        <div class="row justify-content-center mb-3 pb-2">
+            <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                <span class="subheading" style="color: #ffb400;">Geri Dönüşler</span>
+                <h2 class="mb-4">Müşterilerimiz Ne Diyor?</h2>
+            </div>
+        </div>
+        <div class="row ftco-animate justify-content-center">
+            <div class="col-md-7">
+                <div class="carousel-testimony owl-carousel ftco-owl">
+
+                    @foreach (var yorum in ViewBag.hyrm)
+                    {
+                        <div class="item">
+                            <div class="testimony-wrap text-center">
+                                <div class="text p-3">
+                                    <p class="mb-4" style="font-style: italic; font-size: 18px; color: #e0e0e0;">
+                                        "@yorum.YorumMetni"
+                                    </p>
+                                    <div class="user-img mb-4" style="background-image: url('/images/person_1.jpg')">
+                                        <span class="quote d-flex align-items-center justify-content-center" style="background: #ffb400;">
+                                            <i class="fa fa-quote-left text-white"></i>
+                                        </span>
+                                    </div>
+                                    <p class="name" style="font-weight: bold; color: white;">@yorum.MusteriAdSoyad</p>
+                                    <span class="position" style="color: #ffb400;">Misafir</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

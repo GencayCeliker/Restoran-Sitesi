@@ -35,7 +35,11 @@ namespace Restorant_Sitesi.Models
         public DbSet<URUNLER> URUNLER { get; set; }
         public DbSet<USTILETISIM> USTILETISIM { get; set; }
         public DbSet<YORUMLAR> YORUMLAR { get; set; }
-        public DbSet<DUYURUBLOGYORUMLARI> DUYURUBLOGYORUMLARI { get; set; }
         public DbSet<HAKKIMDA> HAKKIMDA { get; set; }
+        public DbSet<NAVBAR> NAVBAR { get; set; }
+        public DbSet<SIFRE_SIFIRLAMA> SIFRE_SIFIRLAMA { get; set; }
+        public DbSet<SITE_AYARLARI> SITE_AYARLARI { get; set; }
+        public DbSet<UYELER> UYELER { get; set; }
+        public DbSet<DUYURUBLOGYORUMLARI> DUYURUBLOGYORUMLARI { get; set; }
     }
 }

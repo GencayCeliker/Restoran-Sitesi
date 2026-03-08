@@ -29,9 +29,9 @@
 <section class="ftco-section ftco-wrap-about ftco-no-pb ftco-no-pt">
     <div class="container">
         <div class="row no-gutters">
-            <div class="col-sm-4 p-4 p-md-5 d-flex align-items-center justify-content-center bg-primary">
 
-                <form action="/Index/RezarvasyonYap" method="post" class="appointment-form">
+            <div class="col-sm-4 p-4 p-md-5 d-flex align-items-center justify-content-center bg-primary">
+                <form action="/Index/RezarvasyonYap" method="post" class="appointment-form w-100">
                     <h3 class="mb-3">REZERVASYON YAPIN</h3>
                     <div class="row">
                         <div class="col-md-12">
@@ -69,36 +69,43 @@
                             <div class="form-group">
                                 <div class="input-wrap">
                                     <div class="icon"><span class="fa fa-user"></span></div>
-                                    <input type="number"
-                                           name="KisiSayisi"
-                                           class="form-control"
-                                           placeholder="Kişi Sayısı (Örn: 4)"
-                                           min="1"
-                                           required>
+                                    <input type="number" name="KisiSayisi" class="form-control" placeholder="Kişi Sayısı (Örn: 4)" min="1" required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="submit" value="Masayı Ayırt" class="btn btn-white py-3 px-4">
+                                <input type="submit" value="Masayı Ayırt" class="btn btn-white py-3 px-4 w-100">
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-sm-8 wrap-about py-5 ftco-animate img" style="background-image: url('../../images/@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Resim');">
-                <div class="row pb-5 pb-md-0">
-                    <div class="col-md-12 col-lg-7">
-                        <div class="heading-section mt-5 mb-4">
-                            <div class="pl-lg-3 ml-md-5">
+
+            <div class="col-sm-8">
+                <div class="row no-gutters h-100">
+
+                    <div class="col-md-6 wrap-about py-5 pl-md-5 pr-md-4 ftco-animate d-flex align-items-center">
+                        <div class="text-wrap w-100">
+                            <div class="heading-section mb-4">
                                 <span class="subheading">Hakkımızda</span>
-                                <h2 class="mb-4">@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Baslik</h2>
+                                <h2 class="mb-4">@Model.Hakkımda.FirstOrDefault(x => x.HakkimdaID == 1).Baslik</h2>
                             </div>
-                        </div>
-                        <div class="pl-lg-3 ml-md-5">
-                            <p>@Model.Hakkımda.OrderByDescending(x => x.HakkimdaID).Take(1).FirstOrDefault().Icerik</p>
+                            <p style="line-height: 1.8; color: #555; font-size: 15px; text-align: justify;">
+                                @Model.Hakkımda.FirstOrDefault(x => x.HakkimdaID == 1).Icerik
+                            </p>
                         </div>
                     </div>
+                    <div class="col-md-6 img ftco-animate"
+                         style="        background-image: url('/images/@Model.Hakkımda.FirstOrDefault(x => x.HakkimdaID == 1).Resim' );
+        width: 90%; /* Kutuyu sola doğru genişlettik ki uzun kol rahatça sığsın */
+        height: 100%;
+        background-size: auto 100%;
+        background-position: right -60px bottom;
+        background-repeat: no-repeat;
+        min-height: 400px;">
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -163,5 +163,11 @@ namespace Restorant_Sitesi.Controllers
 
             return View(tumBloglar);
         }
+        public ActionResult Hakkimizda()
+        {
+            var hakkimizda = db.HAKKIMDA.Where(x => x.HakkimdaID != 1).ToList();
+            ViewBag.hyrm = db.DUYURUBLOGYORUMLARI.Where(x => x.Durum == true).OrderByDescending(x => x.YorumID).Take(5).ToList();
+            return View(hakkimizda); 
+        }
     }
 }
