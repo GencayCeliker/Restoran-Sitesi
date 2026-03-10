@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Web.Helpers;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -307,20 +308,73 @@ namespace Restorant_Sitesi.Controllers
         {
             if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
             {
-                string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
-                string yol = Path.Combine(Server.MapPath("~/images/"), dosyaAdi);
-                ResimDosyasi.SaveAs(yol);
-                veri.Resim = "/images/" + dosyaAdi;
+                // 1. Güvenlik: Sadece resim dosyalarına izin ver
+                if (ResimDosyasi.ContentType == "image/jpeg" || ResimDosyasi.ContentType == "image/jpg" || ResimDosyasi.ContentType == "image/png")
+                {
+                    // 2. Çöp Temizliği: Eğer güncelleme yapılıyorsa ve eski resim varsa, onu sunucudan SİL!
+                    if (!string.IsNullOrEmpty(EskiResimYolu))
+                    {
+                        var silinecekYol = Server.MapPath(EskiResimYolu);
+                        if (System.IO.File.Exists(silinecekYol))
+                        {
+                            System.IO.File.Delete(silinecekYol);
+                        }
+                    }
+
+                    // 3. GUID ile Benzersiz İsimlendirme
+                    var uzanti = Path.GetExtension(ResimDosyasi.FileName);
+                    var yeniAd = Guid.NewGuid().ToString() + uzanti;
+                    var yol = Path.Combine(Server.MapPath("~/images/"), yeniAd);
+
+                    // 4. Boyutlandırma ve Kaydetme (WebImage)
+                    WebImage img = new WebImage(ResimDosyasi.InputStream);
+                    if (img.Width > 1200) img.Resize(1200, 1200, preserveAspectRatio: true, preventEnlarge: true);
+                    img.Save(yol);
+
+                    veri.Resim = "/images/" + yeniAd;
+                }
             }
             else
             {
+                // Resim seçilmediyse eskisini koru
                 veri.Resim = EskiResimYolu;
             }
+
+            // 5. Veritabanı İşlemleri ve Toastr Bildirimleri İçin TempData Ayarı
             if (veri.AnasayfaID == 0)
+            {
                 db.ANASAYFA.Add(veri);
+                TempData["Basarili"] = "Yeni slider başarıyla eklendi!"; 
+            }
             else
+            {
                 db.Entry(veri).State = System.Data.Entity.EntityState.Modified;
+                TempData["Bilgi"] = "Slider başarıyla güncellendi!"; 
+            }
+
             db.SaveChanges();
+            return RedirectToAction("SliderYonetimi");
+        }
+
+        public ActionResult SliderSil(int id)
+        {
+            var veri = db.ANASAYFA.Find(id);
+            if (veri != null)
+            {
+                // Silerken de sunucudaki fiziksel resmi bul ve yok et!
+                if (!string.IsNullOrEmpty(veri.Resim))
+                {
+                    var silinecekYol = Server.MapPath(veri.Resim);
+                    if (System.IO.File.Exists(silinecekYol))
+                    {
+                        System.IO.File.Delete(silinecekYol);
+                    }
+                }
+
+                db.ANASAYFA.Remove(veri);
+                db.SaveChanges();
+                TempData["Hata"] = "Slider sistemden kalıcı olarak silindi!";
+            }
             return RedirectToAction("SliderYonetimi");
         }
         [HttpPost]
@@ -339,16 +393,6 @@ namespace Restorant_Sitesi.Controllers
                 });
             }
             return Json(null);
-        }
-        public ActionResult SliderSil(int id)
-        {
-            var veri = db.ANASAYFA.Find(id);
-            if (veri != null)
-            {
-                db.ANASAYFA.Remove(veri);
-                db.SaveChanges();
-            }
-            return RedirectToAction("SliderYonetimi");
         }
         public ActionResult BlogVeDuyuru()
         {

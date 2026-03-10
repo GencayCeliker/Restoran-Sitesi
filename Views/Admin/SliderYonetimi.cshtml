@@ -24,13 +24,11 @@
         padding-top: 10px !important;
     }
 </style>
-
 @model IEnumerable<Restorant_Sitesi.Models.ANASAYFA>
 @{
     ViewBag.Title = "SliderYonetimi";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
-
 <div class="row mb-4">
     <div class="col-lg-12">
         <div class="card bg-dark">
@@ -80,17 +78,11 @@
                                     <td><img src="@x.Resim" width="60" class="rounded" /></td>
                                     <td>@x.Baslik</td>
                                     <td>
-                                        <span class="badge @(x.Durum ? "badge-success" : "badge-danger")">
-                                            @(x.Durum ? "Aktif" : "Pasif")
-                                        </span>
+                                        <span class="badge @(x.Durum ? "badge-success" : "badge-danger")">@(x.Durum ? "Aktif" : "Pasif")</span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-info" onclick="sliderDuzenle(@x.AnasayfaID)">
-                                            DÜZENLE
-                                        </button>
-                                        <a href="/Admin/SliderSil/@x.AnasayfaID" class="btn btn-sm btn-danger" onclick="return confirm('Bu slider kaydını silmek istediğinize emin misiniz? (Resim dosyanız silinmeyecektir)')">
-                                            SİL
-                                        </a>
+                                        <button type="button" class="btn btn-sm btn-info" onclick="sliderDuzenle(@x.AnasayfaID)">DÜZENLE</button>
+                                        <a href="/Admin/SliderSil/@x.AnasayfaID" class="btn btn-sm btn-danger" onclick="return confirm('Bu slider kaydını kalıcı olarak silmek istediğinize emin misiniz?')">SİL</a>
                                     </td>
                                 </tr>
                             }
@@ -111,11 +103,11 @@
                     <input type="hidden" name="AnasayfaID" id="AnasayfaID" value="0" />
                     <div class="form-group">
                         <label>Başlık</label>
-                        <input type="text" name="Baslik" class="form-control" placeholder="Ana başlık..." required />
+                        <input type="text" name="Baslik" id="Baslik" class="form-control" placeholder="Ana başlık..." required />
                     </div>
                     <div class="form-group">
                         <label>İçerik</label>
-                        <input type="text" name="Icerik" class="form-control" placeholder="Kısa içerik yazısı..." required />
+                        <input type="text" name="Icerik" id="Icerik" class="form-control" placeholder="Kısa içerik yazısı..." required />
                     </div>
                     <div class="form-group">
                         <label>Açıklama (Detay)</label>
@@ -123,16 +115,21 @@
                     </div>
                     <div class="form-group">
                         <label>Resim Yükle</label>
-                        <input type="file" name="ResimDosyasi" class="form-control" />
+                        <input type="file" name="ResimDosyasi" class="form-control" onchange="$('#onizlemeKutusu').show(); $('#canliResim')[0].src = window.URL.createObjectURL(this.files[0])" />
+
+                        <div id="onizlemeKutusu" style="display:none;" class="mt-3 text-center">
+                            <span class="badge badge-info mb-1">Yeni Seçilen Resim</span>
+                            <img id="canliResim" style="width:100%; height:150px; object-fit:cover; border-radius:8px; border:2px dashed #00a8ff;" />
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Yayın Durumu</label>
-                        <select name="Durum" class="form-control">
+                        <select name="Durum" id="Durum" class="form-control">
                             <option value="true">Aktif (Sitede Görünsün)</option>
                             <option value="false">Pasif (Gizle)</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Yeni Slider Ekle</button>
+                    <button type="submit" class="btn btn-primary btn-block">Değişiklikleri Kaydet</button>
                     <button type="button" class="btn btn-secondary btn-block mt-2" onclick="formuTemizle()">İptal / Yeni Kayıt</button>
                 }
             </div>
@@ -141,45 +138,52 @@
 </div>
 
 @section Scripts {
+    <script src="~/Scripts/toastr.min.js"></script>
+
     <script>
+        // --- 1. AJAX VERİ ÇEKME ---
         function sliderDuzenle(id) {
-            // Arka planda Controller'daki metoda gidip veriyi istiyoruz
             $.ajax({
-                url: '/Admin/SliderGuncelle',
+                url: '@Url.Action("SliderGuncelle", "Admin")',
                 type: 'POST',
+                dataType: 'json',
                 data: { id: id },
                 success: function (data) {
                     if (data != null) {
                         $('#AnasayfaID').val(id);
                         $('#EskiResimYolu').val(data.resim);
-                        $('input[name="Baslik"]').val(data.baslik);
-                        $('input[name="Icerik"]').val(data.icerik);
+                        $('#Baslik').val(data.baslik);
+                        $('#Icerik').val(data.icerik);
 
                         var durum = (data.durum === true || data.durum === "True" || data.durum === "true") ? "true" : "false";
-                        $('select[name="Durum"]').val(durum);
+                        $('#Durum').val(durum);
 
                         var aciklamaMetni = data.aciklama ? data.aciklama : "";
                         $('#summernote').summernote('code', aciklamaMetni);
 
+                        // Önizleme kutusunu sıfırla
+                        $('#onizlemeKutusu').hide();
+
                         $('.btn-block').first().text("GÜNCELLE").removeClass("btn-primary").addClass("btn-warning");
 
-                        $('html, body').animate({
-                            scrollTop: $(".col-lg-5").offset().top - 100
-                        }, 500);
+                        $('html, body').animate({ scrollTop: $(".col-lg-5").offset().top - 100 }, 500);
                     }
                 },
-                error: function () {
-                    alert("Veri çekilirken bir hata oluştu!");
+                error: function (xhr, status, error) {
+                    alert("BAĞLANTI HATASI!\nHata Kodu: " + xhr.status);
                 }
             });
         }
 
+        // --- 2. FORMU SIFIRLAMA ---
         function formuTemizle() {
             $('#AnasayfaID').val(0);
             $('#EskiResimYolu').val('');
             $('form')[0].reset();
-            $('#summernote').summernote('code', ''); // Editörü temizler
+            $('#summernote').summernote('code', '');
+            $('#onizlemeKutusu').hide(); // Önizlemeyi gizle
             $('.btn-block').first().text("Değişiklikleri Kaydet").removeClass("btn-warning").addClass("btn-primary");
         }
+
     </script>
 }
