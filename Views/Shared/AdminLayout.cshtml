@@ -20,7 +20,7 @@
     <link href="~/AdminTemplate/assets/css/sidebar-menu.css" rel="stylesheet" />
     <link href="~/AdminTemplate/assets/css/app-style.css" rel="stylesheet" />
 
-    <link href="~/Content/summernote/summernote-lite.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
 
     <style>
@@ -35,7 +35,7 @@
         .note-editable {
             background-color: #ffffff !important;
             color: #000000 !important;
-            min-height: 200px;
+           
         }
 
         /* 3. RENK PALETİNE BAŞLIK EKLEME VE KAYMA DÜZELTMESİ */
@@ -70,6 +70,17 @@
                 padding-bottom: 3px;
                 margin-top: 10px;
             }
+        .note-editor {
+            margin-bottom: 0 !important;
+        }
+
+        .note-editable {
+            overflow-y: auto !important;
+        }
+
+        .content-wrapper {
+            overflow-x: hidden;
+        }
     </style>
 </head>
 
@@ -82,6 +93,11 @@
                     <h5 class="logo-text">Moly RS Admin</h5>
                 </a>
             </div>
+            <style>
+                html {
+                    scroll-behavior: auto !important;
+                }
+            </style>
             <ul class="sidebar-menu do-nicescrol">
                 <li class="sidebar-header">GENEL YÖNETİM</li>
                 <li><a href="/Admin/Index"><i class="zmdi zmdi-view-dashboard"></i> <span>Anasayfa</span></a></li>
@@ -136,6 +152,12 @@
                 @RenderBody()
             </div>
         </div>
+
+        <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+        <footer class="footer">
+            <div class="container text-center">Copyright © 2026 Moly RS Admin</div>
+        </footer>
     </div>
 
     <script src="~/AdminTemplate/assets/js/jquery.min.js"></script>
@@ -145,17 +167,18 @@
     <script src="~/AdminTemplate/assets/js/sidebar-menu.js"></script>
     <script src="~/AdminTemplate/assets/js/app-script.js"></script>
 
-    <script src="~/Scripts/summernote/summernote-lite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-tr-TR.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
 
     <script>
         $(document).ready(function () {
             // SUMMERNOTE BAŞLATICI
-            $('.summernote').summernote({
+            if (!$('.summernote').data('summernote')) {
+                $('.summernote').summernote({
                 placeholder: 'İçeriği buraya giriniz...',
                 tabsize: 2,
-                height: 250,
+                height: 220,
                 lang: 'tr-TR', // Dil paketini aktif ettik!
                 toolbar: [
                     ['style', ['style']],
@@ -166,7 +189,24 @@
                     ['insert', ['link', 'picture', 'video']],
                     ['view', ['fullscreen', 'codeview', 'help']]
                 ]
-            });
+                });
+            }
+            if (!$('.summernote-kisa').data('summernote')) {
+                $('.summernote-kisa').summernote({
+                placeholder: 'İçeriği buraya giriniz...',
+                tabsize: 2,
+                height: 120,
+                lang: 'tr-TR',
+                toolbar: [
+                    // Başlıkta tabloya veya videoya gerek olmadığı için araç çubuğunu sadeleştirdik
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                   
+                    ['color', ['color']],
+                    ['view', ['fullscreen', 'codeview']]
+                ]
+                });
+            }
 
             // TOASTR GLOBAL AYARI
             toastr.options = {

@@ -23,6 +23,18 @@
     .card-body {
         padding-top: 10px !important;
     }
+    /* Summernote stabilizasyonu */
+    .note-editor {
+        transition: none !important; /* Animasyonları kapat */
+        transform: translateZ(0); /* GPU ivmesi */
+        backface-visibility: hidden;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .note-editable {
+        min-height: 100px;
+        overflow-y: auto !important;
+    }
 </style>
 @model IEnumerable<Restorant_Sitesi.Models.ANASAYFA>
 @{
@@ -42,8 +54,8 @@
                             <div class="carousel-item @(i == 0 ? "active" : "")">
                                 <img src="@x.Resim" class="d-block w-100" style="object-fit: cover; height: 250px; opacity:0.6">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h5>@x.Baslik</h5>
-                                    <p>@x.Icerik</p>
+                                    <h5>@Html.Raw(x.Baslik)</h5>
+                                    <p>@Html.Raw(x.Icerik)</p>
                                     <p>@Html.Raw(x.Aciklama)</p>
                                 </div>
                             </div>
@@ -76,7 +88,7 @@
                             {
                                 <tr>
                                     <td><img src="@x.Resim" width="60" class="rounded" /></td>
-                                    <td>@x.Baslik</td>
+                                    <td>@Html.Raw(x.Baslik)</td>
                                     <td>
                                         <span class="badge @(x.Durum ? "badge-success" : "badge-danger")">@(x.Durum ? "Aktif" : "Pasif")</span>
                                     </td>
@@ -97,17 +109,17 @@
         <div class="card">
             <div class="card-header">Slider Ekle / Güncelle</div>
             <div class="card-body">
-                @using (Html.BeginForm("SliderKaydet", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("SliderKaydet", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "sliderForm" }))
                 {
                     <input type="hidden" name="EskiResimYolu" id="EskiResimYolu" />
                     <input type="hidden" name="AnasayfaID" id="AnasayfaID" value="0" />
                     <div class="form-group">
                         <label>Başlık</label>
-                        <input type="text" name="Baslik" id="Baslik" class="form-control" placeholder="Ana başlık..." required />
+                        <textarea name="Baslik" id="Baslik" class="form-control summernote-kisa"></textarea>
                     </div>
                     <div class="form-group">
                         <label>İçerik</label>
-                        <input type="text" name="Icerik" id="Icerik" class="form-control" placeholder="Kısa içerik yazısı..." required />
+                        <textarea name="Icerik" id="Icerik" class="form-control summernote-kisa"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Açıklama (Detay)</label>
@@ -138,52 +150,47 @@
 </div>
 
 @section Scripts {
-    <script src="~/Scripts/toastr.min.js"></script>
 
     <script>
-        // --- 1. AJAX VERİ ÇEKME ---
         function sliderDuzenle(id) {
             $.ajax({
                 url: '@Url.Action("SliderGuncelle", "Admin")',
                 type: 'POST',
-                dataType: 'json',
                 data: { id: id },
                 success: function (data) {
                     if (data != null) {
                         $('#AnasayfaID').val(id);
                         $('#EskiResimYolu').val(data.resim);
-                        $('#Baslik').val(data.baslik);
-                        $('#Icerik').val(data.icerik);
 
-                        var durum = (data.durum === true || data.durum === "True" || data.durum === "true") ? "true" : "false";
+                        // Layout'ta summernote zaten başlatıldı, sadece içerik ekle
+                        $('#Baslik').summernote('code', data.baslik || '');
+                        $('#Icerik').summernote('code', data.icerik || '');
+                        $('#summernote').summernote('code', data.aciklama || '');
+
+                        var durum = (data.durum === true || data.durum.toString().toLowerCase() === "true") ? "true" : "false";
                         $('#Durum').val(durum);
 
-                        var aciklamaMetni = data.aciklama ? data.aciklama : "";
-                        $('#summernote').summernote('code', aciklamaMetni);
-
-                        // Önizleme kutusunu sıfırla
-                        $('#onizlemeKutusu').hide();
-
-                        $('.btn-block').first().text("GÜNCELLE").removeClass("btn-primary").addClass("btn-warning");
-
-                        $('html, body').animate({ scrollTop: $(".col-lg-5").offset().top - 100 }, 500);
+                        if (data.resim) {
+                            $('#canliResim').attr('src', data.resim);
+                            $('#onizlemeKutusu').fadeIn();
+                        }
                     }
-                },
-                error: function (xhr, status, error) {
-                    alert("BAĞLANTI HATASI!\nHata Kodu: " + xhr.status);
                 }
             });
         }
 
-        // --- 2. FORMU SIFIRLAMA ---
         function formuTemizle() {
             $('#AnasayfaID').val(0);
             $('#EskiResimYolu').val('');
-            $('form')[0].reset();
-            $('#summernote').summernote('code', '');
-            $('#onizlemeKutusu').hide(); // Önizlemeyi gizle
-            $('.btn-block').first().text("Değişiklikleri Kaydet").removeClass("btn-warning").addClass("btn-primary");
-        }
+            $('#sliderForm')[0].reset();
 
+            // Summernote'ları temizle
+            $('#Baslik').summernote('code', '');
+            $('#Icerik').summernote('code', '');
+            $('#summernote').summernote('code', '');
+
+            $('#onizlemeKutusu').fadeOut();
+        }
     </script>
-}
+
+    }
