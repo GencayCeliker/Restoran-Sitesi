@@ -173,7 +173,9 @@
                         $('#Durum').val(data.durum.toString().toLowerCase());
 
                         if (data.resim) {
-                            $('#onizlemeImg').attr('src', '/' + data.resim);
+                         
+                            var resimYolu = data.resim.startsWith('/') ? data.resim : '/' + data.resim;
+                            $('#onizlemeImg').attr('src', resimYolu);
                             $('#onizleme').fadeIn();
                         }
 
