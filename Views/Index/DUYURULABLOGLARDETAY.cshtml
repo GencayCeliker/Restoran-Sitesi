@@ -32,7 +32,7 @@
             <div class="col-lg-8 ftco-animate">
 
                 <div class="d-flex justify-content-between align-items-baseline mb-3 pb-3 border-bottom">
-                    <h2 class="mb-0" style="font-weight: bold; color: #333;">@Model.Baslik</h2>
+                    <h2 class="mb-0" style="font-weight: bold; color: #333;">@Html.Raw(@Model.Baslik)</h2>
                     <span style="font-size: 14px; color: #999; font-weight: 500;">
                         <i class="fa fa-user"></i> @Model.Yazar &nbsp;|&nbsp;
                         <i class="fa fa-calendar"></i> @Model.Tarih.Value.ToString("dd.MM.yyyy")
@@ -42,7 +42,7 @@
                 <p>
                     <img src="../../@Model.Resim" alt="Blog Visual" class="img-fluid rounded shadow-sm">
                 </p>
-                <p style="line-height: 1.8; font-size: 16px; color: #555;">@Model.Icerik</p>
+                <p style="line-height: 1.8; font-size: 16px; color: #555;">@Html.Raw(@Model.Icerik)</p>
 
                 <div class="tag-widget post-tag-container mb-5 mt-5">
                     <div class="tagcloud">
@@ -152,7 +152,7 @@
                             <div class="block-21 mb-4 d-flex">
                                 <a class="blog-img mr-4" style="background-image: url('../../@x.Resim'); border-radius: 5px;"></a>
                                 <div class="text">
-                                    <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@x.Icerik</a></h3>
+                                    <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@Html.Raw(x.Icerik)</a></h3>
                                     <div class="meta">
                                         <div><a href="#"><span class="icon-calendar"></span> @x.Tarih.Value.ToString("dd.MM.yyyy")</a></div>
                                         <div><a href="#"><span class="icon-person"></span> @x.Yazar</a></div>

@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Restorant_Sitesi.Models.HAKKIMDA>
+<style>
+    /* TABLO ÜST ÇİZGİSİNİ KALDIRMA */
+    .table td, .table th {
+        border-top: 0 !important; /* Üstteki o beyaz çizgiyi siler */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; /* Alt çizgiyi sliderdaki gibi zarif yapar */
+        vertical-align: middle !important;
+    }
+
+    .table thead th {
+        border-bottom-width: 1px !important;
+        padding-bottom: 15px !important; /* Başlıklara biraz nefes payı verir */
+    }
+</style>
+@{
+    ViewBag.Title = "HakkimizdaYonetim";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header">Hakkımızda Yazıları</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Resim</th>
+                                <th>Başlık</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td><img src="@x.Resim" width="60" class="rounded" /></td>
+                                    <td>@Html.Raw(x.Baslik)</td>
+                                    <td>
+                                        @if (x.HakkimdaID == 1)
+                                        {
+                                            <span class="badge badge-warning">REZERVASYON YANI (ÖZEL)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-info">SAYFA İÇERİĞİ</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-info" onclick="hakkimdaDuzenle(@x.HakkimdaID)">DÜZENLE</button>
+                                        <a href="/Admin/HakkimizdaSil/@x.HakkimdaID" class="btn btn-sm btn-danger" onclick="return confirm('Hakkımızda kaydını kalıcı olarak silmek istediğinize emin misiniz?')">SİL</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-lg-5" id="duzenleArea">
+        <div class="card">
+            <div class="card-header">İçerik Düzenle</div>
+            <div class="card-body">
+                @using (Html.BeginForm("HakkimizdaKaydet", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "hakkimdaForm" }))
+                {
+                    <input type="hidden" name="HakkimdaID" id="HakkimdaID" />
+                    <input type="hidden" name="EskiResimYolu" id="EskiResimYolu" />
+
+                    <div class="form-group">
+                        <label>Başlık</label>
+                        <textarea name="Baslik" id="Baslik" class="summernote-kisa"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>İçerik</label>
+                        <textarea name="Icerik" id="Icerik" class="summernote"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Resim Değiştir</label>
+                        <input type="file" name="ResimDosyasi" class="form-control" onchange="$('#onizleme').show(); $('#onizlemeImg')[0].src = window.URL.createObjectURL(this.files[0])" />
+                        <div id="onizleme" style="display:none;" class="mt-2">
+                            <img id="onizlemeImg" style="width:100%; height:150px; object-fit:cover;" class="rounded shadow" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning btn-block">DEĞİŞİKLİKLERİ UYGULA</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        function hakkimdaDuzenle(id) {
+            if (!id) {
+                toastr.warning('Düzenlenecek kayıt bulunamadı!');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("HakkimizdaGetir", "Admin")/' + id,
+                type: 'POST',
+                success: function (data) {
+                    if (data) {  // Veri varsa
+                        $('#HakkimdaID').val(data.id);
+                        $('#EskiResimYolu').val(data.resim);
+
+                        // Summernote'ları doldur
+                        $('#Baslik').summernote('code', data.baslik || '');
+                        $('#Icerik').summernote('code', data.icerik || '');
+
+                        // Resim varsa göster, yoksa gizle
+                        if (data.resim) {
+                            $('#onizlemeImg').attr('src', data.resim);
+                            $('#onizleme').show();
+                        } else {
+                            $('#onizleme').hide();
+                        }
+
+                        // Sayfayı düzenleme alanına kaydır
+                        $('html, body').animate({
+                            scrollTop: $("#duzenleArea").offset().top - 50
+                        }, 800);
+                    } else {
+                        toastr.error('Veri alınamadı!');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Bir hata oluştu: ' + error);
+                }
+            });
+        }
+
+        // Sayfa yüklendiğinde formu temizle (opsiyonel)
+        $(document).ready(function () {
+            // Yeni kayıt için formu sıfırla
+            $('#hakkimdaForm')[0].reset();
+            $('#onizleme').hide();
+        });
+    </script>
+}

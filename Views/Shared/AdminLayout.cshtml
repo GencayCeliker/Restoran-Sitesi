@@ -22,66 +22,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
-
-    <style>
-        /* 1. SEÇİLEN METNİ GÖRÜNÜR YAPMA (MAVİ YAKALAMA) */
-        .note-editable::selection,
-        .note-editable *::selection {
-            background-color: #007bff !important;
-            color: #ffffff !important;
-        }
-
-        /* 2. SUMMERNOTE DARK TEMA UYUMU */
-        .note-editable {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-           
-        }
-
-        /* 3. RENK PALETİNE BAŞLIK EKLEME VE KAYMA DÜZELTMESİ */
-        .note-color .note-dropdown-menu {
-            min-width: 215px !important;
-            padding: 10px !important;
-        }
-
-            /* Üstteki Palet: Arka Plan (Fosforlu Kalem) */
-            .note-color .note-dropdown-menu .note-palette:first-child::before {
-                content: 'ARKA PLAN (FOSFORLU)';
-                display: block;
-                text-align: center;
-                font-weight: 800;
-                font-size: 10px;
-                color: #e74c3c;
-                margin-bottom: 5px;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 3px;
-            }
-
-            /* Alttaki Palet: Yazı Rengi */
-            .note-color .note-dropdown-menu .note-palette:last-child::before {
-                content: 'YAZI RENGİ';
-                display: block;
-                text-align: center;
-                font-weight: 800;
-                font-size: 10px;
-                color: #2980b9;
-                margin-bottom: 5px;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 3px;
-                margin-top: 10px;
-            }
-        .note-editor {
-            margin-bottom: 0 !important;
-        }
-
-        .note-editable {
-            overflow-y: auto !important;
-        }
-
-        .content-wrapper {
-            overflow-x: hidden;
-        }
-    </style>
 </head>
 
 <body class="bg-theme bg-theme1">
@@ -101,14 +41,21 @@
             <ul class="sidebar-menu do-nicescrol">
                 <li class="sidebar-header">GENEL YÖNETİM</li>
                 <li><a href="/Admin/Index"><i class="zmdi zmdi-view-dashboard"></i> <span>Anasayfa</span></a></li>
-                <li><a href="/Admin/SliderYonetimi"><i class="zmdi zmdi-calendar-check"></i> <span>SliderYonetimi</span></a></li>
-                <li><a href="/Admin/Rezervasyonlar"><i class="zmdi zmdi-calendar-check"></i> <span>Rezervasyonlar</span> <small class="badge float-right badge-light">YENİ</small></a></li>
+
+                <li><a href="/Admin/SliderYonetimi"><i class="zmdi zmdi-collection-image-o"></i> <span>Slider Yönetimi</span></a></li>
+
+                <li><a href="/Admin/Rezervasyonlar"><i class="zmdi zmdi-calendar-check"></i> <span>Rezervasyonlar</span></a></li>
                 <li><a href="/Admin/Masalar"><i class="zmdi zmdi-layers"></i> <span>Masa Düzeni</span></a></li>
+
                 <li class="sidebar-header">MENÜ & İÇERİK</li>
                 <li><a href="/Admin/Kategoriler"><i class="zmdi zmdi-label"></i> <span>Kategoriler</span></a></li>
                 <li><a href="/Admin/Urunler"><i class="zmdi zmdi-cutlery"></i> <span>Ürünler / Menü</span></a></li>
                 <li><a href="/Admin/Sefler"><i class="zmdi zmdi-face"></i> <span>Şeflerimiz</span></a></li>
+
+                <li><a href="/Admin/HakkimizdaYonetim"><i class="zmdi zmdi-info-outline"></i> <span>Hakkımızda</span></a></li>
+
                 <li><a href="/Admin/BlogVeDuyuru"><i class="zmdi zmdi-assignment"></i> <span>Blog & Duyuru</span></a></li>
+
                 <li class="sidebar-header">SİTE AYARLARI</li>
                 <li><a href="/Admin/Iletisim"><i class="zmdi zmdi-phone"></i> <span>İletişim Bilgileri</span></a></li>
                 <li><a href="/Admin/Ayarlar"><i class="zmdi zmdi-settings"></i> <span>Genel Ayarlar</span></a></li>
@@ -174,37 +121,37 @@
     <script>
         $(document).ready(function () {
             // SUMMERNOTE BAŞLATICI
+            // SUMMERNOTE BAŞLATICI
             if (!$('.summernote').data('summernote')) {
                 $('.summernote').summernote({
-                placeholder: 'İçeriği buraya giriniz...',
-                tabsize: 2,
-                height: 220,
-                lang: 'tr-TR', // Dil paketini aktif ettik!
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
+                    placeholder: 'İçeriği buraya giriniz...',
+                    tabsize: 2,
+                    height: 220,
+                    lang: 'tr-TR',
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ]
                 });
             }
+
             if (!$('.summernote-kisa').data('summernote')) {
                 $('.summernote-kisa').summernote({
-                placeholder: 'İçeriği buraya giriniz...',
-                tabsize: 2,
-                height: 120,
-                lang: 'tr-TR',
-                toolbar: [
-                    // Başlıkta tabloya veya videoya gerek olmadığı için araç çubuğunu sadeleştirdik
-                    ['style', ['style']],
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                   
-                    ['color', ['color']],
-                    ['view', ['fullscreen', 'codeview']]
-                ]
+                    placeholder: 'İçeriği buraya giriniz...',
+                    tabsize: 2,
+                    height: 120,
+                    lang: 'tr-TR',
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['view', ['fullscreen', 'codeview']]
+                    ]
                 });
             }
 

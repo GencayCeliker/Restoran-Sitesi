@@ -298,7 +298,7 @@ namespace Restorant_Sitesi.Controllers
 
         public ActionResult SliderYonetimi()
         {
-            var liste = db.ANASAYFA.ToList();
+            var liste = db.ANASAYFA.OrderByDescending(x => x.AnasayfaID).ToList();
             return View(liste);
         }
 
@@ -308,10 +308,8 @@ namespace Restorant_Sitesi.Controllers
         {
             if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
             {
-                // 1. Güvenlik: Sadece resim dosyalarına izin ver
                 if (ResimDosyasi.ContentType == "image/jpeg" || ResimDosyasi.ContentType == "image/jpg" || ResimDosyasi.ContentType == "image/png")
                 {
-                    // 2. Çöp Temizliği: Eğer güncelleme yapılıyorsa ve eski resim varsa, onu sunucudan SİL!
                     if (!string.IsNullOrEmpty(EskiResimYolu))
                     {
                         var silinecekYol = Server.MapPath(EskiResimYolu);
@@ -320,13 +318,9 @@ namespace Restorant_Sitesi.Controllers
                             System.IO.File.Delete(silinecekYol);
                         }
                     }
-
-                    // 3. GUID ile Benzersiz İsimlendirme
                     var uzanti = Path.GetExtension(ResimDosyasi.FileName);
                     var yeniAd = Guid.NewGuid().ToString() + uzanti;
                     var yol = Path.Combine(Server.MapPath("~/images/"), yeniAd);
-
-                    // 4. Boyutlandırma ve Kaydetme (WebImage)
                     WebImage img = new WebImage(ResimDosyasi.InputStream);
                     if (img.Width > 1200) img.Resize(1200, 1200, preserveAspectRatio: true, preventEnlarge: true);
                     img.Save(yol);
@@ -336,20 +330,17 @@ namespace Restorant_Sitesi.Controllers
             }
             else
             {
-                // Resim seçilmediyse eskisini koru
                 veri.Resim = EskiResimYolu;
             }
-
-            // 5. Veritabanı İşlemleri ve Toastr Bildirimleri İçin TempData Ayarı
             if (veri.AnasayfaID == 0)
             {
                 db.ANASAYFA.Add(veri);
-                TempData["Basarili"] = "Yeni slider başarıyla eklendi!"; 
+                TempData["Basarili"] = "Yeni slider başarıyla eklendi!";
             }
             else
             {
                 db.Entry(veri).State = System.Data.Entity.EntityState.Modified;
-                TempData["Bilgi"] = "Slider başarıyla güncellendi!"; 
+                TempData["Bilgi"] = "Slider başarıyla güncellendi!";
             }
 
             db.SaveChanges();
@@ -387,7 +378,7 @@ namespace Restorant_Sitesi.Controllers
                 {
                     baslik = veri.Baslik,
                     icerik = veri.Icerik,
-                    aciklama = veri.Aciklama, 
+                    aciklama = veri.Aciklama,
                     resim = veri.Resim,
                     durum = veri.Durum
                 });
@@ -396,72 +387,95 @@ namespace Restorant_Sitesi.Controllers
         }
         public ActionResult BlogVeDuyuru()
         {
-
             var bloglar = db.DUYURULABLOGLAR.OrderByDescending(x => x.DuyuruID).ToList();
             var yorumlar = db.DUYURUBLOGYORUMLARI.OrderByDescending(x => x.YorumID).ToList();
             var model = Tuple.Create(bloglar, yorumlar);
             return View(model);
         }
+
+        // --- DÜZENLEME İÇİN VERİ GETİR (AJAX) ---
+        [HttpPost]
+        public JsonResult BlogGetir(int id)
+        {
+            var veri = db.DUYURULABLOGLAR.Find(id);
+            return Json(new
+            {
+                id = veri.DuyuruID,
+                baslik = veri.Baslik,
+                yazar = veri.Yazar,
+                icerik = veri.Icerik,
+                resim = veri.Resim,
+                durum = veri.Durum
+            });
+        }
+
+        // --- KAYDET / GÜNCELLE ---
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult BlogKaydet(DUYURULABLOGLAR b, HttpPostedFileBase resimDosyasi)
         {
-            // 1. RESİM YÜKLEME KONTROLÜ
+            var guncellenecek = db.DUYURULABLOGLAR.Find(b.DuyuruID);
+            bool yeniKayit = false;
+
+            if (guncellenecek == null)
+            {
+                guncellenecek = new DUYURULABLOGLAR();
+                guncellenecek.Tarih = DateTime.Now;
+                yeniKayit = true;
+            }
+
+            // RESİM YÜKLEME VE ESKİ DOSYAYI SİLME
             if (resimDosyasi != null && resimDosyasi.ContentLength > 0)
             {
-                string dosyaAdi = Path.GetFileName(resimDosyasi.FileName);
-                string yol = Path.Combine(Server.MapPath("~/images/"), dosyaAdi);
-                resimDosyasi.SaveAs(yol);
-                b.Resim = "images/" + dosyaAdi;
-            }
-
-            // 2. EKLEME İŞLEMİ
-            if (b.DuyuruID == 0 || b.DuyuruID == null)
-            {
-                b.Tarih = DateTime.Now;
-                db.DUYURULABLOGLAR.Add(b);
-
-
-                TempData["ekle"] = 1;
-            }
-            // 3. GÜNCELLEME İŞLEMİ
-            else
-            {
-                var guncellenecek = db.DUYURULABLOGLAR.Find(b.DuyuruID);
-                if (guncellenecek != null)
+                // Eski resim varsa sunucudan fiziksel olarak sil
+                if (!string.IsNullOrEmpty(guncellenecek.Resim))
                 {
-                    guncellenecek.Baslik = b.Baslik;
-                    guncellenecek.Yazar = b.Yazar;
-                    guncellenecek.Icerik = b.Icerik;
-                    guncellenecek.Durum = b.Durum;
-                    if (resimDosyasi != null)
-                    {
-                        guncellenecek.Resim = b.Resim;
-                    }
-                    TempData["güncelle"] = 1;
+                    string eskiYol = Server.MapPath(guncellenecek.Resim);
+                    if (System.IO.File.Exists(eskiYol)) System.IO.File.Delete(eskiYol);
                 }
+
+                // Yeni resmi GUID ile isimlendir
+                string dosyaAdi = Guid.NewGuid().ToString().Substring(0, 8) + "-" + Path.GetFileName(resimDosyasi.FileName);
+                string yol = "/images/" + dosyaAdi;
+                resimDosyasi.SaveAs(Server.MapPath(yol));
+                guncellenecek.Resim = yol;
             }
+
+            guncellenecek.Baslik = b.Baslik;
+            guncellenecek.Yazar = b.Yazar;
+            guncellenecek.Icerik = b.Icerik;
+            guncellenecek.Durum = b.Durum;
+
+            if (yeniKayit) db.DUYURULABLOGLAR.Add(guncellenecek);
+
             db.SaveChanges();
+
+            // Layout'taki Toastr sistemiyle uyumlu bildirim
+            TempData["Basarili"] = yeniKayit ? "Blog başarıyla eklendi." : "Blog başarıyla güncellendi.";
             return RedirectToAction("BlogVeDuyuru");
         }
 
-
+        // --- BLOG SİL ---
         public ActionResult BlogSil(int id)
         {
             var silinecek = db.DUYURULABLOGLAR.Find(id);
             if (silinecek != null)
             {
+                // Bağlı resmi sunucudan temizle
+                if (!string.IsNullOrEmpty(silinecek.Resim))
+                {
+                    string yol = Server.MapPath(silinecek.Resim);
+                    if (System.IO.File.Exists(yol)) System.IO.File.Delete(yol);
+                }
+
                 db.DUYURULABLOGLAR.Remove(silinecek);
                 db.SaveChanges();
+                TempData["Basarili"] = "Blog ve bağlı resmi kalıcı olarak silindi.";
             }
-            TempData["sil"] = 1;
             return RedirectToAction("BlogVeDuyuru");
         }
-        public ActionResult BlogYorumYonetim()
-        {
-            var yorumlar = db.DUYURUBLOGYORUMLARI.OrderByDescending(x => x.YorumID).ToList();
-            return View(yorumlar);
-        }
+
+        // --- YORUM İŞLEMLERİ ---
         public ActionResult BlogYorumOnayla(int id)
         {
             var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
@@ -469,22 +483,11 @@ namespace Restorant_Sitesi.Controllers
             {
                 yorum.Durum = true;
                 db.SaveChanges();
+                TempData["Basarili"] = "Yorum onaylandı ve yayına alındı.";
             }
+            return RedirectToAction("BlogVeDuyuru");
+        }
 
-            return RedirectToAction("BlogVeDuyuru");
-        }
-        public ActionResult BlogYorumSil(int id)
-        {
-            var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
-            if (yorum != null)
-            {
-                db.DUYURUBLOGYORUMLARI.Remove(yorum);
-                db.SaveChanges();
-            }
-            TempData["bysil"] = 1;
-            return RedirectToAction("BlogVeDuyuru");
-           
-        }
         public ActionResult BlogYorumKaldir(int id)
         {
             var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
@@ -492,8 +495,96 @@ namespace Restorant_Sitesi.Controllers
             {
                 yorum.Durum = false;
                 db.SaveChanges();
+                TempData["Bilgi"] = "Yorum yayından kaldırıldı.";
             }
             return RedirectToAction("BlogVeDuyuru");
+        }
+
+        public ActionResult BlogYorumSil(int id)
+        {
+            var yorum = db.DUYURUBLOGYORUMLARI.Find(id);
+            if (yorum != null)
+            {
+                db.DUYURUBLOGYORUMLARI.Remove(yorum);
+                db.SaveChanges();
+                TempData["Basarili"] = "Yorum başarıyla silindi.";
+            }
+            return RedirectToAction("BlogVeDuyuru");
+        }
+
+        public ActionResult HakkimizdaYonetim()
+        {
+            var liste = db.HAKKIMDA.ToList();
+            return View(liste);
+        }
+
+
+        [HttpPost]
+        public JsonResult HakkimizdaGetir(int id)
+        {
+            var veri = db.HAKKIMDA.Find(id);
+            return Json(new
+            {
+                id = veri.HakkimdaID,
+                baslik = veri.Baslik,
+                icerik = veri.Icerik,
+                resim = veri.Resim
+            });
+        }
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult HakkimizdaKaydet(HAKKIMDA model, HttpPostedFileBase ResimDosyasi, string EskiResimYolu)
+        {
+            var guncellenecek = db.HAKKIMDA.Find(model.HakkimdaID);
+            bool yeniKayit = false;
+            if (guncellenecek == null)
+            {
+                guncellenecek = new HAKKIMDA();
+                yeniKayit = true;
+            }
+            if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
+            {
+                if (!string.IsNullOrEmpty(EskiResimYolu))
+                {
+                    string eskiYol = Server.MapPath(EskiResimYolu);
+                    if (System.IO.File.Exists(eskiYol)) System.IO.File.Delete(eskiYol);
+                }
+
+                string dosyaAdi = Guid.NewGuid().ToString().Substring(0, 8) + "-" + Path.GetFileName(ResimDosyasi.FileName);
+                string yol = "/images/" + dosyaAdi;
+                ResimDosyasi.SaveAs(Server.MapPath(yol));
+
+                guncellenecek.Resim = yol;
+            }
+            guncellenecek.Baslik = model.Baslik;
+            guncellenecek.Icerik = model.Icerik;
+            if (yeniKayit)
+            {
+                db.HAKKIMDA.Add(guncellenecek);
+            }
+
+            db.SaveChanges();
+            TempData["Basarili"] = yeniKayit ? "Yeni kayıt başarıyla eklendi!" : "İçerik başarıyla güncellendi!";
+
+            return RedirectToAction("HakkimizdaYonetim");
+        }
+        public ActionResult HakkimizdaSil(int id)
+        {
+            var silinecek = db.HAKKIMDA.Find(id);
+            if (silinecek != null)
+            {
+                if (!string.IsNullOrEmpty(silinecek.Resim))
+                {
+                    string silinecekYol = Server.MapPath(silinecek.Resim);
+                    if (System.IO.File.Exists(silinecekYol)) System.IO.File.Delete(silinecekYol);
+                }
+                db.HAKKIMDA.Remove(silinecek);
+                db.SaveChanges();
+                TempData["Hata"] = "Kayıt sistemden kalıcı olarak silindi!";
+            }
+            return RedirectToAction("HakkimizdaYonetim");
         }
     }
 }

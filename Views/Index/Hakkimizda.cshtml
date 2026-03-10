@@ -24,19 +24,13 @@
         <div class="row d-flex">
 
             <div class="col-md-6 d-flex">
-                @if (Model.Count >= 1)
+                @* Sadece kurucuları (ID'si 1 olmayanları) ve ilk 3 kaydı döngüye alıyoruz *@
+                @foreach (var item in Model.Where(x => x.HakkimdaID != 1))
                 {
-                    <div class="img img-2 w-100 mr-md-2 shadow" style="background-image: url('/images/@Model[0].Resim'); border-radius: 8px;"></div>
-                }
-
-                @if (Model.Count >= 2)
-                {
-                    <div class="img img-2 w-100 mr-md-2 shadow" style="background-image: url('/images/@Model[1].Resim'); border-radius: 8px;"></div>
-                }
-
-                @if (Model.Count >= 3)
-                {
-                    <div class="img img-2 w-100 ml-md-2 shadow" style="background-image: url('/images/@Model[2].Resim'); border-radius: 8px;"></div>
+                    <div class="img img-2 w-100 mx-md-1 shadow"
+                         style="background-image: url('@item.Resim'); border-radius: 8px;"
+                         title="@Html.Raw(item.Baslik)">
+                    </div>
                 }
             </div>
 
@@ -49,10 +43,10 @@
                     {
                         <div class="mb-4">
                             <h4 style="color: #cda434; font-weight: bold; margin-bottom: 5px;">
-                                <i class="fas fa-utensils" style="font-size: 14px; margin-right: 5px;"></i> @kisi.Baslik
+                                <i class="fas fa-utensils" style="font-size: 14px; margin-right: 5px;"></i> @Html.Raw(kisi.Baslik)
                             </h4>
                             <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                                @kisi.Icerik
+                                @Html.Raw(@kisi.Icerik)
                             </p>
                         </div>
                     }

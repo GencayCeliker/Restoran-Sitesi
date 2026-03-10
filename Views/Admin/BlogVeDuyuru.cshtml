@@ -1,90 +1,52 @@
-﻿
-@using Restorant_Sitesi.Models
+﻿@using Restorant_Sitesi.Models
 @model Tuple<List<DUYURULABLOGLAR>, List<DUYURUBLOGYORUMLARI>>
 
 @{
-    ViewBag.Title = "BlogVeDuyuru";
+    ViewBag.Title = "Blog & Duyuru Yönetimi";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+<br />
+<br />
+<h3>Blog & Duyuru Yönetim</h3>
+<br />
+<br />
 
-<script src="~/Scripts/jquery-3.7.1.min.js"></script>
-<script src="~/Scripts/toastr.js"></script>
-<script src="~/Scripts/toastr.min.js"></script>
-<link href="~/Content/toastr.min.css" rel="stylesheet" />
 
 <div class="row">
-
-    <div class="col-lg-12">
+    <div class="col-lg-7">
         <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
             <div class="card-header py-3" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">Blog Ve Duyuru Listesi</h6>
+                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">Blog ve Duyuru Listesi</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table text-white mb-0" width="100%" cellspacing="0" style="table-layout: fixed;">
-                        <thead style="background: rgba(0, 0, 0, 0.4); border-bottom: 2px solid rgba(255, 255, 255, 0.15);">
-                            <tr style="text-transform: uppercase; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; color: #ffffff;">
-                                <th style="border: none; padding: 18px 15px; width: 12%; text-align: center;">Resim</th>
-                                <th style="border: none; padding: 18px 15px; width: 18%; text-align: left;">Başlık</th>
-                                <th style="border: none; padding: 18px 15px; width: 30%; text-align: left;">İçerik</th>
-                                <th style="border: none; padding: 18px 15px; width: 12%; text-align: center;">Tarih</th>
-                                <th style="border: none; padding: 18px 15px; width: 13%; text-align: center;">Durum</th>
-                                <th style="border: none; padding: 18px 15px; width: 15%; text-align: center;">İşlem</th>
+                    <table class="table text-white mb-0">
+                        <thead style="background: rgba(0, 0, 0, 0.4);">
+                            <tr style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">
+                                <th class="text-center">Resim</th>
+                                <th>Başlık</th>
+                                <th class="text-center">Tarih</th>
+                                <th class="text-center">Durum</th>
+                                <th class="text-center">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var x in Model.Item1)
                             {
-                                <tr style="transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
-
-                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; text-align: center;">
-                                        <div style="width: 80px; height: 50px; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: inline-block;">
-                                            <img src="/@x.Resim" alt="Resim" style="width: 100%; height: 100%; object-fit: cover;" />
-                                        </div>
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="@x.Resim" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px;" />
                                     </td>
-
-                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; font-weight: 500; color: #e2e8f0; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        @x.Baslik
+                                    <td class="text-truncate" style="max-width: 150px;">@x.Baslik</td>
+                                    <td class="text-center">@(x.Tarih.HasValue ? x.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
+                                    <td class="text-center">
+                                        <span class="badge @(x.Durum == true ? "badge-success" : "badge-danger")">
+                                            @(x.Durum == true ? "AKTİF" : "PASİF")
+                                        </span>
                                     </td>
-
-                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; font-size: 13px; color: #cbd5e1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        @if (x.Icerik != null && x.Icerik.Length > 60)
-                                        {
-                                            @(x.Icerik.Substring(0, 60) + "...")
-                                        }
-                                        else
-                                        {
-                                            @x.Icerik
-                                        }
-                                    </td>
-
-                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; font-size: 13px; color: #cbd5e1; text-align: center;">
-                                        @x.Tarih.Value.ToString("dd.MM.yyyy")
-                                    </td>
-
-                                    <td class="align-middle" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 15px; text-align: center;">
-
-                                        @if (x.Durum == true)
-                                        {
-                                            <span class="badge" style="background-color: #28a745; padding: 6px 12px; border-radius: 4px;">AKTİF</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge" style="background-color: #dc3545; padding: 6px 12px; border-radius: 4px;">PASİF</span>
-                                        }
-                                    </td>
-                                    <td class="align-middle">
-                                        <button type="button" class="btn btn-sm shadow-sm mr-2"
-                                                style="background: #00a8ff; color: white; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; border-radius: 4px; padding: 8px 16px; border: none; transition: 0.3s;"
-                                                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"
-                                                onclick="blogDuzenle('@x.DuyuruID',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Baslik)',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Yazar)',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Icerik)',
-                                                '@x.Durum.ToString().ToLower()')">
-                                            DÜZENLE
-                                        </button>
-                                        <a href="/Admin/BlogSil/@x.DuyuruID" class="btn btn-danger btn-sm" style="border-radius: 4px; font-weight: bold; padding: 5px 15px;" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">SİL</a>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-info" onclick="blogDuzenle(@x.DuyuruID)">DÜZENLE</button>
+                                        <a href="/Admin/BlogSil/@x.DuyuruID" class="btn btn-sm btn-danger" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?')">SİL</a>
                                     </td>
                                 </tr>
                             }
@@ -95,143 +57,96 @@
         </div>
     </div>
 
-    <div class="col-lg-5">
+    <div class="col-lg-5" id="formArea">
         <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
             <div class="card-header py-3" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
                 <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">Blog Ekle / Güncelle</h6>
             </div>
             <div class="card-body">
-
-                <form action="/Admin/BlogKaydet" method="post" enctype="multipart/form-data">
-
+                @using (Html.BeginForm("BlogKaydet", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "blogForm" }))
+                {
                     <input type="hidden" name="DuyuruID" id="DuyuruID" value="0" />
 
                     <div class="form-group">
-                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">BAŞLIK</label>
-                        <input type="text" class="form-control" id="Baslik" name="Baslik" placeholder="Blog başlığı..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
+                        <label>BAŞLIK</label>
+                        <textarea name="Baslik" id="Baslik" class="summernote-kisa" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">YAZAR</label>
-                        <input type="text" class="form-control" id="Yazar" name="Yazar" placeholder="Yazar adı (Örn: Admin)" style="background: rgba(255,255,255,0.1); border: none; color: white;" required>
+                        <label>YAZAR</label>
+                        <input type="text" name="Yazar" id="Yazar" class="form-control" style="background: rgba(255,255,255,0.1); border: none; color: white;" required />
                     </div>
 
                     <div class="form-group">
-                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">İÇERİK (DETAY)</label>
-                        <textarea class="form-control" id="Icerik" name="Icerik" rows="5" placeholder="Geniş açıklama ve blog metni..." style="background: rgba(255,255,255,0.1); border: none; color: white;" required></textarea>
+                        <label>İÇERİK (DETAY)</label>
+                        <textarea name="Icerik" id="summernote" class="summernote"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">RESİM YÜKLE</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="resimDosyasi" name="resimDosyasi" style="cursor: pointer;">
-                                <label class="custom-file-label" id="resimLabel" for="resimDosyasi" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">DOSYA SEÇİLMEDİ</label>
-                            </div>
+                        <label>RESİM YÜKLE</label>
+                        <input type="file" name="resimDosyasi" class="form-control" onchange="$('#onizleme').show(); $('#onizlemeImg')[0].src = window.URL.createObjectURL(this.files[0])" />
+                        <div id="onizleme" style="display:none;" class="mt-2 text-center">
+                            <img id="onizlemeImg" class="rounded shadow" style="max-height: 120px; width: 100%; object-fit: cover;" />
                         </div>
-                        <small style="color: #aaa; font-size: 11px;">Seçmek için tıklayın</small>
                     </div>
 
-                    <div class="form-group mt-3">
-                        <label style="font-size: 12px; font-weight: bold; color: #ccc;">YAYIN DURUMU</label>
-                        <select class="form-control" id="Durum" name="Durum" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">
-                            <option value="true" style="color: black;">Aktif (Sitede Görünsün)</option>
-                            <option value="false" style="color: black;">Pasif (Gizle)</option>
+                    <div class="form-group">
+                        <label>YAYIN DURUMU</label>
+                        <select name="Durum" id="Durum" class="form-control" style="background: rgba(255,255,255,0.1); border: none; color: #ccc;">
+                            <option value="true">Aktif (Sitede Görünsün)</option>
+                            <option value="false">Pasif (Gizle)</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-block mt-4 shadow-sm" style="background: linear-gradient(90deg, #9b59b6, #8e44ad); color: white; font-weight: bold; border-radius: 4px; padding: 12px; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                        DEĞİŞİKLİKLERİ KAYDET
-                    </button>
-
-                    <button type="button" class="btn btn-block mt-2" onclick="formuTemizle()" style="background: transparent; color: #a0aec0; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 10px;">
-                        Formu Temizle (Yeni Kayıt)
-                    </button>
-
-                </form>
-
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-block">DEĞİŞİKLİKLERİ KAYDET</button>
+                    <button type="button" class="btn btn-secondary btn-block mt-2" onclick="formuTemizle()">İPTAL / YENİ KAYIT</button>
+                }
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="row">
-    <div class="col-12 col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                Blog Yorumları (Onaylı & Bekleyen)
+    <div class="col-12">
+        <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
+            <div class="card-header py-3" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">Yorum Yönetimi</h6>
             </div>
             <div class="table-responsive">
-                <table class="table align-items-center table-flush table-borderless">
+                <table class="table text-white mb-0">
                     <thead>
                         <tr>
                             <th>Ad Soyad</th>
                             <th>Mail</th>
-                            <th>Tarih</th>
-                            <th>Yorum</th>
-                            <th>Blog & Duyuru</th>
+                            <th>Blog</th>
                             <th>Durum</th>
                             <th>İşlem</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var y in Model.Item2) // YORUMLAR LİSTESİ
+
+                        @foreach (var y in Model.Item2)
                         {
                             <tr>
                                 <td>@y.MusteriAdSoyad</td>
                                 <td>@y.Mail</td>
-                                <td>@(y.Tarih.HasValue ? y.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
-
-                                <td title="@y.YorumMetni">
-                                    @if (y.YorumMetni != null && y.YorumMetni.Length > 20)
-                                    {
-                                        @y.YorumMetni.Substring(0, 20) <text>...</text>
-                                    }
-                                    else
-                                    {
-                                        @y.YorumMetni
-                                    }
-                                </td>
                                 <td>@y.DUYURULABLOGLAR.Baslik</td>
                                 <td>
-                                    @if (y.Durum == true)
-                                    {
-                                        <span class="badge badge-success">Yayında</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-warning">Onay Bekliyor</span>
-                                    }
+                                    <span class="badge @(y.Durum == true ? "badge-success" : "badge-warning")">
+                                        @(y.Durum == true ? "Yayında" : "Onay Bekliyor")
+                                    </span>
                                 </td>
-
                                 <td>
                                     @if (y.Durum == false)
                                     {
-                                        // Eğer Bekliyorsa -> YAYINLA butonu göster
-                                        <a href="/Admin/BlogYorumOnayla/@y.YorumID" class="btn btn-sm btn-success">
-                                            <i class="fa fa-check"></i> Yayınla
-                                        </a>
+                                        <a href="/Admin/BlogYorumOnayla/@y.YorumID" class="btn btn-sm btn-success">Yayınla</a>
                                     }
                                     else
                                     {
-                                        // Eğer Zaten Yayındaysa -> KALDIR (Geri Al) butonu göster
-                                        <a href="/Admin/BlogYorumKaldir/@y.YorumID" class="btn btn-sm btn-warning">
-                                            <i class="fa fa-minus-circle"></i> Kaldır
-                                        </a>
+                                        <a href="/Admin/BlogYorumKaldir/@y.YorumID" class="btn btn-sm btn-warning">Kaldır</a>
                                     }
-
-                                    <a href="/Admin/BlogYorumSil/@y.YorumID" class="btn btn-sm btn-danger">
-                                        <i class="fa fa-trash"></i> Sil
-                                    </a>
+                                    <a href="/Admin/BlogYorumSil/@y.YorumID" class="btn btn-sm btn-danger" onclick="return confirm('Yorumu silmek istediğinize emin misiniz?')">Sil</a>
                                 </td>
-                            </tr>
-                        }
-
-                        @if (Model.Item2.Count == 0)
-                        {
-                            <tr>
-                                <td colspan="6" class="text-center">Henüz yorum yok.</td>
                             </tr>
                         }
                     </tbody>
@@ -240,145 +155,49 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-<script>
-    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
-        var fileName = document.getElementById("resimDosyasi").files[0].name;
-        var nextSibling = e.target.nextElementSibling;
-        nextSibling.innerText = fileName;
-    });
-</script>
-<style>
-    /* Bootstrap'in otomatik eklediği BROWSE butonunu tamamen gizler */
-    .custom-file-label::after {
-        display: none !important;
-    }
-</style>
-<script>
-    function blogDuzenle(id, baslik, yazar, icerik, durum) {
-
-        document.getElementById('DuyuruID').value = id;
-
-
-        document.querySelector('input[name="Baslik"]').value = baslik;
-        document.querySelector('input[name="Yazar"]').value = yazar;
-        document.querySelector('textarea[name="Icerik"]').value = icerik;
-
-
-        var durumSelect = document.querySelector('select[name="Durum"]');
-        if (durum === "true" || durum === "True") {
-            durumSelect.value = "true";
-        } else {
-            durumSelect.value = "false";
-        }
-
-
-        document.querySelector('.custom-file-label').innerText = "Mevcut Resim Korunuyor...";
-        document.querySelector('.custom-file-label').style.color = "#00a8ff";
-    }
-</script>
-@if (TempData["ekle"] != null)
-{
+@section Scripts {
     <script>
+        function blogDuzenle(id) {
+            $.ajax({
+                url: '/Admin/BlogGetir/' + id,
+                type: 'POST',
+                success: function (data) {
+                    if (data != null) {
+                        $('#DuyuruID').val(data.id);
+                        $('#Yazar').val(data.yazar);
 
+                        // Summernote içeriklerini doldur
+                        $('#Baslik').summernote('code', data.baslik || '');
+                        $('#summernote').summernote('code', data.icerik || '');
 
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
+                        $('#Durum').val(data.durum.toString().toLowerCase());
+
+                        if (data.resim) {
+                            $('#onizlemeImg').attr('src', '/' + data.resim);
+                            $('#onizleme').fadeIn();
+                        }
+
+                        $('#submitBtn').text("GÜNCELLEMEYİ KAYDET").removeClass("btn-primary").addClass("btn-warning");
+                        $('html, body').animate({ scrollTop: $("#formArea").offset().top - 20 }, 800);
+                    }
+                },
+                error: function () {
+                    toastr.error('Blog verisi alınamadı!');
+                }
+            });
         }
-        Command: toastr["success"]("Blog & Duyuru Başarıyla Eklendi")
-    </script>
-}
-@if (TempData["güncelle"] != null)
-{
-    <script>
 
+        function formuTemizle() {
+            $('#DuyuruID').val(0);
+            $('#blogForm')[0].reset();
 
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
+            // Summernote'ları temizle
+            $('#Baslik').summernote('code', '');
+            $('#summernote').summernote('code', '');
+
+            $('#onizleme').fadeOut();
+            $('#submitBtn').text("DEĞİŞİKLİKLERİ KAYDET").removeClass("btn-warning").addClass("btn-primary");
+            $('html, body').animate({ scrollTop: 0 }, 600);
         }
-        Command: toastr["success"]("Blog & Duyuru Başarıyla Güncellendi")
-    </script>
-}
-@if (TempData["sil"] != null)
-{
-    <script>
-
-
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-        Command: toastr["success"]("Blog & Duyuru Başarıyla Silindi")
-    </script>
-}
-@if (TempData["bysil"] != null)
-{
-    <script>
-
-
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-        Command: toastr["success"]("Blogtaki Yorum Başarıyla Silindi")
     </script>
 }

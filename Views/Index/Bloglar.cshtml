@@ -33,7 +33,7 @@
                                 <div><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@x.Tarih</a></div>
                                 <div><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@x.Yazar</a></div>
                             </div>
-                            <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@x.Baslik</a></h3>
+                            <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@Html.Raw(x.Baslik)</a></h3>
                             <p class="clearfix">
                                 <a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID" class="float-left read btn btn-primary">Devamı</a>
                                 <a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID" class="float-right meta-chat"><span class="fa fa-comment"></span> @x.DUYURUBLOGYORUMLARI.Count()</a>

@@ -1387,6 +1387,7 @@
     <Content Include="Views\Index\Bloglar.cshtml" />
     <Content Include="Views\Admin\BlogVeDuyuru.cshtml" />
     <Content Include="Views\Index\Hakkimizda.cshtml" />
+    <Content Include="Views\Admin\HakkimizdaYonetim.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
