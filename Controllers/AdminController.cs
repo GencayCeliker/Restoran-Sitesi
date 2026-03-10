@@ -302,6 +302,7 @@ namespace Restorant_Sitesi.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult SliderKaydet(ANASAYFA veri, HttpPostedFileBase ResimDosyasi, string EskiResimYolu)
         {
             if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
@@ -322,6 +323,23 @@ namespace Restorant_Sitesi.Controllers
             db.SaveChanges();
             return RedirectToAction("SliderYonetimi");
         }
+        [HttpPost]
+        public JsonResult SliderGuncelle(int id)
+        {
+            var veri = db.ANASAYFA.Find(id);
+            if (veri != null)
+            {
+                return Json(new
+                {
+                    baslik = veri.Baslik,
+                    icerik = veri.Icerik,
+                    aciklama = veri.Aciklama, 
+                    resim = veri.Resim,
+                    durum = veri.Durum
+                });
+            }
+            return Json(null);
+        }
         public ActionResult SliderSil(int id)
         {
             var veri = db.ANASAYFA.Find(id);
@@ -341,6 +359,7 @@ namespace Restorant_Sitesi.Controllers
             return View(model);
         }
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult BlogKaydet(DUYURULABLOGLAR b, HttpPostedFileBase resimDosyasi)
         {
             // 1. RESİM YÜKLEME KONTROLÜ

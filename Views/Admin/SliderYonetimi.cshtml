@@ -1,28 +1,29 @@
 ﻿<style>
-
     .table td, .table th {
         border-top: 0 !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
         text-transform: uppercase;
         font-size: 0.85rem;
         letter-spacing: 1px;
-        padding-top: 0.5rem !important; 
+        padding-top: 0.5rem !important;
         padding-bottom: 0.5rem !important;
-        vertical-align: middle !important; 
+        vertical-align: middle !important;
     }
+
     .table thead th {
         border-bottom-width: 1px !important;
         padding-bottom: 10px !important;
     }
+
     .table img {
         margin: 0 !important;
-        display: block; 
+        display: block;
     }
+
     .card-body {
         padding-top: 10px !important;
     }
 </style>
-
 
 @model IEnumerable<Restorant_Sitesi.Models.ANASAYFA>
 @{
@@ -40,12 +41,12 @@
                         @{ int i = 0; }
                         @foreach (var x in Model)
                         {
-                            
                             <div class="carousel-item @(i == 0 ? "active" : "")">
                                 <img src="@x.Resim" class="d-block w-100" style="object-fit: cover; height: 250px; opacity:0.6">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>@x.Baslik</h5>
                                     <p>@x.Icerik</p>
+                                    <p>@Html.Raw(x.Aciklama)</p>
                                 </div>
                             </div>
                             i++;
@@ -84,18 +85,10 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-info"
-                                                onclick="sliderDuzenle('@x.AnasayfaID',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Baslik)',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Icerik)',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Aciklama)',
-                                                '@HttpUtility.JavaScriptStringEncode(x.Resim)',
-                                                '@x.Durum.ToString().ToLower()')">
+                                        <button type="button" class="btn btn-sm btn-info" onclick="sliderDuzenle(@x.AnasayfaID)">
                                             DÜZENLE
                                         </button>
-                                        <a href="/Admin/SliderSil/@x.AnasayfaID"
-                                           class="btn btn-sm btn-danger"
-                                           onclick="return confirm('Bu slider kaydını silmek istediğinize emin misiniz? (Resim dosyanız silinmeyecektir)')">
+                                        <a href="/Admin/SliderSil/@x.AnasayfaID" class="btn btn-sm btn-danger" onclick="return confirm('Bu slider kaydını silmek istediğinize emin misiniz? (Resim dosyanız silinmeyecektir)')">
                                             SİL
                                         </a>
                                     </td>
@@ -126,7 +119,7 @@
                     </div>
                     <div class="form-group">
                         <label>Açıklama (Detay)</label>
-                        <textarea name="Aciklama" class="form-control" rows="3" placeholder="Geniş açıklama metni..."></textarea>
+                        <textarea name="Aciklama" id="summernote" class="form-control summernote"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Resim Yükle</label>
@@ -139,32 +132,54 @@
                             <option value="false">Pasif (Gizle)</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Değişiklikleri Kaydet</button>
+                    <button type="submit" class="btn btn-primary btn-block">Yeni Slider Ekle</button>
+                    <button type="button" class="btn btn-secondary btn-block mt-2" onclick="formuTemizle()">İptal / Yeni Kayıt</button>
                 }
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function sliderDuzenle(id, baslik, icerik, aciklama, resimYolu, durum) {
-       
-        $('#AnasayfaID').val(id);
-        $('#EskiResimYolu').val(resimYolu);
+@section Scripts {
+    <script>
+        function sliderDuzenle(id) {
+            // Arka planda Controller'daki metoda gidip veriyi istiyoruz
+            $.ajax({
+                url: '/Admin/SliderGuncelle',
+                type: 'POST',
+                data: { id: id },
+                success: function (data) {
+                    if (data != null) {
+                        $('#AnasayfaID').val(id);
+                        $('#EskiResimYolu').val(data.resim);
+                        $('input[name="Baslik"]').val(data.baslik);
+                        $('input[name="Icerik"]').val(data.icerik);
 
-   
-        $('input[name="Baslik"]').val(baslik);
-        $('input[name="Icerik"]').val(icerik);
-        $('textarea[name="Aciklama"]').val(aciklama);
+                        var durum = (data.durum === true || data.durum === "True" || data.durum === "true") ? "true" : "false";
+                        $('select[name="Durum"]').val(durum);
 
-       
-        $('select[name="Durum"]').val(durum);
+                        var aciklamaMetni = data.aciklama ? data.aciklama : "";
+                        $('#summernote').summernote('code', aciklamaMetni);
 
-      
-        $('.btn-block').text("GÜNCELLE").removeClass("btn-primary").addClass("btn-warning");
+                        $('.btn-block').first().text("GÜNCELLE").removeClass("btn-primary").addClass("btn-warning");
 
-        $('html, body').animate({
-            scrollTop: $(".col-lg-5").offset().top - 100
-        }, 500);
-    }
-</script>
+                        $('html, body').animate({
+                            scrollTop: $(".col-lg-5").offset().top - 100
+                        }, 500);
+                    }
+                },
+                error: function () {
+                    alert("Veri çekilirken bir hata oluştu!");
+                }
+            });
+        }
+
+        function formuTemizle() {
+            $('#AnasayfaID').val(0);
+            $('#EskiResimYolu').val('');
+            $('form')[0].reset();
+            $('#summernote').summernote('code', ''); // Editörü temizler
+            $('.btn-block').first().text("Değişiklikleri Kaydet").removeClass("btn-warning").addClass("btn-primary");
+        }
+    </script>
+}

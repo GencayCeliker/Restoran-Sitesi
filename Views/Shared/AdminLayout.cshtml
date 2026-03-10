@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -16,7 +15,7 @@
     <script src="~/AdminTemplate/assets/js/pace.min.js"></script>
 
     <link rel="icon" href="~/images/logo.png" type="image/x-icon">
-   
+
     <link href="~/AdminTemplate/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
     <link href="~/AdminTemplate/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <link href="~/AdminTemplate/assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -25,6 +24,14 @@
     <link href="~/AdminTemplate/assets/css/sidebar-menu.css" rel="stylesheet" />
     <link href="~/AdminTemplate/assets/css/app-style.css" rel="stylesheet" />
 
+    <link href="~/Content/summernote/summernote-lite.css" rel="stylesheet" />
+
+    <style>
+        .note-editable {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+    </style>
 </head>
 
 <body class="bg-theme bg-theme1">
@@ -41,79 +48,29 @@
 
             <ul class="sidebar-menu do-nicescrol">
                 <li class="sidebar-header">GENEL YÖNETİM</li>
-
-                <li>
-                    <a href="/Admin/Index">
-                        <i class="zmdi zmdi-view-dashboard"></i> <span>Anasayfa</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/Admin/SliderYonetimi">
-                        <i class="zmdi zmdi-calendar-check"></i> <span>SliderYonetimi</span>
-
-                    </a>
-                </li>
-
+                <li><a href="/Admin/Index"><i class="zmdi zmdi-view-dashboard"></i> <span>Anasayfa</span></a></li>
+                <li><a href="/Admin/SliderYonetimi"><i class="zmdi zmdi-calendar-check"></i> <span>SliderYonetimi</span></a></li>
                 <li>
                     <a href="/Admin/Rezervasyonlar">
                         <i class="zmdi zmdi-calendar-check"></i> <span>Rezervasyonlar</span>
                         <small class="badge float-right badge-light">YENİ</small>
                     </a>
                 </li>
-
-                <li>
-                    <a href="/Admin/Masalar">
-                        <i class="zmdi zmdi-layers"></i> <span>Masa Düzeni</span>
-                    </a>
-                </li>
+                <li><a href="/Admin/Masalar"><i class="zmdi zmdi-layers"></i> <span>Masa Düzeni</span></a></li>
 
                 <li class="sidebar-header">MENÜ & İÇERİK</li>
-
-                <li>
-                    <a href="/Admin/Kategoriler">
-                        <i class="zmdi zmdi-label"></i> <span>Kategoriler</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/Admin/Urunler">
-                        <i class="zmdi zmdi-cutlery"></i> <span>Ürünler / Menü</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/Admin/Sefler">
-                        <i class="zmdi zmdi-face"></i> <span>Şeflerimiz</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/Admin/BlogVeDuyuru">
-                        <i class="zmdi zmdi-assignment"></i> <span>Blog & Duyuru</span>
-                    </a>
-                </li>
+                <li><a href="/Admin/Kategoriler"><i class="zmdi zmdi-label"></i> <span>Kategoriler</span></a></li>
+                <li><a href="/Admin/Urunler"><i class="zmdi zmdi-cutlery"></i> <span>Ürünler / Menü</span></a></li>
+                <li><a href="/Admin/Sefler"><i class="zmdi zmdi-face"></i> <span>Şeflerimiz</span></a></li>
+                <li><a href="/Admin/BlogVeDuyuru"><i class="zmdi zmdi-assignment"></i> <span>Blog & Duyuru</span></a></li>
 
                 <li class="sidebar-header">SİTE AYARLARI</li>
-
-                <li>
-                    <a href="/Admin/Iletisim">
-                        <i class="zmdi zmdi-phone"></i> <span>İletişim Bilgileri</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/Admin/Ayarlar">
-                        <i class="zmdi zmdi-settings"></i> <span>Genel Ayarlar</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/Index/Index" target="_blank">
-                        <i class="zmdi zmdi-globe"></i> <span>Siteye Git</span>
-                    </a>
-                </li>
+                <li><a href="/Admin/Iletisim"><i class="zmdi zmdi-phone"></i> <span>İletişim Bilgileri</span></a></li>
+                <li><a href="/Admin/Ayarlar"><i class="zmdi zmdi-settings"></i> <span>Genel Ayarlar</span></a></li>
+                <li><a href="/Index/Index" target="_blank"><i class="zmdi zmdi-globe"></i> <span>Siteye Git</span></a></li>
             </ul>
         </div>
+
         <header class="topbar-nav">
             <nav class="navbar navbar-expand fixed-top">
                 <ul class="navbar-nav mr-auto align-items-center">
@@ -198,7 +155,6 @@
 
     </div>
 
-
     <script src="~/AdminTemplate/assets/js/jquery.min.js"></script>
     <script src="~/AdminTemplate/assets/js/popper.min.js"></script>
     <script src="~/AdminTemplate/assets/js/bootstrap.min.js"></script>
@@ -207,6 +163,28 @@
     <script src="~/AdminTemplate/assets/js/sidebar-menu.js"></script>
     <script src="~/AdminTemplate/assets/js/jquery.loading-indicator.js"></script>
     <script src="~/AdminTemplate/assets/js/app-script.js"></script>
+
+    <script src="~/Scripts/summernote/summernote-lite.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // class="summernote" olan tüm textarea'ları otomatik editöre çevirir
+            $('.summernote').summernote({
+                placeholder: 'İçeriği buraya giriniz...',
+                tabsize: 2,
+                height: 200,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+        });
+    </script>
 
     @RenderSection("Scripts", required: false)
 
