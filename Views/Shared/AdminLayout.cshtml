@@ -105,7 +105,41 @@
         <footer class="footer">
             <div class="container text-center">Copyright © 2026 Moly RS Admin</div>
         </footer>
+
+        <div class="right-sidebar">
+            <div class="switcher-icon">
+                <i class="zmdi zmdi-settings"></i>
+            </div>
+            <div class="right-sidebar-content">
+                <p class="mb-0">Doku Seçenekleri (Gaussion)</p>
+                <hr>
+                <ul class="switcher">
+                    <li id="theme1"></li>
+                    <li id="theme2"></li>
+                    <li id="theme3"></li>
+                    <li id="theme4"></li>
+                    <li id="theme5"></li>
+                    <li id="theme6"></li>
+                </ul>
+
+                <p class="mb-0">Gradyan Renkler</p>
+                <hr>
+                <ul class="switcher">
+                    <li id="theme7"></li>
+                    <li id="theme8"></li>
+                    <li id="theme9"></li>
+                    <li id="theme10"></li>
+                    <li id="theme11"></li>
+                    <li id="theme12"></li>
+                    <li id="theme13"></li>
+                    <li id="theme14"></li>
+                    <li id="theme15"></li>
+                </ul>
+            </div>
+        </div>
     </div>
+
+
 
     <script src="~/AdminTemplate/assets/js/jquery.min.js"></script>
     <script src="~/AdminTemplate/assets/js/popper.min.js"></script>
@@ -120,7 +154,26 @@
 
     <script>
         $(document).ready(function () {
-            // SUMMERNOTE BAŞLATICI
+            var kayitliTema = localStorage.getItem("moly_tema_sinifi");
+            if (kayitliTema) {
+                // Mevcut tüm tema sınıflarını temizle
+                $('body').removeClass(function (index, className) {
+                    return (className.match(/(^|\s)bg-theme\S+/g) || []).join(' ');
+                });
+                // Hafızadaki sınıfları body'ye ekle
+                $('body').addClass(kayitliTema);
+            }
+
+            // 2. RENK SEÇİLDİĞİNDE HAFIZAYA KAYDET
+            $('.switcher li').on('click', function () {
+                var secilenID = $(this).attr('id'); // Örn: theme1
+                // Sınıf ismini tam formatta hazırlıyoruz: "bg-theme bg-theme1"
+                var yeniTemaSinifi = "bg-theme bg-" + secilenID;
+
+                // Seçilen bu tam formatı localStorage'a kaydet
+                localStorage.setItem("moly_tema_sinifi", yeniTemaSinifi);
+            });
+
             // SUMMERNOTE BAŞLATICI
             if (!$('.summernote').data('summernote')) {
                 $('.summernote').summernote({
@@ -162,6 +215,7 @@
                 "positionClass": "toast-top-right",
                 "timeOut": "4000"
             };
+
 
             // Global Bildirim Yakalayıcı
             @if (TempData["Basarili"] != null) { <text>toastr.success('@TempData["Basarili"]');</text> }
