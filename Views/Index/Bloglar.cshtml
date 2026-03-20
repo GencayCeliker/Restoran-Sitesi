@@ -34,10 +34,26 @@
                                 <div><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@x.Yazar</a></div>
                             </div>
                             <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID">@Html.Raw(x.Baslik)</a></h3>
-                            <p class="clearfix">
-                                <a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID" class="float-left read btn btn-primary">Devamı</a>
-                                <a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID" class="float-right meta-chat"><span class="fa fa-comment"></span> @x.DUYURUBLOGYORUMLARI.Count()</a>
-                            </p>
+
+                            <div class="d-flex align-items-center justify-content-between mt-4">
+                                <a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID" class="btn btn-primary btn-sm" style="border-radius: 4px;">Devamı</a>
+
+                                <div class="meta-icons d-flex align-items-center" style="gap: 15px; color: #b3b3b3; font-size: 14px;">
+
+                                    <span title="Görüntülenme">
+                                        <i class="fa fa-eye"></i> @x.Goruntulenme
+                                    </span>
+
+                                    <a href="#" title="Paylaş" style="color: inherit;">
+                                        <i class="fa fa-share-alt"></i>
+                                    </a>
+
+                                    <a href="/Index/DUYURULABLOGLARDETAY/@x.DuyuruID" class="meta-chat" style="color: inherit;">
+                                        <span class="fa fa-comment"></span> @x.DUYURUBLOGYORUMLARI.Count()
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

@@ -20,6 +20,7 @@ namespace Restorant_Sitesi.Models
         public string Mail { get; set; }
         public Nullable<System.DateTime> Tarih { get; set; }
         public string YorumMetni { get; set; }
+        public Nullable<int> Yildiz { get; set; }
         public bool Durum { get; set; }
     
         public virtual DUYURULABLOGLAR DUYURULABLOGLAR { get; set; }

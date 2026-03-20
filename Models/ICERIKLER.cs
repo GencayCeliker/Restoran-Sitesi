@@ -12,23 +12,13 @@ namespace Restorant_Sitesi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DUYURULABLOGLAR
+    public partial class ICERIKLER
     {
-        public DUYURULABLOGLAR()
-        {
-            this.DUYURUBLOGYORUMLARI = new HashSet<DUYURUBLOGYORUMLARI>();
-        }
-    
-        public int DuyuruID { get; set; }
+        public int IcerikID { get; set; }
         public string Baslik { get; set; }
-        public string Icerik { get; set; }
         public Nullable<System.DateTime> Tarih { get; set; }
-        public string Resim { get; set; }
-        public string Yazar { get; set; }
-        public Nullable<int> Goruntulenme { get; set; }
-        public Nullable<int> Begeni { get; set; }
+        public string IcerikMetni { get; set; }
+        public string Dosya { get; set; }
         public bool Durum { get; set; }
-    
-        public virtual ICollection<DUYURUBLOGYORUMLARI> DUYURUBLOGYORUMLARI { get; set; }
     }
 }

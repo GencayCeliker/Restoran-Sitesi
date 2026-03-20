@@ -38,7 +38,7 @@ namespace Restorant_Sitesi.Controllers
         }
         private void GuvenlikKoduUret()
         {
-            string[] kelimeler = { "MOLY", "RS", "RESTORANT", "YEMEK", "HİJYEN", "GUVEN", "LEZZET" };
+            string[] kelimeler = { "MOLY", "RS", "RESTORANT", "YEMEK", "YENİ", "GUVEN", "LEZZET" };
             Random rnd = new Random();
             string secilenKelime = kelimeler[rnd.Next(kelimeler.Length)];
 
@@ -117,16 +117,30 @@ namespace Restorant_Sitesi.Controllers
         }
         public ActionResult DUYURULABLOGLARDETAY(int id)
         {
-      
             var deger = db.DUYURULABLOGLAR.Find(id);
-            ViewBag.BlogYorumlari = db.DUYURUBLOGYORUMLARI.Where(x => x.DuyuruID == id && x.Durum == true).ToList();
+
+            if (deger == null)
+                return HttpNotFound();
+
+            deger.Goruntulenme = (deger.Goruntulenme ?? 0) + 1;
+            db.SaveChanges();
+
+         
+            var guncelVeri = db.DUYURULABLOGLAR.Find(id);
+
+            ViewBag.BlogYorumlari = db.DUYURUBLOGYORUMLARI
+                .Where(x => x.DuyuruID == id && x.Durum == true)
+                .ToList();
+
             GuvenlikKoduUret();
+
             ViewBag.PopulerYazilar = db.DUYURULABLOGLAR
-                               .Where(x => x.DuyuruID != id && x.Durum == true)
-                               .OrderBy(x => Guid.NewGuid())
-                               .Take(3)
-                               .ToList();
-            return View(deger);
+                .Where(x => x.DuyuruID != id && x.Durum == true)
+                .OrderBy(x => Guid.NewGuid())
+                .Take(3)
+                .ToList();
+
+            return View(guncelVeri); // 🔥 BURASI DEĞİŞTİ
         }
         [HttpPost]
         public ActionResult YorumKaydet(DUYURUBLOGYORUMLARI y, string GirilenDogrulamaKodu)
@@ -144,6 +158,7 @@ namespace Restorant_Sitesi.Controllers
             yeni.Mail = y.Mail;
             yeni.YorumMetni = y.YorumMetni;
             yeni.DuyuruID = y.DuyuruID;
+            yeni.Yildiz = y.Yildiz;
             yeni.Durum = false; 
             yeni.Tarih = DateTime.Now;
 
@@ -152,6 +167,31 @@ namespace Restorant_Sitesi.Controllers
            
             TempData["Mesaj"] = "Yorumunuz başarıyla gönderildi.Yönetici onayından sonra yayınlanacaktır.";
             return RedirectToAction("DUYURULABLOGLARDETAY", new { id = y.DuyuruID });
+        }
+        [HttpPost]
+        public JsonResult BegeniArttir(int id)
+        {
+            string cookieName = "blog_like_" + id;
+
+            
+            if (Request.Cookies[cookieName] != null)
+            {
+                return Json(new { success = false, message = "Zaten beğendiniz." });
+            }
+
+            var blog = db.DUYURULABLOGLAR.Find(id);
+
+            if (blog == null)
+                return Json(new { success = false });
+
+            blog.Begeni = (blog.Begeni ?? 0) + 1;
+            db.SaveChanges();
+
+            HttpCookie cookie = new HttpCookie(cookieName);
+            cookie.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.Add(cookie);
+
+            return Json(new { success = true, begeni = blog.Begeni });
         }
         public ActionResult Bloglar()
         {
@@ -163,6 +203,7 @@ namespace Restorant_Sitesi.Controllers
 
             return View(tumBloglar);
         }
+      
         public ActionResult Hakkimizda()
         {
             var hakkimizda = db.HAKKIMDA.Where(x => x.HakkimdaID != 1).ToList();

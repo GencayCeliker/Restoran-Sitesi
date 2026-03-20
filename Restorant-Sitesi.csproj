@@ -183,6 +183,9 @@
     <Compile Include="Models\HAKKIMDA.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ICERIKLER.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\KATEGORILER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

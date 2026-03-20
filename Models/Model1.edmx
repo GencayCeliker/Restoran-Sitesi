@@ -26,6 +26,7 @@
           <Property Name="Mail" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Tarih" Type="datetime" />
           <Property Name="YorumMetni" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Yildiz" Type="int" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="DUYURULABLOGLAR">
@@ -38,6 +39,8 @@
           <Property Name="Tarih" Type="date" />
           <Property Name="Resim" Type="nvarchar(max)" />
           <Property Name="Yazar" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Goruntulenme" Type="int" />
+          <Property Name="Begeni" Type="int" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="HAKKIMDA">
@@ -48,6 +51,17 @@
           <Property Name="Resim" Type="nvarchar(max)" />
           <Property Name="Baslik" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Icerik" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ICERIKLER">
+          <Key>
+            <PropertyRef Name="IcerikID" />
+          </Key>
+          <Property Name="IcerikID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Baslik" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Tarih" Type="date" />
+          <Property Name="IcerikMetni" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Dosya" Type="nvarchar(max)" />
+          <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="KATEGORILER">
           <Key>
@@ -177,18 +191,6 @@
           <Property Name="YorumMetni" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="FK__DUYURUBLO__Duyur__6B24EA82">
-          <End Role="DUYURULABLOGLAR" Type="Self.DUYURULABLOGLAR" Multiplicity="0..1" />
-          <End Role="DUYURUBLOGYORUMLARI" Type="Self.DUYURUBLOGYORUMLARI" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DUYURULABLOGLAR">
-              <PropertyRef Name="DuyuruID" />
-            </Principal>
-            <Dependent Role="DUYURUBLOGYORUMLARI">
-              <PropertyRef Name="DuyuruID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__REZARVASY__Durum__571DF1D5">
           <End Role="REZARVASYONDURUM" Type="Self.REZARVASYONDURUM" Multiplicity="0..1" />
           <End Role="REZARVASYONLAR" Type="Self.REZARVASYONLAR" Multiplicity="*" />
@@ -237,11 +239,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR">
+          <End Role="DUYURULABLOGLAR" Type="Self.DUYURULABLOGLAR" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DUYURUBLOGYORUMLARI" Type="Self.DUYURUBLOGYORUMLARI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DUYURULABLOGLAR">
+              <PropertyRef Name="DuyuruID" />
+            </Principal>
+            <Dependent Role="DUYURUBLOGYORUMLARI">
+              <PropertyRef Name="DuyuruID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="WRestourantDBModelStoreContainer">
           <EntitySet Name="ANASAYFA" EntityType="Self.ANASAYFA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DUYURUBLOGYORUMLARI" EntityType="Self.DUYURUBLOGYORUMLARI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DUYURULABLOGLAR" EntityType="Self.DUYURULABLOGLAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HAKKIMDA" EntityType="Self.HAKKIMDA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ICERIKLER" EntityType="Self.ICERIKLER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KATEGORILER" EntityType="Self.KATEGORILER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MASALAR" EntityType="Self.MASALAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NAVBAR" EntityType="Self.NAVBAR" Schema="dbo" store:Type="Tables" />
@@ -254,10 +271,6 @@
           <EntitySet Name="USTILETISIM" EntityType="Self.USTILETISIM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UYELER" EntityType="Self.UYELER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YORUMLAR" EntityType="Self.YORUMLAR" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__DUYURUBLO__Duyur__6B24EA82" Association="Self.FK__DUYURUBLO__Duyur__6B24EA82">
-            <End Role="DUYURULABLOGLAR" EntitySet="DUYURULABLOGLAR" />
-            <End Role="DUYURUBLOGYORUMLARI" EntitySet="DUYURUBLOGYORUMLARI" />
-          </AssociationSet>
           <AssociationSet Name="FK__REZARVASY__Durum__571DF1D5" Association="Self.FK__REZARVASY__Durum__571DF1D5">
             <End Role="REZARVASYONDURUM" EntitySet="REZARVASYONDURUM" />
             <End Role="REZARVASYONLAR" EntitySet="REZARVASYONLAR" />
@@ -274,6 +287,10 @@
             <End Role="KATEGORILER" EntitySet="KATEGORILER" />
             <End Role="URUNLER" EntitySet="URUNLER" />
           </AssociationSet>
+          <AssociationSet Name="FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR" Association="Self.FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR">
+            <End Role="DUYURULABLOGLAR" EntitySet="DUYURULABLOGLAR" />
+            <End Role="DUYURUBLOGYORUMLARI" EntitySet="DUYURUBLOGYORUMLARI" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -289,19 +306,6 @@
           <Property Name="Icerik" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Aciklama" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Durum" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="DUYURULABLOGLAR">
-          <Key>
-            <PropertyRef Name="DuyuruID" />
-          </Key>
-          <Property Name="DuyuruID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Baslik" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Icerik" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Tarih" Type="DateTime" Precision="0" />
-          <Property Name="Resim" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Yazar" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Durum" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="DUYURUBLOGYORUMLARI" Relationship="WRestourantDBModel.FK__DUYURUBLO__Duyur__6B24EA82" FromRole="DUYURULABLOGLAR" ToRole="DUYURUBLOGYORUMLARI" />
         </EntityType>
         <EntityType Name="KATEGORILER">
           <Key>
@@ -433,7 +437,6 @@
         </Association>
         <EntityContainer Name="WRestourantDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ANASAYFA" EntityType="Self.ANASAYFA" />
-          <EntitySet Name="DUYURULABLOGLAR" EntityType="Self.DUYURULABLOGLAR" />
           <EntitySet Name="KATEGORILER" EntityType="Self.KATEGORILER" />
           <EntitySet Name="MASALAR" EntityType="Self.MASALAR" />
           <EntitySet Name="REZARVASYONDURUM" EntityType="Self.REZARVASYONDURUM" />
@@ -463,12 +466,14 @@
             <End Role="UYELER" EntitySet="UYELER" />
             <End Role="SIFRE_SIFIRLAMA" EntitySet="SIFRE_SIFIRLAMA" />
           </AssociationSet>
+          <EntitySet Name="ICERIKLER" EntityType="WRestourantDBModel.ICERIKLER" />
           <EntitySet Name="DUYURUBLOGYORUMLARI" EntityType="WRestourantDBModel.DUYURUBLOGYORUMLARI" />
-          <AssociationSet Name="FK__DUYURUBLO__Duyur__6B24EA82" Association="WRestourantDBModel.FK__DUYURUBLO__Duyur__6B24EA82">
+          <EntitySet Name="DUYURULABLOGLAR" EntityType="WRestourantDBModel.DUYURULABLOGLAR" />
+          <AssociationSet Name="FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR" Association="WRestourantDBModel.FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR">
             <End Role="DUYURULABLOGLAR" EntitySet="DUYURULABLOGLAR" />
             <End Role="DUYURUBLOGYORUMLARI" EntitySet="DUYURUBLOGYORUMLARI" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="HAKKIMDA">
           <Key>
             <PropertyRef Name="HakkimdaID" />
@@ -534,6 +539,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ICERIKLER">
+          <Key>
+            <PropertyRef Name="IcerikID" />
+          </Key>
+          <Property Name="IcerikID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Baslik" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Tarih" Type="DateTime" Precision="0" />
+          <Property Name="IcerikMetni" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Dosya" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Durum" Type="Boolean" Nullable="false" />
+        </EntityType>
         <EntityType Name="DUYURUBLOGYORUMLARI">
           <Key>
             <PropertyRef Name="YorumID" />
@@ -544,11 +560,29 @@
           <Property Name="Mail" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Tarih" Type="DateTime" Precision="3" />
           <Property Name="YorumMetni" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Yildiz" Type="Int32" />
           <Property Name="Durum" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="DUYURULABLOGLAR" Relationship="WRestourantDBModel.FK__DUYURUBLO__Duyur__6B24EA82" FromRole="DUYURUBLOGYORUMLARI" ToRole="DUYURULABLOGLAR" />
+          <NavigationProperty Name="DUYURULABLOGLAR" Relationship="WRestourantDBModel.FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR" FromRole="DUYURUBLOGYORUMLARI" ToRole="DUYURULABLOGLAR" />
         </EntityType>
-        <Association Name="FK__DUYURUBLO__Duyur__6B24EA82">
-          <End Type="WRestourantDBModel.DUYURULABLOGLAR" Role="DUYURULABLOGLAR" Multiplicity="0..1" />
+        <EntityType Name="DUYURULABLOGLAR">
+          <Key>
+            <PropertyRef Name="DuyuruID" />
+          </Key>
+          <Property Name="DuyuruID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Baslik" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Icerik" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Tarih" Type="DateTime" Precision="0" />
+          <Property Name="Resim" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Yazar" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Goruntulenme" Type="Int32" />
+          <Property Name="Begeni" Type="Int32" />
+          <Property Name="Durum" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DUYURUBLOGYORUMLARI" Relationship="WRestourantDBModel.FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR" FromRole="DUYURULABLOGLAR" ToRole="DUYURUBLOGYORUMLARI" />
+        </EntityType>
+        <Association Name="FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR">
+          <End Type="WRestourantDBModel.DUYURULABLOGLAR" Role="DUYURULABLOGLAR" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="WRestourantDBModel.DUYURUBLOGYORUMLARI" Role="DUYURUBLOGYORUMLARI" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DUYURULABLOGLAR">
@@ -559,7 +593,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -573,19 +607,6 @@
                 <ScalarProperty Name="Baslik" ColumnName="Baslik" />
                 <ScalarProperty Name="Icerik" ColumnName="Icerik" />
                 <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
-                <ScalarProperty Name="Durum" ColumnName="Durum" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DUYURULABLOGLAR">
-            <EntityTypeMapping TypeName="WRestourantDBModel.DUYURULABLOGLAR">
-              <MappingFragment StoreEntitySet="DUYURULABLOGLAR">
-                <ScalarProperty Name="DuyuruID" ColumnName="DuyuruID" />
-                <ScalarProperty Name="Baslik" ColumnName="Baslik" />
-                <ScalarProperty Name="Icerik" ColumnName="Icerik" />
-                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
-                <ScalarProperty Name="Resim" ColumnName="Resim" />
-                <ScalarProperty Name="Yazar" ColumnName="Yazar" />
                 <ScalarProperty Name="Durum" ColumnName="Durum" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -740,16 +761,44 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ICERIKLER">
+            <EntityTypeMapping TypeName="WRestourantDBModel.ICERIKLER">
+              <MappingFragment StoreEntitySet="ICERIKLER">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Dosya" ColumnName="Dosya" />
+                <ScalarProperty Name="IcerikMetni" ColumnName="IcerikMetni" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Baslik" ColumnName="Baslik" />
+                <ScalarProperty Name="IcerikID" ColumnName="IcerikID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="DUYURUBLOGYORUMLARI">
             <EntityTypeMapping TypeName="WRestourantDBModel.DUYURUBLOGYORUMLARI">
               <MappingFragment StoreEntitySet="DUYURUBLOGYORUMLARI">
                 <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Yildiz" ColumnName="Yildiz" />
                 <ScalarProperty Name="YorumMetni" ColumnName="YorumMetni" />
                 <ScalarProperty Name="Tarih" ColumnName="Tarih" />
                 <ScalarProperty Name="Mail" ColumnName="Mail" />
                 <ScalarProperty Name="MusteriAdSoyad" ColumnName="MusteriAdSoyad" />
                 <ScalarProperty Name="DuyuruID" ColumnName="DuyuruID" />
                 <ScalarProperty Name="YorumID" ColumnName="YorumID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DUYURULABLOGLAR">
+            <EntityTypeMapping TypeName="WRestourantDBModel.DUYURULABLOGLAR">
+              <MappingFragment StoreEntitySet="DUYURULABLOGLAR">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Begeni" ColumnName="Begeni" />
+                <ScalarProperty Name="Goruntulenme" ColumnName="Goruntulenme" />
+                <ScalarProperty Name="Yazar" ColumnName="Yazar" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Icerik" ColumnName="Icerik" />
+                <ScalarProperty Name="Baslik" ColumnName="Baslik" />
+                <ScalarProperty Name="DuyuruID" ColumnName="DuyuruID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

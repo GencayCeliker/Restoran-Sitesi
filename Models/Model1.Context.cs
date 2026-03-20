@@ -26,7 +26,6 @@ namespace Restorant_Sitesi.Models
         }
     
         public DbSet<ANASAYFA> ANASAYFA { get; set; }
-        public DbSet<DUYURULABLOGLAR> DUYURULABLOGLAR { get; set; }
         public DbSet<KATEGORILER> KATEGORILER { get; set; }
         public DbSet<MASALAR> MASALAR { get; set; }
         public DbSet<REZARVASYONDURUM> REZARVASYONDURUM { get; set; }
@@ -40,6 +39,8 @@ namespace Restorant_Sitesi.Models
         public DbSet<SIFRE_SIFIRLAMA> SIFRE_SIFIRLAMA { get; set; }
         public DbSet<SITE_AYARLARI> SITE_AYARLARI { get; set; }
         public DbSet<UYELER> UYELER { get; set; }
+        public DbSet<ICERIKLER> ICERIKLER { get; set; }
         public DbSet<DUYURUBLOGYORUMLARI> DUYURUBLOGYORUMLARI { get; set; }
+        public DbSet<DUYURULABLOGLAR> DUYURULABLOGLAR { get; set; }
     }
 }
