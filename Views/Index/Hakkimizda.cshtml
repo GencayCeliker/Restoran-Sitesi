@@ -25,11 +25,11 @@
 
             <div class="col-md-6 d-flex">
                 @* Sadece kurucuları (ID'si 1 olmayanları) ve ilk 3 kaydı döngüye alıyoruz *@
-                @foreach (var item in Model.Where(x => x.HakkimdaID != 1))
+                @foreach (var x in Model.Where(x => x.HakkimdaID != 1))
                 {
                     <div class="img img-2 w-100 mx-md-1 shadow"
-                         style="background-image: url('@item.Resim'); border-radius: 8px;"
-                         title="@Html.Raw(item.Baslik)">
+                         style="background-image: url('@x.Resim'); border-radius: 8px;"
+                         title="@Html.Raw(x.Baslik)">
                     </div>
                 }
             </div>

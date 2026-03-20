@@ -25,16 +25,13 @@
             @foreach (var x in Model.Item1)
             {
                 <li class="list-group-item">
-                    <a href="/Admin/Index">
+                    @* Rezervasyonlar sayfasına gider *@
+                    <a href="/Admin/Rezervasyonlar">
                         <div class="media">
                             <i class="zmdi zmdi-calendar-check fa-2x mr-3 text-warning"></i>
                             <div class="media-body">
                                 <h6 class="mt-0 msg-title" style="font-size: 14px;">@x.MusteriAdSoyad</h6>
-                                <p class="msg-info" style="font-size: 11px;">
-                                    @(x.Tarih.HasValue ? x.Tarih.Value.ToString("dd.MM") : "") - @x.Saat
-                                    <br>
-                                    <span class="text-muted">@x.KisiSayisi Kişilik Masa</span>
-                                </p>
+                                <p class="msg-info" style="font-size: 11px;">Rezervasyon Bekliyor</p>
                             </div>
                         </div>
                     </a>
@@ -44,7 +41,8 @@
             @foreach (var y in Model.Item2)
             {
                 <li class="list-group-item">
-                    <a href="/Admin/Index">
+                    @* Eğer genel yorumlar sayfası varsa oraya, yoksa Index'e *@
+                    <a href="/Admin/Index#YorumOnayla">
                         <div class="media">
                             <i class="zmdi zmdi-comment-text fa-2x mr-3 text-info"></i>
                             <div class="media-body">
@@ -59,7 +57,8 @@
             @foreach (var b in Model.Item3)
             {
                 <li class="list-group-item">
-                    <a href="/Admin/BlogYorumlari">
+                    @* Blog sayfasına gider ve 'yorumlar' ID'sine sahip kısma odaklanır *@
+                    <a href="/Admin/BlogVeDuyuru#yorumlar">
                         <div class="media">
                             <i class="fa fa-rss-square fa-2x mr-3 text-danger"></i>
                             <div class="media-body">

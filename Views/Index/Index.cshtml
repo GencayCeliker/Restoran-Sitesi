@@ -97,8 +97,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 img ftco-animate"
-                         style="        background-image: url('/images/@Model.Hakkımda.FirstOrDefault(x => x.HakkimdaID == 1).Resim' );
-        width: 90%; /* Kutuyu sola doğru genişlettik ki uzun kol rahatça sığsın */
+                         style="        background-image: url('@Model.Hakkımda.FirstOrDefault(x => x.HakkimdaID == 1).Resim' );
+        width: 90%; 
         height: 100%;
         background-size: auto 100%;
         background-position: right -60px bottom;
@@ -373,22 +373,26 @@
                             <div class="item">
                                 <div class="blog-entry large-blog-card" style="margin-bottom: 0;">
 
-                                    <a href="/Index/DUYURULABLOGLARDETAY/@blog.DuyuruID" class="block-20 large-blog-img" style="background-image: url(/@blog.Resim);"></a>
+                                    <a href="/Index/DUYURULABLOGLARDETAY/@blog.DuyuruID" class="block-20 large-blog-img" style="background-image: url(@blog.Resim);"></a>
 
                                     <div class="text px-4 pt-4 pb-4">
                                         <div class="meta mb-2">
                                             <div><a href="#"><span class="fa fa-calendar mr-1"></span> @Convert.ToDateTime(blog.Tarih).ToString("dd MMMM yyyy")</a></div>
-                                            <div><a href="#"><span class="fa fa-user mr-1"></span> @blog.Yazar</a></div>
+                                            <div><a href="#"><span class="fa fa-user mr-1"></span> @Html.Raw(@blog.Yazar)</a></div>
                                         </div>
 
-                                        <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@blog.DuyuruID">@blog.Baslik</a></h3>
+                                        <h3 class="heading"><a href="/Index/DUYURULABLOGLARDETAY/@blog.DuyuruID">@Html.Raw(@blog.Baslik)</a></h3>
 
-                                        <p class="text-muted" style="font-size: 14px;">
+                                        <p class="text-muted summary-text">
                                             @{
-                                                string icerikOzet = blog.Icerik;
-                                                if (!string.IsNullOrEmpty(icerikOzet) && icerikOzet.Length > 70)
+                                                
+                                                string temizMetin = System.Text.RegularExpressions.Regex.Replace(blog.Icerik, "<.*?>", String.Empty);
+
+                                                
+                                                string icerikOzet = temizMetin;
+                                                if (!string.IsNullOrEmpty(icerikOzet) && icerikOzet.Length > 30)
                                                 {
-                                                    icerikOzet = icerikOzet.Substring(0, 70) + "...";
+                                                    icerikOzet = icerikOzet.Substring(0, 30) + "...";
                                                 }
                                             }
                                             @icerikOzet
