@@ -1,0 +1,118 @@
+﻿@model Restorant_Sitesi.Models.ICERIKLER
+
+@{
+    ViewBag.Title = "İçerik Düzenle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">
+                    <i class="zmdi zmdi-edit mr-2"></i>MEVCUT İÇERİĞİ VE DOSYALARI DÜZENLE
+                </h6>
+                <a href="/Admin/IcerikYonetimi" class="btn btn-sm btn-outline-light">Listeye Dön</a>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("IcerikGuncelle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(x => x.IcerikID)
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">İÇERİK BAŞLIĞI</label>
+                                @Html.TextBoxFor(x => x.Baslik, new { @class = "form-control", required = "required", style = "background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px;" })
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">İÇERİK DETAYI (YAZI ALANI)</label>
+                                @Html.TextAreaFor(x => x.IcerikMetni, new { @id = "summernote", @class = "summernote" })
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4" style="border-left: 1px solid rgba(255,255,255,0.05);">
+
+                            <div class="form-group">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">GÜNCEL YAYIN TARİHİ</label>
+                                <input type="date" name="TARIH" class="form-control"
+                                       value="@(Model.Tarih.HasValue ? Model.Tarih.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))"
+                                       style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;" required />
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">YAYIN DURUMU</label>
+                                @Html.DropDownListFor(x => x.Durum, new SelectList(new[] {
+                                    new { Value = "true", Text = "Aktif (Sitede Görünür)" },
+                                    new { Value = "false", Text = "Pasif (Gizli)" }
+                                }, "Value", "Text"), new { @class = "form-control", style = "background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc;" })
+                            </div>
+
+                            <hr style="border-top: 1px solid rgba(255,255,255,0.05);" />
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #ffc107;">1. KAPAK FOTOĞRAFI (GÜNCELLE)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="kapakInput" name="KAPAK" onchange="kapakOnizle(this)">
+                                    <label class="custom-file-label" id="kapakLabel" for="kapakInput" style="background: rgba(255,255,255,0.05); color: #ccc;">Yeni Kapak Seç...</label>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <img id="imgKapak" src="/Dosyalar/@Model.KFotograf" class="img-fluid rounded border" style="max-height: 120px; border-color: rgba(255,255,255,0.1);" />
+                                    <small class="d-block mt-1 text-muted">Mevcut Kapak</small>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">2. EK DOSYA / PDF (DEĞİŞTİR)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="ekDosyaInput" name="RESIM" onchange="ekDosyaOnizle(this)">
+                                    <label class="custom-file-label" id="ekDosyaLabel" for="ekDosyaInput" style="background: rgba(255,255,255,0.05); color: #ccc;">Yeni Dosya Seç...</label>
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.Dosya))
+                                {
+                                    <div class="mt-2">
+                                        <small class="text-info"><i class="zmdi zmdi-file-text mr-1"></i>Mevcut: @Model.Dosya</small>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="mt-5">
+                                <button type="submit" class="btn btn-block shadow-sm"
+                                        style="background: linear-gradient(45deg, #1b5e20, #4caf50); color: white; font-weight: bold; padding: 15px; border: none; letter-spacing: 1px; border-radius: 4px;">
+                                    <i class="zmdi zmdi-refresh-check mr-2"></i> DEĞİŞİKLİKLERİ KAYDET
+                                </button>
+                                <a href="/Admin/IcerikYonetimi" class="btn btn-block mt-3" style="background: transparent; color: #aaa; border: 1px solid rgba(255,255,255,0.1); font-size: 12px;">
+                                    İptal Et
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Kapak Fotoğrafı Önizleme
+        function kapakOnizle(input) {
+            if (input.files && input.files[0]) {
+                $('#kapakLabel').text(input.files[0].name);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgKapak').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Ek Dosya Önizleme (Eğer resimse gösterir)
+        function ekDosyaOnizle(input) {
+            if (input.files && input.files[0]) {
+                $('#ekDosyaLabel').text(input.files[0].name);
+            }
+        }
+    </script>
+}

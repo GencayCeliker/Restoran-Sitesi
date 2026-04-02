@@ -216,6 +216,16 @@ namespace Restorant_Sitesi.Controllers
             var menuler = db.URUNLER.Where(x => x.Durum == true).ToList();
             return View(menuler);
         }
+        public ActionResult IcerikListele()
+        {
+            var icerik = db.ICERIKLER.Where(x => x.Durum == true).ToList();
+            return PartialView(icerik);
+        }
 
+        public ActionResult IcerikGoster(int id)
+        {
+            var icerikbbul = db.ICERIKLER.Find(id);
+            return PartialView(icerikbbul);
+        }
     }
 }

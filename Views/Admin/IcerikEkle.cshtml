@@ -1,0 +1,115 @@
+﻿@model Restorant_Sitesi.Models.ICERIKLER
+
+@{
+    ViewBag.Title = "Yeni İçerik Ekle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow mb-4" style="background: rgba(0, 0, 0, 0.2); border: none; color: white;">
+            <div class="card-header py-3" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h6 class="m-0 font-weight-bold" style="color: #e0e0e0;">
+                    <i class="zmdi zmdi-plus-circle-o mr-2"></i>YENİ İÇERİK VE ÇİFT DOSYA EKLE
+                </h6>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("IcerikEkle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">İÇERİK BAŞLIĞI</label>
+                                @Html.TextBoxFor(x => x.Baslik, new { @class = "form-control", required = "required", placeholder = "İçerik başlığını buraya yazın...", style = "background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px;" })
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">İÇERİK DETAYI (YAZI ALANI)</label>
+                                @Html.TextAreaFor(x => x.IcerikMetni, new { @id = "summernote", @class = "summernote" })
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4" style="border-left: 1px solid rgba(255,255,255,0.05);">
+
+                            <div class="form-group">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">YAYIN TARİHİ</label>
+                                <input type="date" name="TARIH" id="tarihInput" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;" required />
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #ffc107;">1. KAPAK FOTOĞRAFI (ZORUNLU)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="kapakResim" name="KAPAK" required onchange="kapakOnizle(this)">
+                                    <label class="custom-file-label" id="kapakLabel" for="kapakResim" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc;">Kapak Seç...</label>
+                                </div>
+                                <div id="kapakOnizlemeArea" class="mt-2 text-center" style="display:none;">
+                                    <img id="imgKapak" src="#" class="img-fluid rounded border" style="max-height: 120px; border-color: rgba(255,255,255,0.1);" />
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #aaa;">2. EK DOSYA / PDF / RESİM (OPSİYONEL)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="ekDosya" name="RESIM" onchange="dosyaOnizle(this)">
+                                    <label class="custom-file-label" id="dosyaLabel" for="ekDosya" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc;">Dosya Seç...</label>
+                                </div>
+                                <div id="dosyaOnizlemeArea" class="mt-2 text-center" style="display:none;">
+                                    <img id="imgDosya" src="#" class="img-fluid rounded border" style="max-height: 120px; border-color: rgba(255,255,255,0.1);" />
+                                </div>
+                            </div>
+
+                            <div class="mt-5">
+                                <button type="submit" class="btn btn-block shadow-sm"
+                                        style="background: linear-gradient(45deg, #7b1fa2, #4a148c); color: white; font-weight: bold; padding: 15px; border: none; letter-spacing: 1px; border-radius: 4px;">
+                                    <i class="zmdi zmdi-save mr-2"></i> SİSTEME KAYDET
+                                </button>
+
+                                <a href="/Admin/IcerikYonetimi" class="btn btn-block mt-3" style="background: transparent; color: #aaa; border: 1px solid rgba(255,255,255,0.1); font-size: 11px;">
+                                    İptal Et ve Listeye Dön
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            document.getElementById("tarihInput").valueAsDate = new Date();
+        });
+
+        // Kapak Fotoğrafı Önizleme
+        function kapakOnizle(input) {
+            if (input.files && input.files[0]) {
+                $('#kapakLabel').text(input.files[0].name);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgKapak').attr('src', e.target.result);
+                    $('#kapakOnizlemeArea').fadeIn();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Ek Dosya Önizleme
+        function dosyaOnizle(input) {
+            if (input.files && input.files[0]) {
+                $('#dosyaLabel').text(input.files[0].name);
+                if (input.files[0].type.startsWith('image/')) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imgDosya').attr('src', e.target.result);
+                        $('#dosyaOnizlemeArea').fadeIn();
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    $('#dosyaOnizlemeArea').hide();
+                }
+            }
+        }
+    </script>
+}

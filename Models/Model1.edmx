@@ -60,6 +60,7 @@
           <Property Name="Baslik" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Tarih" Type="date" />
           <Property Name="IcerikMetni" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="KFotograf" Type="nvarchar(max)" />
           <Property Name="Dosya" Type="nvarchar(max)" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
@@ -549,6 +550,7 @@
           <Property Name="IcerikMetni" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Dosya" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Durum" Type="Boolean" Nullable="false" />
+          <Property Name="KFotograf" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DUYURUBLOGYORUMLARI">
           <Key>
@@ -764,6 +766,7 @@
           <EntitySetMapping Name="ICERIKLER">
             <EntityTypeMapping TypeName="WRestourantDBModel.ICERIKLER">
               <MappingFragment StoreEntitySet="ICERIKLER">
+                <ScalarProperty Name="KFotograf" ColumnName="KFotograf" />
                 <ScalarProperty Name="Durum" ColumnName="Durum" />
                 <ScalarProperty Name="Dosya" ColumnName="Dosya" />
                 <ScalarProperty Name="IcerikMetni" ColumnName="IcerikMetni" />

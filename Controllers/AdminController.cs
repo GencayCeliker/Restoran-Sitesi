@@ -650,5 +650,163 @@ namespace Restorant_Sitesi.Controllers
             return RedirectToAction("UrunListesi");
         }
 
+        // 1. İÇERİKLERİ LİSTELEME
+        public ActionResult IcerikYonetimi()
+        {
+          
+            var icerikler = db.ICERIKLER.OrderByDescending(x => x.IcerikID).ToList();
+            return View(icerikler);
+        }
+
+       
+        public ActionResult IcerikEkle()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+
+        public ActionResult IcerikEkle(ICERIKLER model, HttpPostedFileBase RESIM, HttpPostedFileBase KAPAK)
+        {
+            // 1. Döküman/PDF Yükleme (Hocanın Mevcut Yapısı)
+            if (RESIM != null && RESIM.ContentLength > 0)
+            {
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(RESIM.FileName);
+                RESIM.SaveAs(Path.Combine(Server.MapPath("~/Dosyalar/"), filename));
+                model.Dosya = filename;
+            }
+
+            // 2. KAPAK FOTOĞRAFI YÜKLEME (Senin Yeni Eklentin 🚀)
+            if (KAPAK != null && KAPAK.ContentLength > 0)
+            {
+                string filename = "kapak_" + Guid.NewGuid().ToString() + Path.GetExtension(KAPAK.FileName);
+                KAPAK.SaveAs(Path.Combine(Server.MapPath("~/Dosyalar/"), filename));
+                model.KFotograf = filename; // DB'deki yeni kolona kayıt
+            }
+
+            model.Durum = true;
+            db.ICERIKLER.Add(model);
+            db.SaveChanges();
+            TempData["Basarili"] = "İçerik ve Dosya Başarıyla Eklendi.";
+            return RedirectToAction("IcerikYonetimi");
+          
+        }
+
+        //public ActionResult IcerikEkle(ICERIKLER model, HttpPostedFileBase RESIM)
+        //{
+        //    if (RESIM != null && RESIM.ContentLength > 0)
+        //    {
+        //        // 1. Hocanın öğrettiği Guid ile benzersiz isim oluşturma yapısı
+        //        string extension = Path.GetExtension(RESIM.FileName);
+        //        string filename = Guid.NewGuid().ToString() + extension;
+
+        //        // 2. Dosyayı 'Dosyalar' klasörüne kaydetme
+        //        var path = Path.Combine(Server.MapPath("~/Dosyalar/"), filename);
+        //        RESIM.SaveAs(path);
+
+        //        // 3. Veritabanına sadece dosya adını yazıyoruz (Hocanın yöntemi)
+        //        model.Dosya = filename;
+        //    }
+
+        //    model.Durum = true;
+        //    db.ICERIKLER.Add(model);
+        //    db.SaveChanges();
+
+        //    TempData["Basarili"] = "İçerik ve Dosya Başarıyla Eklendi.";
+        //    return RedirectToAction("IcerikYonetimi");
+        //}
+        public ActionResult IcerikDuzenle(int id)
+        {
+            var bul = db.ICERIKLER.Find(id);
+            if (bul == null) return HttpNotFound();
+            return View(bul);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+
+        public ActionResult IcerikGuncelle(ICERIKLER model, HttpPostedFileBase RESIM, HttpPostedFileBase KAPAK)
+        {
+            var guncel = db.ICERIKLER.Find(model.IcerikID);
+
+            // Döküman Güncelleme
+            if (RESIM != null)
+            {
+                if (!string.IsNullOrEmpty(guncel.Dosya)) System.IO.File.Delete(Request.MapPath("~/Dosyalar/") + guncel.Dosya);
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(RESIM.FileName);
+                RESIM.SaveAs(Path.Combine(Server.MapPath("~/Dosyalar/"), filename));
+                guncel.Dosya = filename;
+            }
+
+            // Kapak Fotoğrafı Güncelleme
+            if (KAPAK != null)
+            {
+                if (!string.IsNullOrEmpty(guncel.KFotograf)) System.IO.File.Delete(Request.MapPath("~/Dosyalar/") + guncel.KFotograf);
+                string filename = "kapak_" + Guid.NewGuid().ToString() + Path.GetExtension(KAPAK.FileName);
+                KAPAK.SaveAs(Path.Combine(Server.MapPath("~/Dosyalar/"), filename));
+                guncel.KFotograf = filename;
+            }
+
+            guncel.Baslik = model.Baslik;
+            guncel.Tarih = model.Tarih;
+            guncel.IcerikMetni = model.IcerikMetni;
+            db.SaveChanges();
+            TempData["Basarili"] = "Güncelleme Başarılı.";
+            return RedirectToAction("IcerikYonetimi");
+        }
+
+
+
+        //public ActionResult IcerikGuncelle(ICERIKLER model, HttpPostedFileBase RESIM)
+        //{
+        //    var guncel = db.ICERIKLER.Find(model.IcerikID);
+
+        //    if (RESIM != null && RESIM.ContentLength > 0)
+        //    {
+        //        // Eski dosyayı klasörden silme (Hocanın öğrettiği temizlik işlemi)
+        //        if (!string.IsNullOrEmpty(guncel.Dosya))
+        //        {
+        //            string eskiYol = Request.MapPath("~/Dosyalar/") + guncel.Dosya;
+        //            if (System.IO.File.Exists(eskiYol)) System.IO.File.Delete(eskiYol);
+        //        }
+
+        //        // Yeni dosyayı kaydetme
+        //        string extension = Path.GetExtension(RESIM.FileName);
+        //        string filename = Guid.NewGuid().ToString() + extension;
+        //        var path = Path.Combine(Server.MapPath("~/Dosyalar/"), filename);
+
+        //        RESIM.SaveAs(path);
+        //        guncel.Dosya = filename;
+        //    }
+
+        //    guncel.Baslik = model.Baslik;
+        //    guncel.Tarih = model.Tarih;
+        //    guncel.IcerikMetni = model.IcerikMetni;
+        //    guncel.Durum = model.Durum;
+
+        //    db.SaveChanges();
+        //    TempData["Basarili"] = "Güncelleme Başarılı.";
+        //    return RedirectToAction("IcerikYonetimi");
+        //}
+
+        // 4. İÇERİK SİLME
+        public ActionResult IcerikSil(int id)
+        {
+            var silinecek = db.ICERIKLER.Find(id);
+
+            // Resim dosyasını temizle
+            if (!string.IsNullOrEmpty(silinecek.Dosya))
+            {
+                string yol = Request.MapPath("~/" + silinecek.Dosya);
+                if (System.IO.File.Exists(yol)) System.IO.File.Delete(yol);
+            }
+
+            db.ICERIKLER.Remove(silinecek);
+            db.SaveChanges();
+            TempData["Basarili"] = "İçerik tamamen silindi.";
+            return RedirectToAction("IcerikYonetimi");
+        }
+
     }
 }

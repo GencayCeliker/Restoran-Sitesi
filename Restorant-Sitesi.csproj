@@ -1394,9 +1394,15 @@
     <Content Include="Views\Index\Menulerimiz.cshtml" />
     <Content Include="Views\Admin\KategoriListesi.cshtml" />
     <Content Include="Views\Admin\KategoriEkle.cshtml" />
+    <Content Include="Views\Admin\IcerikYonetimi.cshtml" />
+    <Content Include="Views\Admin\IcerikEkle.cshtml" />
+    <Content Include="Views\Admin\IcerikDuzenle.cshtml" />
+    <Content Include="Views\Index\IcerikGoster.cshtml" />
+    <Content Include="Views\Index\IcerikListele.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Dosyalar\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>

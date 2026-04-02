@@ -33,6 +33,7 @@
 <body>
             @Html.Action("UstIletisimPartial", "Index")
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+
         <div class="container">
 
             <a href="/Index/Index" class="navbar-brand">
@@ -62,8 +63,11 @@
                     <li class="nav-item @(aktifSayfa == "Bloglar" || aktifSayfa == "DUYURULABLOGLARDETAY" ? "active" : "")">
                         <a href="/Index/Bloglar" class="nav-link">Blog & Duyuru</a>
                     </li>
+                    <li class="nav-item @(aktifSayfa == "IcerikListele" || aktifSayfa == "IcerikGoster" ? "active" : "")">
+                        <a href="/Index/IcerikListele" class="nav-link">İçerikler</a>
+                    </li>
 
-                    <li class="nav-item"><a href="/Index/Index" class="nav-link">İletişim</a></li>
+                    @*<li class="nav-item"><a href="/Index/Index" class="nav-link">İletişim</a></li>*@
                 </ul>
             </div>
         </div>

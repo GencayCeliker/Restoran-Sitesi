@@ -1,0 +1,61 @@
+﻿@model Restorant_Sitesi.Models.ICERIKLER
+@{
+    ViewBag.Title = "IcerikGoster";
+    Layout = "~/Views/Shared/RestourantLayout.cshtml";
+}
+
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center mb-5">
+                <h1 class="mb-2 bread"> Güncel İçerikler </h1>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="/Index/Index">Ana Sayfa <i class="fa fa-chevron-right"></i></a></span>
+                    <span>IcerikGoster<i class="fa fa-chevron-right"></i></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="mt-5 pt-4 border-top">
+    <a href="javascript:history.back()" class="text-primary font-weight-bold">
+        <i class="fa fa-arrow-left mr-2"></i> Listeye Geri Dön
+    </a>
+</div>
+<section class="article-header">
+    <div class="container">
+
+        <h1 class="display-4 font-weight-bold">@Model.Baslik</h1>
+    </div>
+</section>
+@if (Model.Dosya != null)
+{
+    <div class="text-center">
+        <a href="~/Dosyalar/@Model.Dosya" target="_blank" class="pdf-button">
+            <i class="fa fa-file-pdf-o fa-2x mr-3"></i>
+            İLGİLİ DOKÜMANI (PDF) GÖRÜNTÜLE
+        </a>
+    </div>
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <article class="article-container">
+                <div class="article-meta">
+                    <span><i class="fa fa-calendar mr-2"></i> @Model.Tarih.Value.ToString("dd MMMM yyyy")</span>
+                    <span><i class="fa fa-user mr-2"></i> Moly RS Mutfak</span>
+                </div>
+
+                <div class="article-content">
+                    @Html.Raw(Model.IcerikMetni)
+                </div>
+
+
+            </article>
+        </div>
+    </div>
+</div>

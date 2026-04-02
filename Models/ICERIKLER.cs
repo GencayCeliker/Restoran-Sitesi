@@ -20,5 +20,6 @@ namespace Restorant_Sitesi.Models
         public string IcerikMetni { get; set; }
         public string Dosya { get; set; }
         public bool Durum { get; set; }
+        public string KFotograf { get; set; }
     }
 }
