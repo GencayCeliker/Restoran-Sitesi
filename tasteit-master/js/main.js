@@ -357,3 +357,4 @@ $('.blog-slider').owlCarousel({
 		1000: { items: 3 }  // Bilgisayarda 3 blog yan yana (Şeflerden farklı olarak 3 daha şık durur)
 	}
 });
+	

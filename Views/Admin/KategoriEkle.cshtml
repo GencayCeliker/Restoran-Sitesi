@@ -1,0 +1,47 @@
+﻿@model Restorant_Sitesi.Models.KATEGORILER
+@{
+    ViewBag.Title = "KategoriEkle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>KategoriEkle</h2>
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="d-flex align-items-center mb-4">
+                <a href="/Admin/KategoriListesi" class="btn btn-outline-secondary btn-sm mr-3">
+                    <i class="fa fa-arrow-left"></i> Geri Dön
+                </a>
+                <h2 class="text-dark font-weight-bold mb-0">Yeni Kategori Ekle</h2>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-primary">
+                    <h6 class="m-0 font-weight-bold text-white">Kategori Bilgileri</h6>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("KategoriEkle", "AdminMenu", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <label class="text-dark font-weight-bold">Kategori Adı</label>
+                            @Html.TextBoxFor(x => x.KategoriAd, new { @class = "form-control", @placeholder = "Örn: Et Yemekleri, İçecekler...", @required = "required" })
+                            @Html.ValidationMessageFor(x => x.KategoriAd, "", new { @class = "text-danger" })
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group mb-0 text-right">
+                            <button type="reset" class="btn btn-secondary px-4 mr-2">Temizle</button>
+                            <button type="submit" class="btn btn-success px-5">
+                                <i class="fa fa-save mr-1"></i> Kaydet
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

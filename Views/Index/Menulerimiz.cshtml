@@ -1,0 +1,158 @@
+﻿@model List<Restorant_Sitesi.Models.URUNLER>
+@{
+    ViewBag.Title = "Menulerimiz";
+    Layout = "~/Views/Shared/RestourantLayout.cshtml";
+}
+
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../../images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center mb-5">
+                <h1 class="mb-2 bread">Menülerimiz</h1>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="/Index/Index">Anasayfa <i class="fa fa-chevron-right"></i></a></span>
+                    <span>Menülerimiz <i class="fa fa-chevron-right"></i></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading">Özel Lezzetler</span>
+                <h2 class="mb-4">Menümüz</h2>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var grup in Model.GroupBy(x => x.KATEGORILER.KategoriAd))
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    @* Mevcut 'menu-wrap' tasarımını koruyoruz, script için 'menu-wrap-custom' ekliyoruz *@
+                    <div class="menu-wrap menu-wrap-custom">
+                        <div class="heading-menu text-center ftco-animate">
+                            <h3>@grup.Key</h3>
+                        </div>
+
+                        @* İlk 3 ürünü normal şekilde gösteriyoruz *@
+                        @foreach (var urun in grup.Take(3))
+                        {
+                            <div class="menus d-flex ftco-animate">
+                                <div class="menu-img img" style="background-image: url('../../@urun.Resim');"></div>
+                                <div class="text">
+                                    <div class="d-flex">
+                                        <div class="one-half">
+                                            <h3>@urun.UrunAd</h3>
+                                        </div>
+                                        <div class="one-forth">
+                                            <span class="price">₺@urun.Fiyat</span>
+                                        </div>
+                                    </div>
+                                    <p>@Html.Raw(urun.Icindekiler)</p>
+                                </div>
+                            </div>
+                        }
+
+                        @* Eğer bu kategoride 3'ten fazla ürün varsa gizli alanı ve butonu ekliyoruz *@
+                        @if (grup.Count() > 3)
+                        {
+                            @* Script'in aradığı 'extra-items-container' *@
+                            <div class="extra-items-container" style="display: none;">
+                                @foreach (var urun in grup.Skip(3))
+                                {
+                                    <div class="menus d-flex">
+                                        <div class="menu-img img" style="background-image: url('../../@urun.Resim');"></div>
+                                        <div class="text">
+                                            <div class="d-flex">
+                                                <div class="one-half">
+                                                    <h3>@urun.UrunAd</h3>
+                                                </div>
+                                                <div class="one-forth">
+                                                    <span class="price">₺@urun.Fiyat</span>
+                                                </div>
+                                            </div>
+                                            <p>@Html.Raw(urun.Icindekiler)</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="text-center mt-3">
+                                <a href="javascript:void(0)" onclick="smartToggle(this)" class="view-all-arrow" style="text-decoration: none;">
+                                    @* Script'in aradığı 'toggle-text' *@
+                                    <p class="toggle-text" style="font-size: 12px; margin-bottom: 0; color: #cda45e; font-weight: bold;">DAHA FAZLA GÖSTER</p>
+                                    @* Script'in aradığı 'animated-arrow' *@
+                                    <i class="fa fa-chevron-down animated-arrow" style="font-size: 20px; color: #cda45e; transition: 0.4s; display: inline-block;"></i>
+                                </a>
+                            </div>
+                        }
+
+                        <span class="flat flaticon-bread" style="left: 0;"></span>
+                        <span class="flat flaticon-breakfast" style="right: 0;"></span>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+
+</section>
+
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+    <div class="row no-gutters bg-primary py-5 px-4 shadow-lg reservation-large-wrap">
+        <div class="container">
+            <h3 class="text-white">Şimdi Rezervasyon Yapın</h3>
+            <form action="/Index/RezarvasyonYap" method="post" class="appointment-form">
+                <div class="row align-items-end">
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="text-white small">Ad Soyad</label>
+                            <input type="text" name="MusteriAdSoyad" class="form-control" placeholder="Ad Soyad" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="text-white small">E-Posta</label>
+                            <input type="email" name="Mail" class="form-control" placeholder="E-Posta Adresi" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="text-white small">Telefon</label>
+                            <input type="tel" name="MusteriTelefon" class="form-control" placeholder="Telefon" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="text-white small">Tarih</label>
+                            <input type="text" class="form-control book_date" name="Tarih" placeholder="Tarih Seç" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="text-white small">Saat</label>
+                            <input type="text" id="timepicker" class="form-control book_time" name="Saat" placeholder="Saat" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group">
+                            <label class="text-white small">Kişi</label>
+                            <input type="number" name="KisiSayisi" class="form-control" placeholder="Kişi" min="1" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="submit" value="Masayı Ayırt" class="btn btn-white w-100 shadow-sm">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

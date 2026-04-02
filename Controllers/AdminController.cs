@@ -586,5 +586,69 @@ namespace Restorant_Sitesi.Controllers
             }
             return RedirectToAction("HakkimizdaYonetim");
         }
+        public ActionResult KategoriListesi()
+        {
+            var kategoriler = db.KATEGORILER.ToList();
+            return View(kategoriler);
+        }
+
+        [HttpGet]
+        public ActionResult KategoriEkle() => View();
+
+        [HttpPost]
+        public ActionResult KategoriEkle(KATEGORILER k)
+        {
+            db.KATEGORILER.Add(k);
+            db.SaveChanges();
+            return RedirectToAction("KategoriListesi");
+        }
+
+        public ActionResult KategoriSil(int id)
+        {
+            var kat = db.KATEGORILER.Find(id);
+            db.KATEGORILER.Remove(kat);
+            db.SaveChanges();
+            return RedirectToAction("KategoriListesi");
+        }
+
+        // --- ÜRÜN (MENÜ) İŞLEMLERİ ---
+        public ActionResult UrunListesi()
+        {
+            var urunler = db.URUNLER.Include("KATEGORILER").ToList();
+            return View(urunler);
+        }
+
+        [HttpGet]
+        public ActionResult UrunEkle()
+        {
+            // Dropdown listesi için kategorileri çekiyoruz
+            List<SelectListItem> degerler = (from i in db.KATEGORILER.ToList()
+                                             select new SelectListItem
+                                             {
+                                                 Text = i.KategoriAd,
+                                                 Value = i.KategoriID.ToString()
+                                             }).ToList();
+            ViewBag.dgr = degerler;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
+        {
+            // Resim Yükleme İşlemi
+            if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
+            {
+                string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
+                string yol = "~/ResimlerMenu/" + dosyaAdi;
+                ResimDosyasi.SaveAs(Server.MapPath(yol));
+                u.Resim = "/ResimlerMenu/" + dosyaAdi;
+            }
+
+            u.Durum = true;
+            db.URUNLER.Add(u);
+            db.SaveChanges();
+            return RedirectToAction("UrunListesi");
+        }
+
     }
 }

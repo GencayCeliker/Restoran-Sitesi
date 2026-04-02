@@ -15,7 +15,7 @@ namespace Restorant_Sitesi.Controllers
 
         public ActionResult Index()
         {
-            GuvenlikKoduUret(); 
+            GuvenlikKoduUret();
             AnasayfaSınıf model = new AnasayfaSınıf();
 
             model.SliderBannerlari = db.ANASAYFA.Where(x => x.Durum == true).ToList();
@@ -23,7 +23,7 @@ namespace Restorant_Sitesi.Controllers
 
             model.OneCikanUrunler = db.URUNLER.Where(x => x.Durum == true).Take(6).ToList();
 
-          
+
             model.urunler = db.URUNLER.Where(x => x.Durum == true).ToList();
 
             model.Seflerimiz = db.SEFLER.Where(x => x.Durum == true).ToList();
@@ -68,7 +68,7 @@ namespace Restorant_Sitesi.Controllers
                 }
             }
 
-            p.DurumID = 1; 
+            p.DurumID = 1;
             db.REZARVASYONLAR.Add(p);
             db.SaveChanges();
 
@@ -79,26 +79,26 @@ namespace Restorant_Sitesi.Controllers
         [HttpPost]
         public ActionResult YorumYap(string AdSoyad, string Mail, string YorumIcerik, string KullaniciKodu)
         {
-            
+
             string dogruKod = Session["DogrulamaKodu"] as string;
 
-           
+
             if (string.IsNullOrEmpty(KullaniciKodu) || string.IsNullOrEmpty(dogruKod) || KullaniciKodu.ToUpper() != dogruKod)
             {
                 TempData["Hata"] = "Güvenlik kodu hatalı! Lütfen tekrar deneyiniz.";
                 return RedirectToAction("Index");
             }
 
-          
+
             if (!string.IsNullOrEmpty(AdSoyad) && !string.IsNullOrEmpty(YorumIcerik))
             {
                 YORUMLAR y = new YORUMLAR();
                 y.MusteriAdSoyad = AdSoyad;
                 y.Mail = Mail;
-             
+
                 y.YorumMetni = YorumIcerik;
                 y.Tarih = DateTime.Now;
-                y.Durum = false; 
+                y.Durum = false;
 
                 db.YORUMLAR.Add(y);
                 db.SaveChanges();
@@ -112,7 +112,7 @@ namespace Restorant_Sitesi.Controllers
         {
             WRestourantDBEntities db = new WRestourantDBEntities();
             var veriler = db.USTILETISIM.FirstOrDefault(x => x.UstID == 1);
-            
+
             return PartialView(veriler);
         }
         public ActionResult DUYURULABLOGLARDETAY(int id)
@@ -125,7 +125,7 @@ namespace Restorant_Sitesi.Controllers
             deger.Goruntulenme = (deger.Goruntulenme ?? 0) + 1;
             db.SaveChanges();
 
-         
+
             var guncelVeri = db.DUYURULABLOGLAR.Find(id);
 
             ViewBag.BlogYorumlari = db.DUYURUBLOGYORUMLARI
@@ -140,7 +140,7 @@ namespace Restorant_Sitesi.Controllers
                 .Take(3)
                 .ToList();
 
-            return View(guncelVeri); // 🔥 BURASI DEĞİŞTİ
+            return View(guncelVeri); 
         }
         [HttpPost]
         public ActionResult YorumKaydet(DUYURUBLOGYORUMLARI y, string GirilenDogrulamaKodu)
@@ -159,12 +159,12 @@ namespace Restorant_Sitesi.Controllers
             yeni.YorumMetni = y.YorumMetni;
             yeni.DuyuruID = y.DuyuruID;
             yeni.Yildiz = y.Yildiz;
-            yeni.Durum = false; 
+            yeni.Durum = false;
             yeni.Tarih = DateTime.Now;
 
             db.DUYURUBLOGYORUMLARI.Add(yeni);
             db.SaveChanges();
-           
+
             TempData["Mesaj"] = "Yorumunuz başarıyla gönderildi.Yönetici onayından sonra yayınlanacaktır.";
             return RedirectToAction("DUYURULABLOGLARDETAY", new { id = y.DuyuruID });
         }
@@ -173,7 +173,7 @@ namespace Restorant_Sitesi.Controllers
         {
             string cookieName = "blog_like_" + id;
 
-            
+
             if (Request.Cookies[cookieName] != null)
             {
                 return Json(new { success = false, message = "Zaten beğendiniz." });
@@ -195,7 +195,7 @@ namespace Restorant_Sitesi.Controllers
         }
         public ActionResult Bloglar()
         {
-           
+
             var tumBloglar = db.DUYURULABLOGLAR
                                .Where(x => x.Durum == true)
                                .OrderByDescending(x => x.Tarih)
@@ -203,12 +203,19 @@ namespace Restorant_Sitesi.Controllers
 
             return View(tumBloglar);
         }
-      
+
         public ActionResult Hakkimizda()
         {
             var hakkimizda = db.HAKKIMDA.Where(x => x.HakkimdaID != 1).ToList();
             ViewBag.hyrm = db.DUYURUBLOGYORUMLARI.Where(x => x.Durum == true).OrderByDescending(x => x.YorumID).Take(5).ToList();
-            return View(hakkimizda); 
+            return View(hakkimizda);
         }
+
+        public ActionResult Menulerimiz()
+        {
+            var menuler = db.URUNLER.Where(x => x.Durum == true).ToList();
+            return View(menuler);
+        }
+
     }
 }
