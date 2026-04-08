@@ -1,0 +1,18 @@
+﻿@model Restorant_Sitesi.Models.KATEGORILER
+@{
+    ViewBag.Title = "KategoriGuncelle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm("KategoriGuncelle", "Admin", FormMethod.Post))
+{
+    @* BU SATIR KRİTİKTİR: ID'yi post etmek zorundayız *@
+    @Html.HiddenFor(x => x.KategoriID)
+
+    <div class="form-group">
+        <label>Kategori Adı</label>
+        @Html.TextBoxFor(x => x.KategoriAd, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-light px-5">Güncelle</button>
+}

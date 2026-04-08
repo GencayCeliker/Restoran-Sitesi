@@ -16,7 +16,10 @@ namespace Restorant_Sitesi.Models
         public List<DUYURULABLOGLAR> SonBlogYazilari { get; set; } // Veritabanından (DUYURULABLOGLAR tablosu) gelen blog/haber yazıları
         public List<YORUMLAR> MusteriYorumlari { get; set; }       // Müşterilerin yaptığı yorumlar (YORUMLAR tablosu)
         public List<HAKKIMDA> Hakkımda { get; set; }               // Hakkımızda kısmında yazacak olan tanıtım metinleri
-        public List<URUNLER> urunler { get; set; }                 // Menü sekmesinde gösterilecek olan TÜM aktif yemek/içecekler
+        public List<URUNLER> urunler { get; set; }
+
+        public List<ICERIKLER> Icerikler { get; set; }
+        // Menü sekmesinde gösterilecek olan TÜM aktif yemek/içecekler
 
 
         // --- TEKLİ VERİLER (Sadece tek bir satır/işlem tutanlar) ---

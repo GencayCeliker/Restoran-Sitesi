@@ -9,16 +9,18 @@ using System.Net;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 namespace Restorant_Sitesi.Controllers
 {
-    public class AdminController : Controller
+    [Authorize]
+    public class AdminController : Controller 
     {
         WRestourantDBEntities db = new WRestourantDBEntities();
         public AdminController()
         {
 
         }
-
+      
         public ActionResult Index()
         {
             var gecmisRezervasyonlar = db.REZARVASYONLAR
@@ -588,7 +590,7 @@ namespace Restorant_Sitesi.Controllers
         }
         public ActionResult KategoriListesi()
         {
-            var kategoriler = db.KATEGORILER.ToList();
+            var kategoriler = db.KATEGORILER.OrderByDescending(x => x.KategoriID).ToList();
             return View(kategoriler);
         }
 
@@ -600,6 +602,38 @@ namespace Restorant_Sitesi.Controllers
         {
             db.KATEGORILER.Add(k);
             db.SaveChanges();
+            TempData["Basarili"] = "Kategori başarıyla eklendi!";
+            return RedirectToAction("KategoriListesi");
+        }
+
+        [HttpGet]
+        public ActionResult KategoriGuncelle(int id)
+        {
+            var kat = db.KATEGORILER.Find(id);
+            if (kat == null) return HttpNotFound();
+
+            return View(kat);
+        }
+
+        // --- DEĞİŞİKLİKLERİ KAYDEDER (POST) ---
+        [HttpPost]
+        public ActionResult KategoriGuncelle(KATEGORILER k)
+        {
+            var guncellenecek = db.KATEGORILER.Find(k.KategoriID);
+
+            if (guncellenecek != null)
+            {
+                guncellenecek.KategoriAd = k.KategoriAd;
+                // Eğer başka kolonlar varsa (Durum, İkon vb.) buraya ekleyebilirsin.
+
+                db.SaveChanges();
+                TempData["Basarili"] = "Kategori bilgileri başarıyla güncellendi.";
+            }
+            else
+            {
+                TempData["Hata"] = "Kategori bulunamadı!";
+            }
+
             return RedirectToAction("KategoriListesi");
         }
 
@@ -608,13 +642,15 @@ namespace Restorant_Sitesi.Controllers
             var kat = db.KATEGORILER.Find(id);
             db.KATEGORILER.Remove(kat);
             db.SaveChanges();
+            TempData["Basarili"] = "Kategori başarıyla silindi.";
             return RedirectToAction("KategoriListesi");
         }
 
         // --- ÜRÜN (MENÜ) İŞLEMLERİ ---
         public ActionResult UrunListesi()
         {
-            var urunler = db.URUNLER.Include("KATEGORILER").ToList();
+            var urunler = db.URUNLER.Include("KATEGORILER").OrderByDescending(x => x.UrunID).ToList();
+
             return View(urunler);
         }
 
@@ -633,20 +669,110 @@ namespace Restorant_Sitesi.Controllers
         }
 
         [HttpPost]
-        public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
+public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
+{
+    if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
+    {
+        // 1. Klasör yolunu belirle
+        string klasörYolu = Server.MapPath("~/ResimlerMenu/");
+
+        // 2. Klasör fiziksel olarak yoksa OLUŞTUR (Hatanın kökten çözümü burası)
+        if (!System.IO.Directory.Exists(klasörYolu))
         {
-            // Resim Yükleme İşlemi
+            System.IO.Directory.CreateDirectory(klasörYolu);
+        }
+
+        // 3. Dosya adını ve tam yolu belirle
+        string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
+        string tamYol = Path.Combine(klasörYolu, dosyaAdi);
+
+        // 4. Kaydet
+        ResimDosyasi.SaveAs(tamYol);
+        
+        // Veritabanına kaydedilecek yol
+        u.Resim = "/ResimlerMenu/" + dosyaAdi;
+    }
+
+    u.Durum = true;
+    db.URUNLER.Add(u);
+    db.SaveChanges();
+    TempData["Basarili"] = "Ürün başarıyla eklendi!";
+    return RedirectToAction("UrunListesi");
+}
+
+        public ActionResult UrunSil(int id)
+        {
+            var urun = db.URUNLER.Find(id);
+            if (urun != null)
+            {
+                // Sunucudaki resmi silme işlemi
+                if (!string.IsNullOrEmpty(urun.Resim))
+                {
+                    string tamYol = Server.MapPath(urun.Resim);
+                    if (System.IO.File.Exists(tamYol))
+                    {
+                        System.IO.File.Delete(tamYol);
+                    }
+                }
+
+                db.URUNLER.Remove(urun);
+                db.SaveChanges();
+                TempData["Basarili"] = "Ürün başarıyla silindi.";
+            }
+            return RedirectToAction("UrunListesi");
+        }
+
+        [HttpGet]
+        public ActionResult UrunGuncelle(int id)
+        {
+            var urun = db.URUNLER.Find(id);
+            if (urun == null) return HttpNotFound();
+
+            // Kategorileri dropdown için çekiyoruz
+            List<SelectListItem> kategoriler = (from i in db.KATEGORILER.ToList()
+                                                select new SelectListItem
+                                                {
+                                                    Text = i.KategoriAd,
+                                                    Value = i.KategoriID.ToString()
+                                                }).ToList();
+            ViewBag.dgr = kategoriler;
+
+            return View(urun);
+        }
+
+        [HttpPost]
+        public ActionResult UrunGuncelle(URUNLER p, HttpPostedFileBase ResimDosyasi)
+        {
+            var urun = db.URUNLER.Find(p.UrunID);
+
             if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
             {
+                // Eski resmi sunucudan sil
+                if (!string.IsNullOrEmpty(urun.Resim))
+                {
+                    string eskiYol = Server.MapPath(urun.Resim);
+                    if (System.IO.File.Exists(eskiYol))
+                    {
+                        System.IO.File.Delete(eskiYol);
+                    }
+                }
+
+                // Yeni resmi kaydet
                 string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
-                string yol = "~/ResimlerMenu/" + dosyaAdi;
-                ResimDosyasi.SaveAs(Server.MapPath(yol));
-                u.Resim = "/ResimlerMenu/" + dosyaAdi;
+                string yeniYol = "/ResimlerMenu/" + dosyaAdi;
+                ResimDosyasi.SaveAs(Server.MapPath("~" + yeniYol));
+                urun.Resim = yeniYol;
             }
 
-            u.Durum = true;
-            db.URUNLER.Add(u);
+            // Bilgileri güncelle
+            urun.UrunAd = p.UrunAd;
+            urun.Fiyat = p.Fiyat;
+            urun.Icindekiler = p.Icindekiler;
+            urun.KategoriID = p.KategoriID;
+            urun.Durum = p.Durum;
+
             db.SaveChanges();
+            TempData["Basarili"] = "Ürün başarıyla güncellendi.";
             return RedirectToAction("UrunListesi");
         }
 
@@ -669,7 +795,7 @@ namespace Restorant_Sitesi.Controllers
 
         public ActionResult IcerikEkle(ICERIKLER model, HttpPostedFileBase RESIM, HttpPostedFileBase KAPAK)
         {
-            // 1. Döküman/PDF Yükleme (Hocanın Mevcut Yapısı)
+           
             if (RESIM != null && RESIM.ContentLength > 0)
             {
                 string filename = Guid.NewGuid().ToString() + Path.GetExtension(RESIM.FileName);
@@ -807,6 +933,8 @@ namespace Restorant_Sitesi.Controllers
             TempData["Basarili"] = "İçerik tamamen silindi.";
             return RedirectToAction("IcerikYonetimi");
         }
+
+
 
     }
 }
