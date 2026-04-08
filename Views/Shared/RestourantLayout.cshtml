@@ -31,43 +31,74 @@
     <link rel="stylesheet" href="~/tasteit-master/css/style.css">
 </head>
 <body>
-            @Html.Action("UstIletisimPartial", "Index")
+    @Html.Action("UstIletisimPartial", "Index")
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-
         <div class="container">
-
             <a href="/Index/Index" class="navbar-brand">
-                <img src="~/images/logo.png" height="60" alt="Moly Logo" />
+                <img src="~/images/logo.png" height="52" alt="Moly Logo" />
             </a>
             <a class="navbar-brand" href="/Index/Index">&ensp;Moly<span>RS</span></a>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Navigasyonu aç/kapat">
                 <span class="oi oi-menu"></span> Menü
             </button>
+
             @{
-                
                 string aktifSayfa = ViewContext.RouteData.Values["action"].ToString();
             }
 
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-
                     <li class="nav-item @(aktifSayfa == "Index" ? "active" : "")">
                         <a href="/Index/Index" class="nav-link">Ana Sayfa</a>
                     </li>
-
                     <li class="nav-item @(aktifSayfa == "Hakkimizda" ? "active" : "")"><a href="/Index/Hakkimizda" class="nav-link">Hakkımızda</a></li>
-                    <li class="nav-item @(aktifSayfa== "Menulerimiz"? "active" : "")"><a href="/Index/Menulerimiz" class="nav-link">Menü</a></li>
+                    <li class="nav-item @(aktifSayfa == "Menulerimiz" ? "active" : "")"><a href="/Index/Menulerimiz" class="nav-link">Menü</a></li>
                     <li class="nav-item"><a href="/Index/Index" class="nav-link">Rezervasyon</a></li>
                     <li class="nav-item"><a href="/Index/Index" class="nav-link">Şefimiz</a></li>
 
                     <li class="nav-item @(aktifSayfa == "Bloglar" || aktifSayfa == "DUYURULABLOGLARDETAY" ? "active" : "")">
                         <a href="/Index/Bloglar" class="nav-link">Blog & Duyuru</a>
                     </li>
+
                     <li class="nav-item @(aktifSayfa == "IcerikListele" || aktifSayfa == "IcerikGoster" ? "active" : "")">
                         <a href="/Index/IcerikListele" class="nav-link">İçerikler</a>
                     </li>
 
-                    @*<li class="nav-item"><a href="/Index/Index" class="nav-link">İletişim</a></li>*@
+                    @if (Session["UyeID"] == null)
+                    {
+                        <li class="nav-item @(aktifSayfa == "GirisYap" ? "active" : "")">
+                            <a href="/Index/GirisYap" class="nav-link text-primary" style="font-weight:bold;">Giriş Yap</a>
+                        </li>
+                        <li class="nav-item @(aktifSayfa == "KayitOl" ? "active" : "")">
+                            <a href="/Index/KayitOl" class="nav-link">Kayıt Ol</a>
+                        </li>
+                    }
+                    else
+                    {
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle text-warning font-weight-bold" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="icon-user"></i> @Session["UyeAd"]
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown" style="background-color: #343a40;">
+
+                        @if (Session["Yetki"] != null && Session["Yetki"].ToString() == "Admin")
+                        {
+                            @* Kullanıcı Admin ise Yönetim Paneli linki görünür *@
+                            <a class="dropdown-item text-white font-weight-bold" href="/Admin/Index">
+                                <i class="fa fa-cogs mr-2"></i> Yönetim Paneli
+                            </a>
+                        }
+
+                        <div class="dropdown-divider border-secondary"></div>
+                        <a class="dropdown-item text-danger" href="/Index/CikisYap">
+                            <i class="fa fa-sign-out mr-2"></i> Çıkış Yap
+                        </a>
+                    </div>
+                </li>
+                    }
+
+                    <li class="nav-item"><a href="/Index/Index" class="nav-link">İletişim</a></li>
                 </ul>
             </div>
         </div>
@@ -258,6 +289,34 @@
                 opacity: 1;
             }
         }
+
+        /* Menü elemanlarının alt satıra geçmesini kesin olarak engeller */
+        #ftco-nav .navbar-nav {
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+        }
+
+        /* Menü çok kalabalık olduğu için linkler arası boşluğu biraz daha daraltıyoruz */
+        #ftco-navbar .nav-link {
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+            padding-left: 7px !important; /* 10px'den 7px'e düşürdük */
+            padding-right: 7px !important; /* 10px'den 7px'e düşürdük */
+            font-size: 13px !important; /* Yazıyı 1 tık daha küçülttük ki sığsın */
+            white-space: nowrap !important; /* Yazıların kendi içinde alt satıra geçmesini önler */
+        }
+
+        /* Giriş Yap ve Kayıt Ol butonlarını birbirine yaklaştır */
+        #ftco-navbar .nav-item {
+            margin-left: 2px !important;
+            margin-right: 2px !important;
+        }
+
+        /* Logo ve marka isminin menüyü çok fazla sıkıştırmasını engelle */
+        #ftco-navbar .navbar-brand {
+            margin-right: 5px !important;
+            font-size: 16px !important;
+        }
     </style>
 
     <div id="bildirim-alani">
@@ -394,6 +453,30 @@
             flex-shrink: 0;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "5000"
+        };
+
+        // 1. BAŞARI BİLDİRİMİ (LoginSuccess gelmişse)
+        @if (TempData["LoginSuccess"] != null)
+        {
+            <text>toastr.success('@TempData["LoginSuccess"]', 'Başarılı!');</text>
+        }
+    });
+    </script>
+
+
 
 
 </body>

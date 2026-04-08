@@ -1,22 +1,23 @@
 ﻿using Restorant_Sitesi.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization; 
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Globalization; 
-
+using System.Web.Security;
 namespace Restorant_Sitesi.Controllers
 {
     public class IndexController : Controller
     {
         WRestourantDBEntities db = new WRestourantDBEntities();
 
-
+        public List<ICERIKLER> Icerikler { get; set; }
         public ActionResult Index()
         {
             GuvenlikKoduUret();
             AnasayfaSınıf model = new AnasayfaSınıf();
+            
 
             model.SliderBannerlari = db.ANASAYFA.Where(x => x.Durum == true).ToList();
             model.Kategoriler = db.KATEGORILER.ToList();
@@ -33,6 +34,10 @@ namespace Restorant_Sitesi.Controllers
             model.Hakkımda = db.HAKKIMDA.ToList();
 
             model.IletisimBilgileri = db.USTILETISIM.FirstOrDefault();
+
+            model.Icerikler = db.ICERIKLER.Where(x => x.Durum == true).OrderByDescending(x => x.Tarih).ToList();
+
+
 
             return View(model);
         }
@@ -226,6 +231,85 @@ namespace Restorant_Sitesi.Controllers
         {
             var icerikbbul = db.ICERIKLER.Find(id);
             return PartialView(icerikbbul);
+        }
+
+        [HttpGet]
+        public ActionResult KayitOl()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult GirisYap()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult KayitOl(UYELER p)
+        {
+            // 1. Varsayılan Değerleri Ata
+            p.KayitTarihi = DateTime.Now;
+            p.Durum = true; // Yeni üye aktif olsun
+            p.Yetki = "Uye"; // Varsayılan yetki
+
+            // Not: Tablo şemanda 'UyeResim' kolonu yok, 
+            // bu yüzden resim yükleme kodunu buraya dahil etmiyorum.
+
+            // 2. Kaydetme İşlemi
+            db.UYELER.Add(p);
+            db.SaveChanges();
+
+            return RedirectToAction("GirisYap");
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult GirisYap(UYELER p)
+        {
+            // Veritabanı sorgusu
+            var bilgiler = db.UYELER.FirstOrDefault(x => x.AdSoyad == p.AdSoyad && x.Sifre == p.Sifre);
+
+            if (bilgiler != null)
+            {
+                FormsAuthentication.SetAuthCookie(bilgiler.AdSoyad, false);
+                // GİRİŞ BAŞARILI - Bilgileri Session'a doldur
+                Session["UyeID"] = bilgiler.UyeID;
+                Session["UyeAd"] = bilgiler.AdSoyad;
+                Session["UyeMail"] = bilgiler.Mail;
+                Session["Yetki"] = bilgiler.Yetki; // Yetki kontrolü için bunu ekledik
+
+                TempData["LoginSuccess"] = "Giriş Başarılı! Hoş geldiniz, " + bilgiler.AdSoyad;
+
+                // YETKİ KONTROLÜ VE YÖNLENDİRME
+                if (bilgiler.Yetki == "Admin")
+                {
+                    // Eğer yetkisi Admin ise Admin panelindeki Index'e gönder
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    // Normal kullanıcı ise ana sayfaya gönder
+                    return RedirectToAction("Index", "Index");
+                }
+            }
+            else
+            {
+                // GİRİŞ HATALI
+                TempData["LoginError"] = "Hatalı Giriş! Ad Soyad veya Şifre yanlış.";
+                return View();
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult CikisYap()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Index");
         }
     }
 }

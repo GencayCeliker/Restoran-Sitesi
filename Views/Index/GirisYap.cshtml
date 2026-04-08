@@ -1,0 +1,176 @@
+﻿@model Restorant_Sitesi.Models.UYELER
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="ADAM olun" />
+    <meta name="author" content="Gamaci" />
+    <title>Moly- RS Giriş Yap</title>
+    <!-- loader-->
+    <link href="~/AdminTemplate/assets/css/pace.min.css" rel="stylesheet" />
+    <script src="~/AdminTemplate/assets/js/pace.min.js"></script>
+    <!--favicon-->
+    <link rel="icon" href="~/AdminTemplate/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Bootstrap core CSS-->
+    <link href="~/AdminTemplate/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- animate CSS-->
+    <link href="~/AdminTemplate/assets/css/animate.css" rel="stylesheet" type="text/css" />
+    <!-- Icons CSS-->
+    <link href="~/AdminTemplate/assets/css/icons.css" rel="stylesheet" type="text/css" />
+    <!-- Custom Style-->
+    <link href="~/AdminTemplate/assets/css/app-style.css" rel="stylesheet" />
+
+    <style>
+        /* CSS Artık Head İçinde ve !important ile Ezilmeleri Önledik */
+        .custom-select-themed {
+            font-family: inherit !important;
+            font-size: 14px !important;
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            color: rgba(255, 255, 255, 0.7) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            border-radius: 4px;
+            height: 38px !important; /* Diğer inputlarla aynı yükseklik */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+            .custom-select-themed option {
+                background-color: #2b3a4a !important;
+                color: #fff !important;
+            }
+
+        .has-icon-right .custom-select-themed {
+            padding-right: 40px !important;
+        }
+
+        /* Input placeholder renk uyumu */
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+        #wrapper {
+            min-height: 100vh; /* Ekranın tam yüksekliğini al */
+            display: flex; /* Esnek kutu yapısını aç */
+            align-items: center; /* Dikeyde ortala */
+            justify-content: center; /* Yatayda ortala */
+        }
+
+        /* Kartın dışındaki fazlalık boşluğu sıfırlayalım ki tam merkezde kalsın */
+        .card-authentication1 {
+            margin: 0 !important;
+            width: 100%; /* Mobilde düzgün durması için */
+            max-width: 450px; /* Panel çok yayılmasın */
+        }
+    </style>
+</head>
+<body class="bg-theme bg-theme1">
+
+    <div id="pageloader-overlay" class="visible incoming">
+        <div class="loader-wrapper-outer">
+            <div class="loader-wrapper-inner"><div class="loader"></div></div>
+        </div>
+    </div>
+
+    <div id="wrapper">
+        <div class="card card-authentication1 mx-auto my-4">
+            <div class="card-body">
+                <div class="card-content p-2">
+                    <div class="text-center">
+                        <img src="~/images/logo.png" height="100"width="100" logo icon">
+                    </div>
+                    <div class="card-title text-uppercase text-center py-3">Giriş Yap</div>
+
+                    @using (Html.BeginForm("GirisYap", "Index", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <label class="sr-only">Ad Soyad</label>
+                            <div class="position-relative has-icon-right">
+                                @Html.TextBoxFor(x => x.AdSoyad, new { @class = "form-control input-shadow", placeholder = "Adınızı ve Soyadınızı Giriniz", required = "required" })
+                                <div class="form-control-position"><i class="icon-user"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only">Şifre</label>
+                            <div class="position-relative has-icon-right">
+                                @Html.PasswordFor(x => x.Sifre, new { @id = "pass-input", @class = "form-control input-shadow", placeholder = "Şifre Seçiniz", required = "required" })
+                                <div class="form-control-position" style="cursor: pointer;" id="toggle-password">
+                                    <i class="fa fa-eye" id="eye-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-light btn-block waves-effect waves-light">Giris Yap</button>
+                    }
+
+                    <div class="form-row mt-4">
+                        <div class="form-group mb-0 col-6">
+                            <button type="button" class="btn btn-light btn-block"><i class="fa fa-facebook-square"></i> Facebook</button>
+                        </div>
+                        <div class="form-group mb-0 col-6 text-right">
+                            <button type="button" class="btn btn-light btn-block"><i class="fa fa-twitter-square"></i> Twitter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center py-3">
+                <p class="text-warning mb-0">Zaten bir hesabınız var mı? <a href="/Index/KayitOl"> Kayıt OL</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/AdminTemplate/assets/js/jquery.min.js"></script>
+    <script src="~/AdminTemplate/assets/js/popper.min.js"></script>
+    <script src="~/AdminTemplate/assets/js/bootstrap.min.js"></script>
+
+    <!-- sidebar-menu js -->
+    <script src="~/AdminTemplate/assets/js/sidebar-menu.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="~/AdminTemplate/assets/js/app-script.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        // Toastr Ayarları (Opsiyonel)
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000"
+        };
+
+        // Eğer Controller'dan hata mesajı gelmişse göster
+        @if (TempData["LoginError"] != null)
+        {
+            <text>toastr.error('@TempData["LoginError"]');</text>
+        }
+    });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#toggle-password").click(function () {
+                var input = $("#pass-input");
+                var icon = $("#eye-icon");
+
+                if (input.attr("type") === "password") {
+                    input.attr("type", "text");
+                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
+                } else {
+                    input.attr("type", "password");
+                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

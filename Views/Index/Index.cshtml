@@ -98,7 +98,7 @@
                     </div>
                     <div class="col-md-6 img ftco-animate"
                          style="        background-image: url('@Model.Hakkımda.FirstOrDefault(x => x.HakkimdaID == 1).Resim' );
-        width: 90%; 
+        width: 90%;
         height: 100%;
         background-size: auto 100%;
         background-position: right -60px bottom;
@@ -201,7 +201,7 @@
     </div>
 </section>
 
-<section class="ftco-section testimony-section" style="background-image: url(../../images/bg_5.jpg);">
+<section class="ftco-section testimony-section" style="background-image: url(../../images/bg_5.jpg); position: relative;">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -211,28 +211,39 @@
                     <span class="subheading">Bize Yazın</span>
                     <h2 class="mb-4">Düşüncelerinizi Paylaşın</h2>
                 </div>
-                <form action="/Index/YorumYap" method="post" class="contact-form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="AdSoyad" placeholder="Adınız Soyadınız" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" name="Mail" placeholder="E-Posta Adresiniz" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
-                    </div>
-                    <div class="form-group">
-                        <textarea name="YorumIcerik" cols="30" rows="4" class="form-control" placeholder="Mesajınız..." required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);"></textarea>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="text-white font-weight-bold" style="text-shadow: 1px 1px 2px black;">
-                            Güvenlik Kodu: <span class="text-warning" style="font-size: 18px; letter-spacing: 3px;">@ViewBag.GosterilenKod</span>
-                        </label>
-                        <input type="text" name="KullaniciKodu" class="form-control" placeholder="Yukarıdaki kodu giriniz" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                @if (Session["UyeID"] != null)
+                {
+                    <form action="/Index/YorumYap" method="post" class="contact-form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="AdSoyad" value="@Session["UyeAd"]" readonly style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); cursor: not-allowed;" title="Adınızı profilinizden değiştirebilirsiniz">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="Mail" value="@Session["UyeMail"]" readonly style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); cursor: not-allowed;">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="YorumIcerik" cols="30" rows="4" class="form-control" placeholder="Deneyiminizi buraya yazın..." required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-white font-weight-bold">Güvenlik Kodu: <span class="text-warning" style="letter-spacing:2px;">@ViewBag.GosterilenKod</span></label>
+                            <input type="text" name="KullaniciKodu" class="form-control" placeholder="Kodu doğrulayın" required style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Yorumu Gönder" class="btn btn-primary py-3 px-5" style="border-radius:50px;">
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="login-to-comment text-center p-4" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 15px; border: 1px dashed rgba(255,255,255,0.3);">
+                        <i class="fa fa-commenting-o text-warning mb-3" style="font-size: 50px;"></i>
+                        <h4 class="text-white">Yorum Yazmak İster Misiniz?</h4>
+                        <p class="text-white-50 small">Görüşleriniz bizim için değerli. Lütfen giriş yaparak deneyiminizi paylaşın.</p>
+                        <a href="/Index/GirisYap" class="btn btn-primary btn-sm px-4 py-2 mt-2" style="border-radius: 50px;">Giriş Yap</a>
+                        <span class="text-white mx-2">veya</span>
+                        <a href="/Index/KayitOl" class="btn btn-outline-white btn-sm px-4 py-2 mt-2" style="border-radius: 50px; border:1px solid #fff; color:#fff;">Kayıt Ol</a>
                     </div>
-
-                    <div class="form-group">
-                        <input type="submit" value="Yorumu Gönder" class="btn btn-primary py-3 px-5">
-                    </div>
-                </form>
+                }
             </div>
 
             <div class="col-lg-6 ftco-animate">
@@ -242,8 +253,7 @@
                 </div>
 
                 <div class="carousel-testimony owl-carousel ftco-owl">
-
-                    @if (Model.MusteriYorumlari != null)
+                    @if (Model.MusteriYorumlari != null && Model.MusteriYorumlari.Any())
                     {
                         foreach (var item in Model.MusteriYorumlari)
                         {
@@ -263,22 +273,14 @@
                             </div>
                         }
                     }
-
-                    <div class="item">
-                        <div class="testimony-wrap p-4 pb-5">
-                            <div class="user-img mb-5" style="background-image: url(../images/person_2.jpg)">
-                                <span class="quote d-flex align-items-center justify-content-center">
-                                    <i class="icon-quote-left"></i>
-                                </span>
-                            </div>
-                            <div class="text text-center">
-                                <p class="mb-5 pl-4 line">Yemekler harikaydı, servis çok hızlıydı. Kesinlikle tavsiye ederim!</p>
-                                <p class="name">Örnek Müşteri</p>
-                                <span class="position">Misafir</span>
+                    else
+                    {
+                        <div class="item">
+                            <div class="testimony-wrap p-4 pb-5 text-center">
+                                <p class="text-white-50 italic">Henüz yorum yapılmamış. İlk yorumu siz yapın!</p>
                             </div>
                         </div>
-                    </div>
-
+                    }
                 </div>
             </div>
 
@@ -385,10 +387,10 @@
 
                                         <p class="text-muted summary-text">
                                             @{
-                                                
+
                                                 string temizMetin = System.Text.RegularExpressions.Regex.Replace(blog.Icerik, "<.*?>", String.Empty);
 
-                                                
+
                                                 string icerikOzet = temizMetin;
                                                 if (!string.IsNullOrEmpty(icerikOzet) && icerikOzet.Length > 30)
                                                 {
@@ -463,3 +465,95 @@
         </div>
     </div>
 </section>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <h2 class="mb-4">Güncel İçerikler</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            @{
+                var aktifIcerikler = Model.Icerikler.Where(m => m.Durum == true).ToList();
+                var ilkUcler = aktifIcerikler.Take(3);
+                var geriyeKalanlar = aktifIcerikler.Skip(3);
+            }
+
+            @* İlk 3 İçerik (Her Zaman Görünür) *@
+            @foreach (var x in ilkUcler)
+            {
+                <div class="col-md-4 d-flex align-items-stretch ftco-animate">
+                    <div class="blog-entry d-flex flex-column h-100 w-100" style="border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom:30px; background: #fff;">
+                        <a href="/Index/IcerikGoster/@x.IcerikID" class="block-20"
+                           style="background-image: url('/Dosyalar/@x.KFotograf'); background-size: cover; background-position: center; min-height: 250px;">
+                        </a>
+                        <div class="text px-4 pt-3 pb-4 d-flex flex-column flex-grow-1">
+                            <div class="meta mb-2" style="font-size: 13px; color: #999;">
+                                <i class="fa fa-calendar mr-1"></i> @(x.Tarih.HasValue ? x.Tarih.Value.ToString("dd MMM yyyy") : "")
+                            </div>
+                            <h3 class="heading" style="font-size: 18px; font-weight: 600; min-height: 50px;">
+                                <a href="/Index/IcerikGoster/@x.IcerikID" style="color: #333;">@x.Baslik</a>
+                            </h3>
+                            <div class="mt-auto">
+                                @* Butonu her zaman en alta sabitler *@
+                                <a href="/Index/IcerikGoster/@x.IcerikID" class="btn btn-primary btn-sm" style="border-radius: 50px; width: 100%;">Devamını Oku</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @* Gizli Olan Diğer İçerikler *@
+        <div class="row" id="extra-contents" style="display: none;">
+            @foreach (var x in geriyeKalanlar)
+            {
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="blog-entry d-flex flex-column h-100 w-100" style="border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom:30px; background: #fff;">
+                        <a href="/Index/IcerikGoster/@x.IcerikID" class="block-20"
+                           style="background-image: url('/Dosyalar/@x.KFotograf'); background-size: cover; background-position: center; min-height: 250px;">
+                        </a>
+                        <div class="text px-4 pt-3 pb-4 d-flex flex-column flex-grow-1">
+                            <h3 class="heading" style="font-size: 18px; font-weight: 600; min-height: 50px;">
+                                <a href="/Index/IcerikGoster/@x.IcerikID">@x.Baslik</a>
+                            </h3>
+                            <div class="mt-auto">
+                                <a href="/Index/IcerikGoster/@x.IcerikID" class="btn btn-primary btn-sm" style="border-radius: 50px; width: 100%;">Devamını Oku</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @* Daha Fazla Gör Butonu *@
+        @if (aktifIcerikler.Count > 3)
+        {
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-4 text-center">
+                    <button type="button" id="btn-show-more" class="btn btn-black py-3 px-5" style="border-radius: 50px; font-weight:700;">
+                        TÜM İÇERİKLERİ GÖR
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btn-show-more").click(function () {
+            // Gizli alanı aşağı doğru kaydırarak aç
+            $("#extra-contents").slideToggle(600);
+
+            // Buton metnini değiştir (isteğe bağlı)
+            var text = $(this).text();
+            $(this).text(text == "TÜM İÇERİKLERİ GÖR" ? "DAHA AZ GÖSTER" : "TÜM İÇERİKLERİ GÖR");
+
+            // Eğer butonu tamamen yok etmek istersen şunuda kullanabilirsin:
+            // $(this).fadeOut();
+        });
+    });
+</script>

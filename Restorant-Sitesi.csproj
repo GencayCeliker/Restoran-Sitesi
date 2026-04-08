@@ -1399,6 +1399,12 @@
     <Content Include="Views\Admin\IcerikDuzenle.cshtml" />
     <Content Include="Views\Index\IcerikGoster.cshtml" />
     <Content Include="Views\Index\IcerikListele.cshtml" />
+    <Content Include="Views\Index\KayitOl.cshtml" />
+    <Content Include="Views\Index\GirisYap.cshtml" />
+    <Content Include="Views\Admin\KategoriGuncelle.cshtml" />
+    <Content Include="Views\Admin\UrunListesi.cshtml" />
+    <Content Include="Views\Admin\UrunGuncelle.cshtml" />
+    <Content Include="Views\Admin\UrunEkle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
