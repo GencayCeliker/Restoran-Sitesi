@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/RestourantLayout.cshtml";
 }
 
-
-
 <section class="hero-wrap hero-wrap-2" style="background-image: url('/images/bg_5.jpg');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
@@ -24,41 +22,44 @@
 <section class="ftco-section bg-light">
     <div class="container">
         <div class="row">
-            @foreach (var x in Model.Where(m => m.Durum == true)) // Sadece aktif olanları gösterir
+            @foreach (var x in Model.Where(m => m.Durum == true))
             {
-                <div class="col-md-4 ftco-animate">
-                    <div class="blog-entry" style="border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
-                        @* Görsel Alanı - Dosyalar klasöründen çeker *@
+                @* d-flex ve align-items-stretch sütunların boyunu eşitler *@
+                <div class="col-md-4 d-flex align-items-stretch ftco-animate">
+                    @* d-flex flex-column h-100 kartın içini boydan boya doldurur *@
+                    <div class="blog-entry d-flex flex-column h-100 w-100" style="border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom:30px; background: #fff;">
+
+                        @* Görsel Alanı - Sabit yükseklik için min-height ekledik *@
                         <a href="/Index/IcerikGoster/@x.IcerikID" class="block-20"
-                           style="background-image: url('/Dosyalar/@x.KFotograf'); background-size: cover; background-position: center;">
+                           style="background-image: url('/Dosyalar/@x.KFotograf'); background-size: cover; background-position: center; min-height: 250px;">
                         </a>
 
-                        <div class="text px-4 pt-3 pb-4 bg-white">
+                        @* Yazı Alanı - flex-grow-1 başlık kısa olsa bile alanı genişletir *@
+                        <div class="text px-4 pt-3 pb-4 d-flex flex-column flex-grow-1">
                             <div class="meta mb-2">
                                 <div style="font-size: 13px; color: #999;">
                                     <i class="fa fa-calendar mr-1"></i>
                                     @(x.Tarih.HasValue ? x.Tarih.Value.ToString("dd MMMM yyyy") : "Tarih Belirtilmedi")
                                 </div>
                             </div>
-                            
-                            <h3 class="heading" style="font-size: 20px; font-weight: 600; line-height: 1.4;">
+
+                            <h3 class="heading" style="font-size: 20px; font-weight: 600; line-height: 1.4; min-height: 55px;">
                                 <a href="/Index/IcerikGoster/@x.IcerikID" style="color: #333;">@x.Baslik</a>
                             </h3>
 
-                            <div class="d-flex align-items-center justify-content-between mt-4">
+                            @* mt-auto sayesinde butonlar ve ikonlar kartın en altına yapışır *@
+                            <div class="d-flex align-items-center justify-content-between mt-auto pt-3">
                                 <a href="/Index/IcerikGoster/@x.IcerikID" class="btn btn-primary btn-sm" style="border-radius: 50px; padding: 8px 20px; font-weight: 600;">
                                     Devamını Oku
                                 </a>
 
                                 <div class="meta-icons d-flex align-items-center" style="gap: 15px; color: #ccc; font-size: 14px;">
-                                    @* PDF veya Dosya varsa küçük bir ikon gösterir *@
                                     @if (!string.IsNullOrEmpty(x.Dosya) && x.Dosya.EndsWith(".pdf"))
                                     {
                                         <span title="PDF Dokümanı Mevcut">
                                             <i class="fa fa-file-pdf-o" style="color: #e74c3c;"></i>
                                         </span>
                                     }
-
                                     <span title="Moly RS">
                                         <i class="fa fa-user-circle-o"></i>
                                     </span>
