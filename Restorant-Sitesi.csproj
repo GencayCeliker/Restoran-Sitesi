@@ -1405,6 +1405,7 @@
     <Content Include="Views\Admin\UrunListesi.cshtml" />
     <Content Include="Views\Admin\UrunGuncelle.cshtml" />
     <Content Include="Views\Admin\UrunEkle.cshtml" />
+    <Content Include="Views\Index\Rezerve.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

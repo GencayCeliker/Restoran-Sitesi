@@ -232,6 +232,17 @@ namespace Restorant_Sitesi.Controllers
             var icerikbbul = db.ICERIKLER.Find(id);
             return PartialView(icerikbbul);
         }
+        public ActionResult Rezerve()
+        {
+            return View();
+        }
+       
+        public ActionResult Seflerimiz()
+        {
+            var seferler = db.SEFLER.Where(x => x.Durum == true).ToList();
+            return View(seferler);
+        }
+
 
         [HttpGet]
         public ActionResult KayitOl()
@@ -244,7 +255,7 @@ namespace Restorant_Sitesi.Controllers
         {
             return View();
         }
-
+        
 
         [HttpPost]
         [AllowAnonymous]
