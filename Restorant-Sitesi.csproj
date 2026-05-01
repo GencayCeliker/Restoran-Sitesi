@@ -1408,6 +1408,9 @@
     <Content Include="Views\Index\Rezerve.cshtml" />
     <Content Include="Views\Admin\Rezervasyonlar.cshtml" />
     <Content Include="SecretSettings.config" />
+    <Content Include="Views\Admin\Masalar.cshtml" />
+    <Content Include="Views\Admin\MasaEkle.cshtml" />
+    <Content Include="Views\Admin\MasaGuncelle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

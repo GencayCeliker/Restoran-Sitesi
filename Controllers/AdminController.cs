@@ -1070,7 +1070,84 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
             TempData["Basarili"] = "İçerik tamamen silindi.";
             return RedirectToAction("IcerikYonetimi");
         }
+        public ActionResult Masalar()
+        {
+            var masalar = db.MASALAR.ToList();
+            ViewBag.AktifRezervasyonlar = db.REZARVASYONLAR.Where(x => x.DurumID == 2).ToList();
+            return View(masalar);
+        }
+        public ActionResult MasaEkle()
+        {
+            return View();
+        }
 
+        
+        [HttpPost]
+        public ActionResult MasaEkle(MASALAR yeniMasa)
+        {
+            if (yeniMasa.MasaNo <= 0 || yeniMasa.Kapasite <= 0)
+            {
+                TempData["Hata"] = "Masa Numarası ve Kapasite 0'dan büyük olmalıdır.";
+                return View();
+            }
+
+            // 2. KONTROL: Aynı isimde/numarada başka bir masa var mı? (Veritabanı tutarlılığı)
+            var varMi = db.MASALAR.FirstOrDefault(x => x.MasaNo == yeniMasa.MasaNo);
+            if (varMi != null)
+            {
+                TempData["Hata"] = "Bu masa numarası zaten kayıtlı!";
+                return View();
+            }
+
+            try
+            {
+                // 3. ATAMA: SQL tablandaki [Durum] sütununu varsayılan olarak 'false' (Boş) yapıyoruz
+                yeniMasa.Durum = false;
+
+                db.MASALAR.Add(yeniMasa);
+                db.SaveChanges();
+                TempData["Basarili"] = "Masa Başarıyla Eklendi";
+                return RedirectToAction("Masalar");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Hata = "Bir hata oluştu: " + ex.Message;
+                return View();
+            }
+        }
+
+       
+        public ActionResult MasaGuncelle(int id)
+        {
+            var masa = db.MASALAR.Find(id);
+            return View(masa);
+        }
+
+     
+        [HttpPost]
+        public ActionResult MasaGuncelle(MASALAR guncelMasa)
+        {
+            var eskiMasa = db.MASALAR.Find(guncelMasa.MasaID);
+            eskiMasa.MasaNo = guncelMasa.MasaNo;
+            eskiMasa.Kapasite = guncelMasa.Kapasite;
+            db.SaveChanges();
+            return RedirectToAction("Masalar");
+        }
+
+      
+        public ActionResult MasaSil(int id)
+        {
+            var masa = db.MASALAR.Find(id);
+            // Eğer masa doluysa silinmesini engellemek için bir kontrol eklenebilir
+            if (masa.Durum == false)
+            {
+                db.MASALAR.Remove(masa);
+                db.SaveChanges();
+                TempData["Basarili"] = "Masa tamamen silindi.";
+            }
+           
+            return RedirectToAction("Masalar");
+        }
 
 
     }

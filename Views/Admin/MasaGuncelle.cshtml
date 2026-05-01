@@ -1,0 +1,158 @@
+﻿@model Restorant_Sitesi.Models.MASALAR
+@{
+    ViewBag.Title = "MasaGuncelle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>MasaGuncelle</h2>
+<style>
+    /* Genel arka plan hissi (istersen body’ye ekle) */
+    body {
+        background-color: #0f172a; /* koyu mavi-siyah ton */
+    }
+
+    /* Card tasarımı */
+    .card {
+        backdrop-filter: blur(10px);
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    /* Header gradient efekt */
+    .card-header {
+        background: linear-gradient(135deg, #6c757d, #343a40);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Form input modern görünüm */
+    .form-control {
+        transition: all 0.3s ease;
+        box-shadow: none !important;
+    }
+
+        .form-control:focus {
+            background-color: #1f2937 !important;
+            border: 1px solid #22c55e !important;
+            box-shadow: 0 0 0 0.15rem rgba(34, 197, 94, 0.25) !important;
+            transform: scale(1.01);
+        }
+
+        /* Placeholder rengi */
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+    /* Label */
+    .form-label {
+        font-size: 14px;
+        color: #e5e7eb;
+        margin-bottom: 6px;
+    }
+
+    /* Butonlar */
+    .btn {
+        transition: all 0.25s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+    /* Save button glow */
+    .btn-success {
+        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.2);
+    }
+
+        .btn-success:hover {
+            box-shadow: 0 12px 25px rgba(34, 197, 94, 0.35);
+        }
+
+    /* Outline button hover */
+    .btn-outline-light:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    /* Alert modern görünüm */
+    .alert {
+        border-radius: 12px;
+        border: none;
+    }
+</style>
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+
+            <div class="card border-0 shadow-lg rounded-4 bg-dark text-white">
+
+                <!-- HEADER -->
+                <div class="card-header bg-gradient bg-secondary text-white border-0 rounded-top-4 py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="fa fa-edit me-2"></i> Masa Bilgilerini Güncelle
+                    </h4>
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body px-4 py-4">
+
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger rounded-3">
+                            <i class="fa fa-exclamation-triangle me-2"></i>
+                            @ViewBag.Hata
+                        </div>
+                    }
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.HiddenFor(x => x.MasaID)
+                        @Html.HiddenFor(x => x.Durum)
+
+                        <!-- MASA NO -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Masa Numarası</label>
+                            @Html.TextBoxFor(x => x.MasaNo, new
+                            {
+                                @class = "form-control form-control-lg bg-secondary text-white border-0 rounded-3",
+                                @type = "number",
+                                @min = "1",
+                                @placeholder = "Örn: 12"
+                            })
+                            <small class="text-white-50">Sadece sayısal değer giriniz.</small>
+                        </div>
+
+                        <!-- KAPASİTE -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Kapasite (Kişi Sayısı)</label>
+                            @Html.TextBoxFor(x => x.Kapasite, new
+                            {
+                                @class = "form-control form-control-lg bg-secondary text-white border-0 rounded-3",
+                                @type = "number",
+                                @min = "1",
+                                @placeholder = "Örn: 4"
+                            })
+                        </div>
+
+                        <hr class="border-light opacity-25" />
+
+                        <!-- BUTTONS -->
+                        <div class="d-flex justify-content-between mt-3">
+
+                            <a href="/Admin/Masalar" class="btn btn-outline-light px-4 rounded-3">
+                                <i class="fa fa-arrow-left me-1"></i> Vazgeç
+                            </a>
+
+                            <button type="submit" class="btn btn-success px-4 rounded-3 shadow-sm">
+                                <i class="fa fa-save me-1"></i> Kaydet
+                            </button>
+
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
