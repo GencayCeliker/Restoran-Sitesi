@@ -1406,6 +1406,8 @@
     <Content Include="Views\Admin\UrunGuncelle.cshtml" />
     <Content Include="Views\Admin\UrunEkle.cshtml" />
     <Content Include="Views\Index\Rezerve.cshtml" />
+    <Content Include="Views\Admin\Rezervasyonlar.cshtml" />
+    <Content Include="SecretSettings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

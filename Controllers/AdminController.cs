@@ -53,7 +53,7 @@ namespace Restorant_Sitesi.Controllers
             var sonBlogYorumlar = db.DUYURUBLOGYORUMLARI.OrderByDescending(x => x.YorumID).Take(10).ToList();
             return View(Tuple.Create(sonRezervasyonlar, sonYorumlar, sonBlogYorumlar));
         }
-        public ActionResult RezervasyonGelmedi(int id)
+        public ActionResult RezervasyonGelmedi(int id,string returnUrl)
         {
             var rez = db.REZARVASYONLAR.Find(id);
             if (rez != null)
@@ -81,6 +81,10 @@ namespace Restorant_Sitesi.Controllers
                     MailGonder(rez.Mail, "Rezervasyon Durumu: Gelmediniz", mailIcerik);
                 }
                 catch (Exception) { }
+            }
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
             }
             return RedirectToAction("Index");
         }
@@ -127,29 +131,119 @@ namespace Restorant_Sitesi.Controllers
             return Json(masalar, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult RezervasyonOnayla(int rezervasyonId, int masaId)
+
+        public ActionResult RezervasyonOnayla(int rezervasyonId, int masaId, string returnUrl, DateTime? yeniTarih, string yeniSaat)
         {
-            var rezervasyon = db.REZARVASYONLAR.Find(rezervasyonId);
-            var masa = db.MASALAR.Find(masaId);
+            var rez = db.REZARVASYONLAR.Find(rezervasyonId);
+            var yeniMasa = db.MASALAR.Find(masaId);
 
-            if (rezervasyon != null && masa != null)
+            if (rez != null && yeniMasa != null)
             {
-                rezervasyon.MasaID = masaId;
-                rezervasyon.DurumID = 2;
-                masa.Durum = true;
-                db.SaveChanges();
-                string mailIcerik = $"Sayın {rezervasyon.MusteriAdSoyad},<br/>" +
-                                    $"{rezervasyon.Tarih.Value.ToString("dd.MM.yyyy")} tarihindeki rezervasyonunuz onaylanmıştır.<br/>" +
-                                    $"Masa Numaranız: <b>{masa.MasaNo}</b><br/>" +
-                                    $"Sizi ağırlamaktan mutluluk duyarız.<br/>- Moly RS Ekibi";
+                // 1. Eski Bilgileri Yedekle
+                string eskiTarih = rez.Tarih?.ToString("dd.MM.yyyy") ?? "-";
+                string eskiSaat = rez.Saat?.ToString() ?? "-";
+                string eskiMasaNo = rez.MASALAR != null ? rez.MASALAR.MasaNo.ToString() : "Atanmamış";
 
-                MailGonder(rezervasyon.Mail, "Rezervasyon Onayı", mailIcerik);
-                TempData["Mesaj"] = "İşlem Başarılı";
+                // 2. Değişiklik kontrol değişkenleri
+                bool tarihDegisti = false;
+                bool saatDegisti = false;
+                bool masaDegisti = false;
+
+                // 3. TARİH KONTROLÜ
+                if (yeniTarih != null && rez.Tarih != yeniTarih)
+                {
+                    rez.Tarih = yeniTarih;
+                    tarihDegisti = true;
+                }
+
+                // 4. SAAT KONTROLÜ
+                if (!string.IsNullOrEmpty(yeniSaat))
+                {
+                    TimeSpan girilenSaat = TimeSpan.Parse(yeniSaat);
+
+                    if (rez.Saat != girilenSaat)
+                    {
+                        rez.Saat = girilenSaat;
+                        saatDegisti = true;
+                    }
+                }
+
+                // 5. MASA KONTROLÜ (KRİTİK DÜZELTME)
+                bool masaIlkAtama = rez.MasaID == null || rez.MasaID == 0;
+
+                if (rez.MasaID != masaId)
+                {
+                    // Eğer daha önce masa atanmışsa bu bir revizedir
+                    if (!masaIlkAtama)
+                    {
+                        var eskiMasa = db.MASALAR.Find(rez.MasaID);
+                        if (eskiMasa != null)
+                            eskiMasa.Durum = false;
+
+                        masaDegisti = true;
+                    }
+
+                    // Yeni masayı ata
+                    rez.MasaID = masaId;
+                    yeniMasa.Durum = true;
+                }
+
+                // 6. REVİZE KARARI (SADECE GERÇEK DEĞİŞİKLİKLER)
+                bool revizeEdildi = tarihDegisti || saatDegisti || masaDegisti;
+
+                // 7. DURUM GÜNCELLE
+                rez.DurumID = 2; // Onaylandı
+
+                db.SaveChanges();
+
+                string mailKonu = "";
+                string mailIcerik = "";
+
+                if (revizeEdildi)
+                {
+                    mailKonu = "Rezervasyon Bilgileriniz Revize Edildi";
+                    mailIcerik = $@"
+        <div style='font-family: Arial, sans-serif; color: #333;'>
+            <h3>Sayın {rez.MusteriAdSoyad},</h3>
+            <p>Talebiniz doğrultusunda rezervasyon bilgileriniz revize edilmiştir.</p>
+            <hr style='border: 1px solid #eee;'/>
+            <p><b>ESKİ BİLGİLER:</b><br/>
+            Tarih: {eskiTarih} | Saat: {eskiSaat} | Masa: {eskiMasaNo}</p>
+
+            <p style='color: #28a745;'><b>YENİ BİLGİLER:</b><br/>
+            Tarih: {rez.Tarih?.ToString("dd.MM.yyyy")} | Saat: {rez.Saat} | Masa: {yeniMasa.MasaNo}</p>
+            <hr style='border: 1px solid #eee;'/>
+            <p>Bizi tercih ettiğiniz için teşekkür ederiz.<br/>
+            - Moly RS Ekibi</p>
+        </div>";
+                }
+                else
+                {
+                    mailKonu = "Rezervasyon Onayı";
+
+                    // Saat formatını hh:mm yaparak (18:00 gibi) daha sade gösteriyoruz
+                    string gorunurSaat = rez.Saat?.ToString(@"hh\:mm") ?? "-";
+
+                    mailIcerik = $@"
+        <div style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>
+            Sayın {rez.MusteriAdSoyad},<br/><br/>
+            {rez.Tarih?.ToString("dd.MM.yyyy")} tarihindeki saat <b>{gorunurSaat}</b> rezervasyonunuz onaylanmıştır.<br/><br/>
+            Masa Numaranız: <b>{yeniMasa.MasaNo}</b><br/><br/>
+            Sizi ağırlamaktan mutluluk duyarız.<br/>
+            - Moly RS Ekibi
+        </div>";
+                }
+                // 9. MAIL GÖNDER
+                MailGonder(rez.Mail, mailKonu, mailIcerik);
             }
 
-            return RedirectToAction("Index");
+            // 10. REDIRECT
+            if (!string.IsNullOrEmpty(returnUrl))
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Rezervasyonlar");
         }
-        public ActionResult RezervasyonIptal(int id)
+        public ActionResult RezervasyonIptal(int id, string returnUrl)
         {
             var rez = db.REZARVASYONLAR.Find(id);
             if (rez != null)
@@ -182,9 +276,14 @@ namespace Restorant_Sitesi.Controllers
 
                 }
             }
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Index");
         }
-        public ActionResult RezervasyonBeklemeyeAl(int id)
+        public ActionResult RezervasyonBeklemeyeAl(int id, string returnUrl)
         {
             var rez = db.REZARVASYONLAR.Find(id);
             if (rez != null)
@@ -215,9 +314,14 @@ namespace Restorant_Sitesi.Controllers
 
                 }
             }
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
             return RedirectToAction("Index");
         }
-        public ActionResult RezervasyonTamamla(int id)
+        public ActionResult RezervasyonTamamla(int id, string returnUrl)
         {
             var rez = db.REZARVASYONLAR.Find(id);
             if (rez != null)
@@ -234,7 +338,31 @@ namespace Restorant_Sitesi.Controllers
                 rez.DurumID = 4;
                 db.SaveChanges();
             }
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Index");
+        }
+        public ActionResult Rezervasyonlar(string aramaMetni, DateTime? aramaTarihi)
+        {
+
+            var liste = db.REZARVASYONLAR.ToList();
+
+           
+            if (!string.IsNullOrEmpty(aramaMetni))
+            {
+                liste = liste.Where(x => x.MusteriAdSoyad.ToLower().Contains(aramaMetni.ToLower())).ToList();
+            }
+
+           
+            if (aramaTarihi != null)
+            {
+                liste = liste.Where(x => x.Tarih == aramaTarihi).ToList();
+            }
+
+           
+            return View(liste.OrderByDescending(x => x.RezervasyonID).ToList());
         }
         public ActionResult YorumOnayla(int id)
         {
@@ -274,9 +402,11 @@ namespace Restorant_Sitesi.Controllers
 
             try
             {
+                // HATA TESPİTİ 1: Dosyadan veri okunabiliyor mu?
                 if (string.IsNullOrWhiteSpace(gonderenMail) || string.IsNullOrWhiteSpace(sifre))
                 {
-                    return;
+                    // Eğer buraya girerse config dosyan okunmuyor demektir.
+                    throw new Exception("Config dosyasından mail veya şifre okunamadı! Anahtar isimlerini kontrol et.");
                 }
 
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
@@ -294,7 +424,14 @@ namespace Restorant_Sitesi.Controllers
             }
             catch (Exception ex)
             {
+                // HATA TESPİTİ 2: Neden gitmediğini ekrana yazdırıyoruz.
+                // TempData kullanarak hatayı sayfaya fırlatalım
+                TempData["MailHatasi"] = "Mail Hatası: " + ex.Message;
+                // Ya da debug ekranına yazdır:
+                System.Diagnostics.Debug.WriteLine("MAIL HATASI: " + ex.Message);
 
+                // Geliştirme aşamasında hatayı doğrudan görmen için:
+                throw new Exception("Mail Gönderim Hatası: " + ex.Message);
             }
         }
 

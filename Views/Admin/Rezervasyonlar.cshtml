@@ -1,124 +1,23 @@
-﻿@using Restorant_Sitesi.Models
-@model Tuple<List<REZARVASYONLAR>, List<YORUMLAR>, List<DUYURUBLOGYORUMLARI>>
-
+﻿@model  List<Restorant_Sitesi.Models.REZARVASYONLAR>
 @{
-    ViewBag.Title = "Yönetim Paneli";
+    ViewBag.Title = "Rezervasyonlar";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
-
-<div class="card mt-3">
-    <div class="card-content">
-        <div class="row row-group m-0">
-            <div class="col-12 col-lg-6 col-xl-3 border-light">
-                <div class="card-body">
-                    <h5 class="text-white mb-0">@ViewBag.ToplamRezervasyon <span class="float-right"><i class="fa fa-calendar-check-o"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                        <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Toplam Rezervasyon</p>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-3 border-light">
-                <div class="card-body">
-                    <h5 class="text-white mb-0">@ViewBag.ToplamUrun <span class="float-right"><i class="fa fa-cutlery"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                        <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Menüdeki Ürünler</p>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-3 border-light">
-                <div class="card-body">
-                    <h5 class="text-white mb-0">@ViewBag.ToplamZiyaretci <span class="float-right"><i class="fa fa-eye"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                        <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Günlük Ziyaretçi</p>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-3 border-light">
-                <div class="card-body">
-                    <h5 class="text-white mb-0">@ViewBag.BekleyenYorum <span class="float-right"><i class="fa fa-comment-o"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                        <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Bekleyen Yorumlar</p>
-                </div>
-            </div>
+<div class="card card-body bg-dark border-light mb-3">
+    <form method="get" action="/Admin/Rezervasyonlar" class="form-row align-items-end">
+        <div class="col-md-4">
+            <label class="text-white">Müşteri Adı</label>
+            <input type="text" name="aramaMetni" class="form-control bg-secondary text-white border-0" placeholder="İsim ile ara...">
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 col-lg-8 col-xl-8">
-        <div class="card">
-            <div class="card-header">
-                Site Trafiği & Rezervasyonlar
-            </div>
-            <div class="card-body">
-                <ul class="list-inline">
-                    <li class="list-inline-item"><i class="fa fa-circle mr-2 text-white"></i>Rezervasyonlar</li>
-                    <li class="list-inline-item"><i class="fa fa-circle mr-2 text-light"></i>Ziyaretçiler</li>
-                </ul>
-                <div class="chart-container-1">
-                    <canvas id="chart1"></canvas>
-                </div>
-            </div>
-            <div class="row m-0 row-group text-center border-top border-light-3">
-                <div class="col-12 col-lg-4">
-                    <div class="p-3">
-                        <h5 class="mb-0">12.5%</h5>
-                        <small class="mb-0">Doluluk Oranı</small>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-4">
-                    <div class="p-3">
-                        <h5 class="mb-0">450</h5>
-                        <small class="mb-0">Haftalık Müşteri</small>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-4">
-                    <div class="p-3">
-                        <h5 class="mb-0">4.8</h5>
-                        <small class="mb-0">Müşteri Puanı</small>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-3">
+            <label class="text-white">Tarih</label>
+            <input type="date" name="aramaTarihi" class="form-control bg-secondary text-white border-0">
         </div>
-    </div>
-
-    <div class="col-12 col-lg-4 col-xl-4">
-        <div class="card">
-            <div class="card-header">Haftalık Menü İlgisi</div>
-            <div class="card-body">
-                <div class="chart-container-2">
-                    <canvas id="chart2"></canvas>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table align-items-center">
-                    <tbody>
-                        <tr>
-                            <td><i class="fa fa-circle text-white mr-2"></i> Ana Yemek</td>
-                            <td>%55</td>
-                        </tr>
-                        <tr>
-                            <td><i class="fa fa-circle text-light-1 mr-2"></i> Tatlılar</td>
-                            <td>%25</td>
-                        </tr>
-                        <tr>
-                            <td><i class="fa fa-circle text-light-2 mr-2"></i> İçecekler</td>
-                            <td>%15</td>
-                        </tr>
-                        <tr>
-                            <td><i class="fa fa-circle text-light-3 mr-2"></i> Diğer</td>
-                            <td>%5</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="col-md-5">
+            <button type="submit" class="btn btn-light"><i class="fa fa-search"></i> Filtrele</button>
+            <a href="/Admin/Rezervasyonlar" class="btn btn-outline-light">Temizle</a>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="row">
@@ -135,18 +34,21 @@
                             <th>Kişi</th>
                             <th>Tarih</th>
                             <th>Saat</th>
+                            <th>Mail</th>
                             <th>Durum</th>
                             <th>İşlem</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var x in Model.Item1)
+                        @foreach (var x in Model)
                         {
                             <tr>
                                 <td>@x.MusteriAdSoyad</td>
                                 <td>@x.KisiSayisi</td>
                                 <td>@(x.Tarih.HasValue ? x.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
                                 <td>@x.Saat</td>
+                                <td>@x.Mail</td>
 
                                 <td>
                                     @if (x.DurumID == 1)
@@ -204,6 +106,7 @@
                                         <span class="text-secondary">-</span>
                                     }
                                 </td>
+
                             </tr>
                         }
                     </tbody>
@@ -239,6 +142,16 @@
                         </select>
                         <small class="text-white-50">Sadece uygun kapasiteli boş masalar listelenir.</small>
                     </div>
+                    <div class="form-group mt-2">
+                        <label class="text-white">Rezervasyon Tarihi:</label>
+                        <input type="date" name="yeniTarih" class="form-control" style="background-color: #2a3042; color: white; border: 1px solid #444;">
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class="text-white">Rezervasyon Saati:</label>
+                        <input type="time" name="yeniSaat" class="form-control" style="background-color: #2a3042; color: white; border: 1px solid #444;">
+                        <small class="text-white-50">Değişiklik gerekmiyorsa boş bırakabilirsiniz.</small>
+                    </div>
                 </div>
 
                 <div class="modal-footer border-light-2">
@@ -250,91 +163,6 @@
         </div>
     </div>
 </div>
-<div class="row" id="sonYorumlar">
-    <div class="col-12 col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                Son Yorumlar (Onaylı & Bekleyen)
-            </div>
-            <div class="table-responsive">
-                <table class="table align-items-center table-flush table-borderless">
-                    <thead>
-                        <tr>
-                            <th>Ad Soyad</th>
-                            <th>Mail</th>
-                            <th>Tarih</th>
-                            <th>Yorum</th>
-                            <th>Durum</th>
-                            <th>İşlem</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var y in Model.Item2) // YORUMLAR LİSTESİ
-                        {
-                            <tr>
-                                <td>@y.MusteriAdSoyad</td>
-                                <td>@y.Mail</td>
-                                <td>@(y.Tarih.HasValue ? y.Tarih.Value.ToString("dd.MM.yyyy") : "-")</td>
-
-                                <td title="@y.YorumMetni">
-                                    @if (y.YorumMetni != null && y.YorumMetni.Length > 20)
-                                    {
-                                        @y.YorumMetni.Substring(0, 20) <text>...</text>
-                                    }
-                                    else
-                                    {
-                                        @y.YorumMetni
-                                    }
-                                </td>
-
-                                <td>
-                                    @if (y.Durum == true)
-                                    {
-                                        <span class="badge badge-success">Yayında</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-warning">Onay Bekliyor</span>
-                                    }
-                                </td>
-
-                                <td>
-                                    @if (y.Durum == false)
-                                    {
-                                        // Eğer Bekliyorsa -> YAYINLA butonu göster
-                                        <a href="/Admin/YorumOnayla/@y.YorumID" class="btn btn-sm btn-success">
-                                            <i class="fa fa-check"></i> Yayınla
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        // Eğer Zaten Yayındaysa -> KALDIR (Geri Al) butonu göster
-                                        <a href="/Admin/YorumKaldir/@y.YorumID" class="btn btn-sm btn-warning">
-                                            <i class="fa fa-minus-circle"></i> Kaldır
-                                        </a>
-                                    }
-
-                                    <a href="/Admin/YorumSil/@y.YorumID" class="btn btn-sm btn-danger">
-                                        <i class="fa fa-trash"></i> Sil
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-
-                        @if (Model.Item2.Count == 0)
-                        {
-                            <tr>
-                                <td colspan="6" class="text-center">Henüz yorum yok.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 @section Scripts {
     <script src="~/AdminTemplate/assets/plugins/Chart.js/Chart.min.js"></script>
 
