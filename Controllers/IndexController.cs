@@ -242,7 +242,7 @@ namespace Restorant_Sitesi.Controllers
             var seferler = db.SEFLER.Where(x => x.Durum == true).ToList();
             return View(seferler);
         }
-
+        
 
         [HttpGet]
         public ActionResult KayitOl()

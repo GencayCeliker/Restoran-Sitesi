@@ -1,0 +1,115 @@
+﻿@model Restorant_Sitesi.Models.SEFLER
+@{
+    ViewBag.Title = "Yeni Şef Ekle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-dark font-weight-bold">
+                <i class="fa fa-user-plus text-warning mr-2"></i>Yeni Şef Ekle
+            </h1>
+            <p class="text-muted mb-0">Mutfak ekibine yeni bir şef ekleyin.</p>
+        </div>
+        <a href="/Admin/KSefler" class="btn btn-secondary shadow-sm">
+            <i class="fa fa-arrow-left mr-2"></i>Geri Dön
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 main-card">
+                <div class="card-header custom-header">
+                    <h4 class="m-0 text-white font-weight-bold">
+                        <i class="fa fa-cutlery mr-2"></i>Şef Bilgileri
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+                    @* DİKKAT: Action ismi KSefEkle olmalı *@
+                    @using (Html.BeginForm("KSefEkle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Şef Adı Soyadı</label>
+                           
+                            @Html.TextBoxFor(x => x.SefAdSoyad, new { @class = "form-control", required = "required" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Uzmanlık</label>
+                          
+                            @Html.TextBoxFor(x => x.Uzmanlik, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Açıklama</label>
+                           
+                            @Html.TextAreaFor(x => x.Aciklama, new { @class = "form-control", rows = "3" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Şef Fotoğrafı Seçin</label>
+                           
+                            <input type="file" name="ResimDosyasi" class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Durum</label>
+                            @Html.DropDownListFor(x => x.Durum, new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Aktif", Value = "True" },
+                                new SelectListItem { Text = "Pasif", Value = "False" }
+                            }, new { @class = "form-control" })
+                        </div>
+
+                        <div class="mt-4 text-right">
+                            <button type="submit" class="btn btn-warning font-weight-bold">Şefi Kaydet</button>
+                            <a href="/Admin/KSefler" class="btn btn-secondary">İptal</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .main-card {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .custom-header {
+        background: linear-gradient(135deg, #141e30, #243b55);
+        padding: 20px;
+    }
+
+    .custom-input {
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        padding: 12px 15px;
+    }
+
+        .custom-input:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 0.2rem rgba(255,193,7,.2) !important;
+        }
+
+    .preview-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #ffc107;
+    }
+</style>
+
+<script>
+    document.getElementById("imageInput").addEventListener("input", function () {
+        let imageUrl = this.value;
+        if (imageUrl.trim() !== "") {
+            document.getElementById("previewImage").src = imageUrl;
+        }
+    });
+</script>

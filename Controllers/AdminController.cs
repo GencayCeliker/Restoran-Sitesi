@@ -1148,7 +1148,54 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
            
             return RedirectToAction("Masalar");
         }
+        public ActionResult KSefler()
+        {
+            var seferler = db.SEFLER.Where(x => x.Durum == true).ToList();
+            return View(seferler);
+        }
+        [HttpGet]
+        public ActionResult KSefEkle()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult KSefEkle(SEFLER p, HttpPostedFileBase ResimDosyasi)
+        {
+            if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
+            {
+               
+                string klasorYolu = Server.MapPath("~/ResimlerMenu/");
+
+               
+                if (!System.IO.Directory.Exists(klasorYolu))
+                {
+                    System.IO.Directory.CreateDirectory(klasorYolu);
+                }
+
+               
+                string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
+                string tamYol = Path.Combine(klasorYolu, dosyaAdi);
+
+               
+                ResimDosyasi.SaveAs(tamYol);
+
+             
+                p.Resim = "/ResimlerMenu/" + dosyaAdi;
+            }
+
+            // Veritabanına ekle ve kaydet
+            db.SEFLER.Add(p);
+            db.SaveChanges();
+            TempData["Basarili"] = "Çalışan başarıyla eklendi!";
+            return RedirectToAction("KSefler");
+        }
+        [HttpGet]
+        public ActionResult KSefGuncelle(int id) 
+        {
+            var sef = db.SEFLER.Find(id);
+            return View(sef); 
+        }
 
     }
 }
