@@ -7,44 +7,28 @@
 
 <div class="container-fluid mt-4">
 
-    <!-- Başlık -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div>
             <h1 class="h3 mb-1 text-dark font-weight-bold">
                 <i class="fa fa-user-secret text-warning mr-2"></i>Şef Yönetim Paneli
             </h1>
-            <p class="text-muted mb-0">
-                Mutfak ekibini buradan yönetebilirsiniz.
-            </p>
+            <p class="text-muted mb-0">Mutfak ekibini buradan yönetebilirsiniz.</p>
         </div>
-
         <a href="/Admin/KSefEkle" class="btn btn-warning shadow-sm px-4">
             <i class="fa fa-plus-circle mr-2"></i>Yeni Şef Ekle
         </a>
     </div>
 
-    <!-- İstatistik Kartları -->
     <div class="row mb-4">
-
         <div class="col-xl-4 col-md-6 mb-3">
             <div class="card border-left-primary shadow h-100 py-2 stat-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Toplam Şef
-                            </div>
-
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Model.Count
-                            </div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Toplam Şef</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count</div>
                         </div>
-
-                        <div class="col-auto">
-                            <i class="fa fa-users fa-2x text-gray-300"></i>
-                        </div>
-
+                        <div class="col-auto"><i class="fa fa-users fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>
@@ -54,21 +38,11 @@
             <div class="card border-left-success shadow h-100 py-2 stat-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Aktif Şef
-                            </div>
-
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Model.Count(x => x.Durum == true)
-                            </div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Aktif Şef</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(x => x.Durum == true)</div>
                         </div>
-
-                        <div class="col-auto">
-                            <i class="fa fa-check-circle fa-2x text-gray-300"></i>
-                        </div>
-
+                        <div class="col-auto"><i class="fa fa-check-circle fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>
@@ -78,53 +52,28 @@
             <div class="card border-left-danger shadow h-100 py-2 stat-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Pasif Şef
-                            </div>
-
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Model.Count(x => x.Durum == false)
-                            </div>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Pasif Şef</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(x => x.Durum == false)</div>
                         </div>
-
-                        <div class="col-auto">
-                            <i class="fa fa-times-circle fa-2x text-gray-300"></i>
-                        </div>
-
+                        <div class="col-auto"><i class="fa fa-times-circle fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- Ana Kart -->
     <div class="card shadow-lg border-0 main-card">
-
-        <!-- Header -->
-        <div class="card-header d-flex justify-content-between align-items-center custom-header">
-
-            <h5 class="m-0 text-white font-weight-bold">
-                <i class="fa fa-cutlery mr-2"></i>Mutfak Ekibi
-            </h5>
-
-            <span class="badge badge-light px-3 py-2">
-                @Model.Count() Şef
-            </span>
-
+        <div class="card-header d-flex justify-content-between align-items-center custom-header text-white">
+            <h5 class="m-0 font-weight-bold"><i class="fa fa-cutlery mr-2"></i>Mutfak Ekibi</h5>
+            <span class="badge badge-light px-3 py-2">@Model.Count() Şef</span>
         </div>
 
-        <!-- Body -->
         <div class="card-body">
-
             @if (Model != null && Model.Any())
             {
                 <div class="table-responsive">
-
                     <table class="table align-middle table-hover custom-table">
-
                         <thead>
                             <tr>
                                 <th>Fotoğraf</th>
@@ -134,159 +83,80 @@
                                 <th class="text-center">İşlemler</th>
                             </tr>
                         </thead>
-
                         <tbody>
-
                             @foreach (var x in Model)
                             {
                                 <tr>
-
-                                    <!-- Foto -->
                                     <td>
                                         <img src="../../@x.Resim"
                                              alt="@x.SefAdSoyad"
                                              class="chef-img">
                                     </td>
-
-                                    <!-- Ad -->
-                                    <td class="font-weight-bold text-dark align-middle">
-                                        @x.SefAdSoyad
-                                    </td>
-
-                                    <!-- Açıklama -->
-                                    <td class="text-muted align-middle">
-                                        @x.Aciklama
-                                    </td>
-
-                                    <!-- Durum -->
-                                    <td class="text-center align-middle">
-
+                                    <td class="font-weight-bold text-dark">@x.SefAdSoyad</td>
+                                    <td class="text-muted">@x.Uzmanlik</td>
+                                    <td class="text-center">
                                         @if (x.Durum == true)
                                         {
-                                            <span class="badge badge-success badge-pill px-3 py-2">
-                                                <i class="fa fa-check mr-1"></i> Aktif
-                                            </span>
+                                            <span class="badge badge-success badge-pill px-3 py-2">Aktif</span>
                                         }
                                         else
                                         {
-                                            <span class="badge badge-danger badge-pill px-3 py-2">
-                                                <i class="fa fa-times mr-1"></i> Pasif
-                                            </span>
+                                            <span class="badge badge-danger badge-pill px-3 py-2">Pasif</span>
                                         }
-
                                     </td>
-
-                                    <!-- İşlemler -->
-                                    <td class="text-center align-middle">
-
+                                    <td class="text-center">
                                         <div class="btn-group shadow-sm">
-
-                                            <a href="/Admin/SefGuncelle/@x.SefID"
-                                               class="btn btn-sm btn-outline-primary"
-                                               title="Düzenle">
-
+                                            <a href="/Admin/KSefGuncelle/@x.SefID" class="btn btn-sm btn-outline-primary" title="Düzenle">
                                                 <i class="fa fa-edit"></i>
                                             </a>
+                                            <a href="/Admin/KSefSil/@x.SefID"
+                                               class="btn btn-danger"
+                                               onclick="return confirm('Bu şefi silmek istediğinize emin misiniz?')">
 
-                                            <button class="btn btn-sm btn-outline-danger deleteBtn"
-                                                    data-id="@x.SefID"
-                                                    data-name="@x.SefAdSoyad">
+                                                <i class="fas fa-trash-alt"></i> Sil
 
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-
+                                            </a>
                                         </div>
-
                                     </td>
-
                                 </tr>
                             }
-
                         </tbody>
-
                     </table>
-
                 </div>
             }
             else
             {
-                <div class="empty-area">
-
+                <div class="empty-area text-center py-5">
                     <i class="fa fa-user-times fa-4x mb-3 text-warning"></i>
-
-                    <h4 class="font-weight-bold">
-                        Henüz Şef Bulunmuyor
-                    </h4>
-
-                    <p class="text-muted">
-                        Sisteme ilk şefi eklemek için aşağıdaki butonu kullanabilirsiniz.
-                    </p>
-
-                    <a href="/Admin/KSefEkle" class="btn btn-warning mt-2 px-4">
-                        <i class="fa fa-plus-circle mr-2"></i>Şef Ekle
-                    </a>
-
+                    <h4 class="font-weight-bold">Henüz Şef Bulunmuyor</h4>
+                    <a href="/Admin/KSefEkle" class="btn btn-warning mt-2">Şef Ekle</a>
                 </div>
             }
-
         </div>
     </div>
 </div>
 
-<!-- Silme Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
-
     <div class="modal-dialog modal-dialog-centered">
-
         <div class="modal-content border-0 shadow-lg">
-
             <div class="modal-header bg-danger text-white">
-
-                <h5 class="modal-title">
-                    <i class="fa fa-trash mr-2"></i>Şef Sil
-                </h5>
-
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-
+                <h5 class="modal-title"><i class="fa fa-trash mr-2"></i>Şef Sil</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
             </div>
-
-            <div class="modal-body text-center">
-
+            <div class="modal-body text-center py-4">
                 <i class="fa fa-exclamation-triangle text-warning fa-4x mb-3"></i>
-
-                <h5 id="chefName"></h5>
-
-                <p class="text-muted">
-                    Bu şefi silmek istediğinize emin misiniz?
-                </p>
-
+                <h5 id="chefNameDisplay" class="font-weight-bold text-dark"></h5>
+                <p class="text-muted">Bu şefi silmek istediğinize emin misiniz?</p>
             </div>
-
-            <div class="modal-footer">
-
-                <button type="button"
-                        class="btn btn-secondary"
-                        data-dismiss="modal">
-
-                    Vazgeç
-                </button>
-
-                <a href="#" id="deleteLink" class="btn btn-danger">
-                    Evet, Sil
-                </a>
-
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <a href="#" id="confirmDeleteLink" class="btn btn-danger">Evet, Sil</a>
             </div>
-
         </div>
-
     </div>
-
 </div>
 
 <style>
-
     body {
         background: #f5f6fa;
     }
@@ -301,56 +171,19 @@
         padding: 18px 25px;
     }
 
-    .custom-table thead {
-        background: #f8f9fc;
+    .custom-table thead th {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #6c757d;
+        border: none;
     }
-
-        .custom-table thead th {
-            border: none;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #6c757d;
-            padding: 18px;
-        }
-
-    .custom-table tbody td {
-        vertical-align: middle;
-        padding: 18px;
-        border-top: 1px solid #f1f1f1;
-    }
-
-    .custom-table tbody tr {
-        transition: all .25s ease;
-    }
-
-        .custom-table tbody tr:hover {
-            background: rgba(255, 193, 7, 0.08);
-            transform: translateY(-2px);
-        }
 
     .chef-img {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid #ffc107;
-        box-shadow: 0 4px 10px rgba(0,0,0,.15);
-    }
-
-    .btn-group .btn {
-        border-radius: 10px !important;
-        margin: 0 2px;
-        transition: .2s;
-    }
-
-        .btn-group .btn:hover {
-            transform: scale(1.08);
-        }
-
-    .empty-area {
-        padding: 60px 20px;
-        text-align: center;
     }
 
     .stat-card {
@@ -375,21 +208,21 @@
     }
 </style>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
     $(document).ready(function () {
-
         $(".deleteBtn").click(function () {
-
             var id = $(this).data("id");
             var name = $(this).data("name");
 
-            $("#chefName").text(name);
-            $("#deleteLink").attr("href", "/Admin/SefSil/" + id);
+            // Modal içeriğini doldur
+            $("#chefNameDisplay").text(name);
 
+            // Silme linkini oluştur (Controller: KSefler, Action: KSefSil)
+            $("#confirmDeleteLink").attr("href", "/Admin/KSefSil/" + id);
+
+            // Modalı göster
             $("#deleteModal").modal("show");
         });
-
     });
-
 </script>

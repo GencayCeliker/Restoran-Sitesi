@@ -1,0 +1,161 @@
+﻿@model Restorant_Sitesi.Models.SEFLER
+
+@{
+    ViewBag.Title = "KSefGuncelle";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="fas fa-user-edit"></i>
+                Şef Bilgilerini Güncelle
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            @using (Html.BeginForm("KSefGuncelle", "Admin",
+                FormMethod.Post,
+                new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(x => x.SefID)
+
+                <div class="row">
+
+                    <!-- RESİM ALANI -->
+                    <div class="col-md-4 text-center border-right">
+
+                        <label class="font-weight-bold d-block mb-2">
+                            Mevcut Resim
+                        </label>
+
+                        @if (!string.IsNullOrEmpty(Model.Resim))
+                        {
+                            <img src="@Url.Content(Model.Resim)"
+                                 class="img-thumbnail mb-3"
+                                 style="max-height:220px;"
+                                 alt="Şef Resim" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/images/resimyokDene.png")"
+                                 class="img-thumbnail mb-3"
+                                 style="max-height:220px;"
+                                 alt="Resim Yok" />
+                        }
+
+                        <div class="form-group">
+                            <label>Yeni Resim Seç</label>
+
+                            <!-- BURASI ÇOK ÖNEMLİ -->
+                            <input type="file"
+                                   name="ResimDosyasi"
+                                   class="form-control-file" />
+                        </div>
+
+                    </div>
+
+                    <!-- FORM ALANI -->
+                    <div class="col-md-8">
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-id-badge"></i>
+                                Şef Ad Soyad
+                            </label>
+
+                            @Html.TextBoxFor(x => x.SefAdSoyad,
+                                new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Ad Soyad giriniz..."
+                                })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-graduation-cap"></i>
+                                Uzmanlık Alanı
+                            </label>
+
+                            @Html.TextBoxFor(x => x.Uzmanlik,
+                                new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Baş Aşçı, Sous Chef..."
+                                })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-align-left"></i>
+                                Açıklama
+                            </label>
+
+                            @Html.TextAreaFor(x => x.Aciklama,
+                                new
+                                {
+                                    @class = "form-control",
+                                    rows = 4,
+                                    placeholder = "Şef hakkında bilgi..."
+                                })
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>
+                                <i class="fas fa-toggle-on"></i>
+                                Durum
+                            </label>
+
+                            <div class="custom-control custom-switch">
+
+                                @Html.CheckBoxFor(x => x.Durum,
+                                    new
+                                    {
+                                        @class = "custom-control-input",
+                                        id = "DurumSwitch"
+                                    })
+
+                                <label class="custom-control-label"
+                                       for="DurumSwitch">
+                                    Sitede Gösterilsin mi?
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="text-right">
+
+                    <a href="@Url.Action("KSefler", "Admin")"
+                       class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
+                        İptal
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="fas fa-save"></i>
+                        Değişiklikleri Kaydet
+
+                    </button>
+
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

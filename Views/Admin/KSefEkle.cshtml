@@ -27,31 +27,31 @@
                 </div>
 
                 <div class="card-body p-4">
-                    @* DİKKAT: Action ismi KSefEkle olmalı *@
+                
                     @using (Html.BeginForm("KSefEkle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">Şef Adı Soyadı</label>
-                           
+
                             @Html.TextBoxFor(x => x.SefAdSoyad, new { @class = "form-control", required = "required" })
                         </div>
 
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">Uzmanlık</label>
-                          
+
                             @Html.TextBoxFor(x => x.Uzmanlik, new { @class = "form-control" })
                         </div>
 
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">Açıklama</label>
-                           
+
                             @Html.TextAreaFor(x => x.Aciklama, new { @class = "form-control", rows = "3" })
                         </div>
 
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">Şef Fotoğrafı Seçin</label>
-                           
-                            <input type="file" name="ResimDosyasi" class="form-control" />
+                         
+                            <input type="file" name="ResimDosyasi" class="form-control" id="imageUpload" />
                         </div>
 
                         <div class="form-group mb-3">

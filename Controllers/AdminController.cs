@@ -1058,7 +1058,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         {
             var silinecek = db.ICERIKLER.Find(id);
 
-            // Resim dosyasını temizle
+           
             if (!string.IsNullOrEmpty(silinecek.Dosya))
             {
                 string yol = Request.MapPath("~/" + silinecek.Dosya);
@@ -1091,7 +1091,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
                 return View();
             }
 
-            // 2. KONTROL: Aynı isimde/numarada başka bir masa var mı? (Veritabanı tutarlılığı)
+           
             var varMi = db.MASALAR.FirstOrDefault(x => x.MasaNo == yeniMasa.MasaNo);
             if (varMi != null)
             {
@@ -1101,7 +1101,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
 
             try
             {
-                // 3. ATAMA: SQL tablandaki [Durum] sütununu varsayılan olarak 'false' (Boş) yapıyoruz
+               
                 yeniMasa.Durum = false;
 
                 db.MASALAR.Add(yeniMasa);
@@ -1138,7 +1138,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         public ActionResult MasaSil(int id)
         {
             var masa = db.MASALAR.Find(id);
-            // Eğer masa doluysa silinmesini engellemek için bir kontrol eklenebilir
+           
             if (masa.Durum == false)
             {
                 db.MASALAR.Remove(masa);
@@ -1150,7 +1150,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         }
         public ActionResult KSefler()
         {
-            var seferler = db.SEFLER.Where(x => x.Durum == true).ToList();
+            var seferler = db.SEFLER.ToList();
             return View(seferler);
         }
         [HttpGet]
@@ -1160,41 +1160,131 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         }
 
         [HttpPost]
+    
         public ActionResult KSefEkle(SEFLER p, HttpPostedFileBase ResimDosyasi)
         {
             if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
             {
-               
-                string klasorYolu = Server.MapPath("~/ResimlerMenu/");
+                // Klasör yolunu temizledik
+                string klasorYolu = Server.MapPath("~/images/");
 
-               
                 if (!System.IO.Directory.Exists(klasorYolu))
                 {
                     System.IO.Directory.CreateDirectory(klasorYolu);
                 }
 
-               
                 string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
                 string tamYol = Path.Combine(klasorYolu, dosyaAdi);
 
-               
                 ResimDosyasi.SaveAs(tamYol);
 
-             
-                p.Resim = "/ResimlerMenu/" + dosyaAdi;
+                // Veritabanına kaydedilecek yolu temizledik
+                p.Resim = "/images/" + dosyaAdi;
             }
 
-            // Veritabanına ekle ve kaydet
             db.SEFLER.Add(p);
             db.SaveChanges();
-            TempData["Basarili"] = "Çalışan başarıyla eklendi!";
+            TempData["Basarili"] = "Şef başarıyla eklendi!";
             return RedirectToAction("KSefler");
         }
+
         [HttpGet]
-        public ActionResult KSefGuncelle(int id) 
+        public ActionResult KSefGuncelle(int id)
         {
             var sef = db.SEFLER.Find(id);
-            return View(sef); 
+            if (sef == null)
+            {
+                return HttpNotFound();
+            }
+            return View(sef);
+        }
+
+        [HttpPost]
+        public ActionResult KSefGuncelle(SEFLER p, HttpPostedFileBase ResimDosyasi)
+        {
+            var veri = db.SEFLER.Find(p.SefID);
+
+            if (veri == null)
+            {
+                return HttpNotFound();
+            }
+
+            veri.SefAdSoyad = p.SefAdSoyad;
+            veri.Uzmanlik = p.Uzmanlik;
+            veri.Aciklama = p.Aciklama;
+            veri.Durum = p.Durum;
+
+            string eskiResimYolu = veri.Resim;
+
+            if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
+            {
+                string uzanti = Path.GetExtension(ResimDosyasi.FileName).ToLower();
+
+                string[] izinli = { ".jpg", ".jpeg", ".png" };
+
+                if (izinli.Contains(uzanti))
+                {
+                    // eski resmi sil
+                    if (!string.IsNullOrEmpty(eskiResimYolu))
+                    {
+                        string tamYol = Server.MapPath(eskiResimYolu);
+
+                        if (System.IO.File.Exists(tamYol))
+                        {
+                            System.IO.File.Delete(tamYol);
+                        }
+                    }
+
+                    string yeniAd = Guid.NewGuid() + uzanti;
+
+                    string kayitYolu =
+                        Path.Combine(Server.MapPath("~/images/"), yeniAd);
+
+                    WebImage img = new WebImage(ResimDosyasi.InputStream);
+
+                    if (img.Width > 1200)
+                    {
+                        img.Resize(1200, 1200,
+                            preserveAspectRatio: true,
+                            preventEnlarge: true);
+                    }
+
+                    img.Save(kayitYolu);
+
+                    veri.Resim = "/images/" + yeniAd;
+                }
+            }
+
+            db.SaveChanges();
+            TempData["Basarili"] = "Şefler başarıyla güncellendi!";
+            return RedirectToAction("KSefler");
+        }
+        public ActionResult KSefSil(int id)
+        {
+            var sef = db.SEFLER.Find(id);
+
+            if (sef == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Resim varsa sil
+            if (!string.IsNullOrEmpty(sef.Resim))
+            {
+                string resimYolu = Server.MapPath(sef.Resim);
+
+                if (System.IO.File.Exists(resimYolu))
+                {
+                    System.IO.File.Delete(resimYolu);
+                }
+            }
+
+            // Veritabanından sil
+            db.SEFLER.Remove(sef);
+
+            db.SaveChanges();
+            TempData["Basarili"] = "Şefler başarıyla silindi!";
+            return RedirectToAction("KSefler");
         }
 
     }
