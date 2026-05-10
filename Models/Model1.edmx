@@ -142,6 +142,18 @@
           <Property Name="Logo" Type="nvarchar(max)" />
           <Property Name="SiteAd" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="SUBELER">
+          <Key>
+            <PropertyRef Name="SubeID" />
+          </Key>
+          <Property Name="SubeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubeAd" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sehir" Type="nvarchar" MaxLength="50" />
+          <Property Name="Adres" Type="nvarchar" MaxLength="500" />
+          <Property Name="Telefon" Type="nvarchar" MaxLength="20" />
+          <Property Name="Durum" Type="bit" />
+          <Property Name="KayitTarihi" Type="datetime" />
+        </EntityType>
         <EntityType Name="URUNLER">
           <Key>
             <PropertyRef Name="UrunID" />
@@ -268,6 +280,7 @@
           <EntitySet Name="SEFLER" EntityType="Self.SEFLER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SIFRE_SIFIRLAMA" EntityType="Self.SIFRE_SIFIRLAMA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SITE_AYARLARI" EntityType="Self.SITE_AYARLARI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SUBELER" EntityType="Self.SUBELER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="URUNLER" EntityType="Self.URUNLER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USTILETISIM" EntityType="Self.USTILETISIM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UYELER" EntityType="Self.UYELER" Schema="dbo" store:Type="Tables" />
@@ -474,6 +487,7 @@
             <End Role="DUYURULABLOGLAR" EntitySet="DUYURULABLOGLAR" />
             <End Role="DUYURUBLOGYORUMLARI" EntitySet="DUYURUBLOGYORUMLARI" />
           </AssociationSet>
+          <EntitySet Name="SUBELER" EntityType="WRestourantDBModel.SUBELER" />
           </EntityContainer>
         <EntityType Name="HAKKIMDA">
           <Key>
@@ -595,6 +609,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="SUBELER">
+          <Key>
+            <PropertyRef Name="SubeID" />
+          </Key>
+          <Property Name="SubeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubeAd" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sehir" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Adres" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Telefon" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Durum" Type="Boolean" />
+          <Property Name="KayitTarihi" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -802,6 +828,19 @@
                 <ScalarProperty Name="Icerik" ColumnName="Icerik" />
                 <ScalarProperty Name="Baslik" ColumnName="Baslik" />
                 <ScalarProperty Name="DuyuruID" ColumnName="DuyuruID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SUBELER">
+            <EntityTypeMapping TypeName="WRestourantDBModel.SUBELER">
+              <MappingFragment StoreEntitySet="SUBELER">
+                <ScalarProperty Name="KayitTarihi" ColumnName="KayitTarihi" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+                <ScalarProperty Name="Sehir" ColumnName="Sehir" />
+                <ScalarProperty Name="SubeAd" ColumnName="SubeAd" />
+                <ScalarProperty Name="SubeID" ColumnName="SubeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

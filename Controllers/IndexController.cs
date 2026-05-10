@@ -242,7 +242,17 @@ namespace Restorant_Sitesi.Controllers
             var seferler = db.SEFLER.Where(x => x.Durum == true).ToList();
             return View(seferler);
         }
-        
+        public ActionResult İletisim(string sehir)
+        {
+            var uyeler = db.SUBELER
+                   .Where(x => x.Sehir.ToLower() == (sehir ?? "").ToLower() && x.Durum == true)
+                   .ToList();
+
+            ViewBag.il = sehir?.ToUpper();
+
+            return View(uyeler);
+
+        }
 
         [HttpGet]
         public ActionResult KayitOl()

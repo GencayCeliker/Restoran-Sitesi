@@ -27,6 +27,7 @@
         <EntityTypeShape EntityType="WRestourantDBModel.DUYURUBLOGYORUMLARI" Width="1.5" PointX="3" PointY="12.125" />
         <EntityTypeShape EntityType="WRestourantDBModel.DUYURULABLOGLAR" Width="1.5" PointX="0.75" PointY="12" />
         <AssociationConnector Association="WRestourantDBModel.FK_DUYURUBLOGYORUMLARI_DUYURULABLOGLAR" />
+        <EntityTypeShape EntityType="WRestourantDBModel.SUBELER" Width="1.5" PointX="12.375" PointY="4.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

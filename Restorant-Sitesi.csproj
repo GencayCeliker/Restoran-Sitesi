@@ -225,6 +225,9 @@
     <Compile Include="Models\SITE_AYARLARI.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SUBELER.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\URUNLER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -920,6 +923,7 @@
     <Content Include="images\dinner-5.jpg" />
     <Content Include="images\dinner-6.jpg" />
     <Content Include="images\doluyıldız.png" />
+    <Content Include="images\DRestoran.jpg" />
     <Content Include="images\drink-1.jpg" />
     <Content Include="images\drink-2.jpg" />
     <Content Include="images\drink-3.jpg" />
@@ -1416,6 +1420,7 @@
     <Content Include="Views\Admin\KSefler.cshtml" />
     <Content Include="Views\Admin\KSefEkle.cshtml" />
     <Content Include="Views\Admin\KSefGuncelle.cshtml" />
+    <Content Include="Views\Index\İletisim.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
