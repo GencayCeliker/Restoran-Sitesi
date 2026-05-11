@@ -81,6 +81,18 @@
           <Property Name="Kapasite" Type="int" />
           <Property Name="Durum" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="MESAJLAR">
+          <Key>
+            <PropertyRef Name="MesajID" />
+          </Key>
+          <Property Name="MesajID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdSoyad" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Konu" Type="nvarchar" MaxLength="150" />
+          <Property Name="Mesaj" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Tarih" Type="datetime" />
+          <Property Name="OkunduMu" Type="bit" />
+        </EntityType>
         <EntityType Name="NAVBAR">
           <Key>
             <PropertyRef Name="NavbarID" />
@@ -274,6 +286,7 @@
           <EntitySet Name="ICERIKLER" EntityType="Self.ICERIKLER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KATEGORILER" EntityType="Self.KATEGORILER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MASALAR" EntityType="Self.MASALAR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MESAJLAR" EntityType="Self.MESAJLAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NAVBAR" EntityType="Self.NAVBAR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REZARVASYONDURUM" EntityType="Self.REZARVASYONDURUM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REZARVASYONLAR" EntityType="Self.REZARVASYONLAR" Schema="dbo" store:Type="Tables" />
@@ -488,6 +501,7 @@
             <End Role="DUYURUBLOGYORUMLARI" EntitySet="DUYURUBLOGYORUMLARI" />
           </AssociationSet>
           <EntitySet Name="SUBELER" EntityType="WRestourantDBModel.SUBELER" />
+          <EntitySet Name="MESAJLAR" EntityType="WRestourantDBModel.MESAJLAR" />
           </EntityContainer>
         <EntityType Name="HAKKIMDA">
           <Key>
@@ -620,6 +634,18 @@
           <Property Name="Telefon" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Durum" Type="Boolean" />
           <Property Name="KayitTarihi" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MESAJLAR">
+          <Key>
+            <PropertyRef Name="MesajID" />
+          </Key>
+          <Property Name="MesajID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdSoyad" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Konu" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mesaj" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Tarih" Type="DateTime" Precision="3" />
+          <Property Name="OkunduMu" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -841,6 +867,19 @@
                 <ScalarProperty Name="Sehir" ColumnName="Sehir" />
                 <ScalarProperty Name="SubeAd" ColumnName="SubeAd" />
                 <ScalarProperty Name="SubeID" ColumnName="SubeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MESAJLAR">
+            <EntityTypeMapping TypeName="WRestourantDBModel.MESAJLAR">
+              <MappingFragment StoreEntitySet="MESAJLAR">
+                <ScalarProperty Name="OkunduMu" ColumnName="OkunduMu" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Mesaj" ColumnName="Mesaj" />
+                <ScalarProperty Name="Konu" ColumnName="Konu" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="MesajID" ColumnName="MesajID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

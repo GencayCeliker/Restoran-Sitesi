@@ -43,5 +43,6 @@ namespace Restorant_Sitesi.Models
         public DbSet<DUYURUBLOGYORUMLARI> DUYURUBLOGYORUMLARI { get; set; }
         public DbSet<DUYURULABLOGLAR> DUYURULABLOGLAR { get; set; }
         public DbSet<SUBELER> SUBELER { get; set; }
+        public DbSet<MESAJLAR> MESAJLAR { get; set; }
     }
 }

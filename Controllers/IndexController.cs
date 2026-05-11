@@ -244,6 +244,7 @@ namespace Restorant_Sitesi.Controllers
         }
         public ActionResult İletisim(string sehir)
         {
+            GuvenlikKoduUret();
             var uyeler = db.SUBELER
                    .Where(x => x.Sehir.ToLower() == (sehir ?? "").ToLower() && x.Durum == true)
                    .ToList();
@@ -252,6 +253,42 @@ namespace Restorant_Sitesi.Controllers
 
             return View(uyeler);
 
+        }
+        [HttpPost]
+        public ActionResult MesajGonder(MESAJLAR p, string captchaInput)
+        {
+           
+            if (string.IsNullOrEmpty(captchaInput))
+            {
+                TempData["Hata"] = "Güvenlik kodu boş bırakılamaz!";
+                return RedirectToAction("İletisim");
+            }
+
+          
+            if (Session["DogrulamaKodu"] == null || captchaInput.ToUpper() != Session["DogrulamaKodu"].ToString())
+            {
+                GuvenlikKoduUret(); // Kod yanlışsa yeni kod üret ki ekranda değişsin
+                TempData["Hata"] = "Güvenlik kodu hatalı!";
+                return RedirectToAction("İletisim");
+            }
+
+          
+            if (ModelState.IsValid)
+            {
+                p.Tarih = DateTime.Now;
+                p.OkunduMu = false;
+                db.MESAJLAR.Add(p);
+                db.SaveChanges();
+                TempData["Mesaj"] = "Mesajınız başarıyla gönderilmiştir.En kısa sürede girdiğiniz mail üzerinden geri dönüş yapılacaktır";
+                // Başarılı olduğunda da yeni bir kod üretilsin
+                GuvenlikKoduUret();
+            }
+            else
+            {
+                TempData["Hata"] = "Lütfen form alanlarını kontrol ediniz.";
+            }
+
+            return RedirectToAction("İletisim");
         }
 
         [HttpGet]

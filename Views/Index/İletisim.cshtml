@@ -1,9 +1,11 @@
 ﻿@using Restorant_Sitesi.Models
-@model List<SUBELER>
+@model  List<SUBELER>
+
 @{
     ViewBag.Title = "İletisim";
     Layout = "~/Views/Shared/RestourantLayout.cshtml";
 }
+
 <section class="hero-wrap hero-wrap-2" style="background-image: url('../../images/bg_5.jpg');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
@@ -11,7 +13,7 @@
             <div class="col-md-9 ftco-animate text-center mb-5">
                 <h1 class="mb-2 bread">İletişim</h1>
                 <p class="breadcrumbs">
-                    <span class="mr-2"><a href="/Home/Index">Anasayfa <i class="fa fa-chevron-right"></i></a></span>
+                    <span class="mr-2"><a href="/Index/Index">Anasayfa <i class="fa fa-chevron-right"></i></a></span>
                     <span>İLETİŞİM <i class="fa fa-chevron-right"></i></span>
                 </p>
             </div>
@@ -28,7 +30,7 @@
             <div class="w-100"></div>
             <div class="col-md-3 d-flex">
                 <div class="dbox">
-                    <p><span>Adres:</span> 198 West 21th Street, Suite 721 New York NY 10016 (Burayı kendi adresinle güncelleyebilirsin)</p>
+                    <p><span>Adres:</span> Yunus Emre Mahhalesi Çekrek Caddesi No 54  Tokat/Zile Moly Restorant</p>
                 </div>
             </div>
             <div class="col-md-3 d-flex">
@@ -38,56 +40,215 @@
             </div>
             <div class="col-md-3 d-flex">
                 <div class="dbox">
-                    <p><span>E-posta:</span> <a href="mailto:info@restoran.com">info@restoran.com</a></p>
+                    <p><span>E-posta:</span> <a href="mailto:gencayceliker@gmail.com">gencayceliker@gmail.com</a></p>
                 </div>
             </div>
             <div class="col-md-3 d-flex">
                 <div class="dbox">
-                    <p><span>Web Sitesi:</span> <a href="#">www.restoranadiniz.com</a></p>
+                    <p><span>Web Sitesi:</span> <a href="#">www.molyrestorant.com</a></p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="ftco-section ftco-no-pt contact-section">
+<section class="ftco-section ftco-no-pt mb-5">
     <div class="container">
-        <div class="row d-flex align-items-stretch no-gutters">
-            <div class="col-md-6 p-5 order-md-last">
-                <h2 class="h4 mb-5 font-weight-bold">Bize Ulaşın</h2>
-                <form action="#">
+        <div class="row no-gutters shadow-lg" style="border-radius: 20px; overflow: hidden; background: #fff; min-height: 600px; align-items: stretch;">
+
+            <div class="col-md-6 d-flex" style="background: #111;">
+                <div class="map-wrap w-100" style="height: 100%; min-height: 450px;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d49013.91617260528!2d36.51654162985392!3d40.3220459520092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x407db99071537059%3A0x67399676352069e2!2sTokat%20Merkez%2FTokat!5e0!3m2!1str!2str!4v1715450000000!5m2!1str!2str"
+                            width="100%" height="100%" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <div class="col-md-6 p-5 d-flex flex-column justify-content-center bg-white">
+                <h2 class="h3 mb-4 font-weight-bold" style="color: #111;">Bize Mesaj Gönderin</h2>
+                <form action="/Index/MesajGonder" method="post" id="contactForm">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Adınız Soyadınız">
+                        <input type="text" name="AdSoyad" class="form-control custom-input" placeholder="Adınız Soyadınız" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="E-posta Adresiniz">
+                        <input type="email" name="Email" class="form-control custom-input" placeholder="E-posta Adresiniz" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Konu">
+                        <input type="text" name="Konu" class="form-control custom-input" placeholder="Konu">
                     </div>
                     <div class="form-group">
-                        <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Mesajınız"></textarea>
+                        <textarea name="Mesaj" cols="30" rows="4" class="form-control custom-input" placeholder="Mesajınız" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Mesaj Gönder" class="btn btn-primary py-3 px-5">
+
+                    <div class="form-group mt-4">
+                        <label class="text-dark small font-weight-bold">Güvenlik Doğrulaması</label>
+                        <div class="captcha-container">
+                            <div id="captchaBox">
+                                @* ViewBag'den gelen kod burada gösterilecek *@
+                                @(ViewBag.GosterilenKod ?? "HATA")
+                            </div>
+                            <button type="button" onclick="location.reload();" class="captcha-refresh" title="Kodu Yenile">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+
+                            <input type="text" id="captchaInput" name="captchaInput" class="form-control captcha-input" placeholder="Kodu giriniz" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary py-3 px-5 w-100 shadow-sm" style="font-weight:bold; text-transform: uppercase; letter-spacing: 1px;">
+                            Mesaj Gönder
+                        </button>
                     </div>
                 </form>
             </div>
-            <div class="col-md-6 d-flex align-items-stretch">
-                <div id="map" style="width: 100%; height: 100%; background-color: #eee; display: flex; align-items: center; justify-content: center;">
-                    <p class="text-muted">Harita Yükleniyor...</p>
-                </div>
-            </div>
+
         </div>
     </div>
 </section>
+<style>
+    /* Harita Alanı: Siyah çerçeve olmaması için */
+    .map-wrap iframe {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Form Input Güzelleştirme */
+    .custom-input {
+        border-radius: 10px !important;
+        border: 1px solid #eee !important;
+        padding: 12px 15px !important;
+        background: #fafafa !important;
+        height: auto !important;
+    }
+
+        .custom-input:focus {
+            border-color: #cda45e !important;
+            background: #fff !important;
+            box-shadow: 0 0 8px rgba(205, 164, 94, 0.2) !important;
+        }
+
+    /* Captcha Tasarımı (Resimdeki Görünüm) */
+    .captcha-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #captchaBox {
+        background: #eee;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        user-select: none;
+        border: 1px dashed #cda45e;
+        color: #333;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        min-width: 130px;
+        text-align: center;
+        text-decoration: line-through; /* Güvenlik kodu havası verir */
+    }
+
+    .captcha-refresh {
+        background: none;
+        border: none;
+        color: #cda45e;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+        .captcha-refresh:hover {
+            transform: rotate(180deg);
+        }
+
+    .captcha-input {
+        width: 140px !important;
+        border-radius: 5px !important;
+        border: 1px solid #ddd !important;
+        height: 46px !important;
+    }
+</style>
+<script>
+    document.getElementById("contactForm").onsubmit = function (e) {
+        const originalCode = "@ViewBag.GosterilenKod";
+        const userInput = document.getElementById("captchaInput").value.toUpperCase().trim();
+
+        if (userInput !== originalCode) {
+            alert("Güvenlik kodu hatalı! Lütfen kutudaki kelimeyi doğru giriniz.");
+            e.preventDefault();
+            return false;
+        }
+    };
+</script>
+<div class="map-header-section">
+    <span class="map-subtitle">Lezzet Duraklarımız</span>
+    <h2 class="map-title">Türkiye'deki <span>Şubelerimiz</span></h2>
+    <div class="map-divider">
+        <div class="line"></div>
+        <i class="fa fa-map-marker"></i>
+        <div class="line"></div>
+    </div>
+</div>
+
 
 <style>
+    /* Başlık Alanı Stilleri */
+    .map-header-section {
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
 
+    .map-subtitle {
+        display: block;
+        font-family: 'Dancing Script', cursive; /* Layout'unda olan font */
+        color: #cda45e;
+        font-size: 26px;
+        margin-bottom: 0px;
+    }
+
+    .map-title {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #333;
+        font-size: 36px;
+    }
+
+        .map-title span {
+            color: #cda45e;
+        }
+
+    /* Ayırıcı Çizgi ve İkon */
+    .map-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+        .map-divider .line {
+            height: 2px;
+            width: 50px;
+            background-color: #cda45e;
+            margin: 0 15px;
+        }
+
+        .map-divider i {
+            color: #cda45e;
+            font-size: 20px;
+        }
+
+
+
+    /* --- HARİTA STİLLERİ --- */
     .svg-turkiye-haritasi {
         max-width: 1140px;
         margin: 0 auto;
         text-align: center;
+        position: relative;
     }
 
         .svg-turkiye-haritasi svg {
@@ -97,381 +258,119 @@
 
     .il-isimleri {
         position: absolute;
-        z-index: 2;
+        z-index: 1050;
+        pointer-events: none;
     }
 
         .il-isimleri div {
-            font-family: 'Open Sans';
-            display: inline-block;
-            background: #1094F6;
-            color: #fff;
-            padding: 8px 16px;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            background: #cda45e;
+            color: #111;
+            padding: 5px 12px;
             border-radius: 4px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
     #svg-turkiye-haritasi path {
         cursor: pointer;
-        fill: #222;
+        fill: #333;
+        transition: fill 0.3s ease;
     }
 
         #svg-turkiye-haritasi path:hover {
-            fill: #1094F6;
+            fill: #cda45e;
         }
 
     #guney-kibris {
         pointer-events: none;
     }
 
-    f
-</style>
-
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<style>
-    /* FontAwesome for working BootSnippet :> */
-
-    @@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-
-    #team {
-        background: #eee !important;
+    /* --- EŞİT BOYUTLU FLIP CARD STİLLERİ --- */
+    #team .section-title {
+        text-align: center;
+        color: #cda45e;
+        margin-bottom: 50px;
+        text-transform: uppercase;
+        font-weight: 800;
     }
 
-    .btn-primary:hover,
-    .btn-primary:focus {
-        background-color: #108d6f;
-        border-color: #108d6f;
-        box-shadow: none;
-        outline: none;
+    /* Kartların yüksekliklerini burada sabitliyoruz */
+    .image-flip, .mainflip {
+        height: 480px; /* İçeriğine göre bu değeri artırıp azaltabilirsin */
+        width: 100%;
     }
 
-    .btn-primary {
-        color: #fff;
-        background-color: #007b5e;
-        border-color: #007b5e;
-    }
-
-    section {
-        padding: 60px 0;
-    }
-
-        section .section-title {
-            text-align: center;
-            color: #007b5e;
-            margin-bottom: 50px;
-            text-transform: uppercase;
+        .image-flip:hover .backside, .image-flip.hover .backside {
+            transform: rotateY(0deg);
         }
 
-    #team .card {
-        border: none;
-        background: #ffffff;
-    }
-
-    .image-flip:hover .backside,
-    .image-flip.hover .backside {
-        -webkit-transform: rotateY(0deg);
-        -moz-transform: rotateY(0deg);
-        -o-transform: rotateY(0deg);
-        -ms-transform: rotateY(0deg);
-        transform: rotateY(0deg);
-        border-radius: .25rem;
-    }
-
-    .image-flip:hover .frontside,
-    .image-flip.hover .frontside {
-        -webkit-transform: rotateY(180deg);
-        -moz-transform: rotateY(180deg);
-        -o-transform: rotateY(180deg);
-        transform: rotateY(180deg);
-    }
+        .image-flip:hover .frontside, .image-flip.hover .frontside {
+            transform: rotateY(180deg);
+        }
 
     .mainflip {
-        -webkit-transition: 1s;
-        -webkit-transform-style: preserve-3d;
-        -ms-transition: 1s;
-        -moz-transition: 1s;
-        -moz-transform: perspective(1000px);
-        -moz-transform-style: preserve-3d;
-        -ms-transform-style: preserve-3d;
         transition: 1s;
         transform-style: preserve-3d;
         position: relative;
     }
 
-    .frontside {
-        position: relative;
-        -webkit-transform: rotateY(0deg);
-        -ms-transform: rotateY(0deg);
-        z-index: 2;
-        margin-bottom: 30px;
-    }
-
-    .backside {
+    .frontside, .backside {
         position: absolute;
         top: 0;
         left: 0;
-        background: white;
-        -webkit-transform: rotateY(-180deg);
-        -moz-transform: rotateY(-180deg);
-        -o-transform: rotateY(-180deg);
-        -ms-transform: rotateY(-180deg);
-        transform: rotateY(-180deg);
-        -webkit-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-        -moz-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-        box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-    }
-
-    .frontside,
-    .backside {
-        -webkit-backface-visibility: hidden;
-        -moz-backface-visibility: hidden;
-        -ms-backface-visibility: hidden;
+        width: 100%;
+        height: 100%; /* Kapsayıcıyı tam doldur */
         backface-visibility: hidden;
-        -webkit-transition: 1s;
-        -webkit-transform-style: preserve-3d;
-        -moz-transition: 1s;
-        -moz-transform-style: preserve-3d;
-        -o-transition: 1s;
-        -o-transform-style: preserve-3d;
-        -ms-transition: 1s;
-        -ms-transform-style: preserve-3d;
         transition: 1s;
         transform-style: preserve-3d;
     }
 
-        .frontside .card,
-        .backside .card {
-            min-height: 312px;
-        }
-
-            .backside .card a {
-                font-size: 18px;
-                color: #007b5e !important;
-            }
-
-            .frontside .card .card-title,
-            .backside .card .card-title {
-                color: #007b5e !important;
-            }
-
-            .frontside .card .card-body img {
-                width: 120px;
-                height: 120px;
-                border-radius: 50%;
-            }
-</style>
-
-<style>
-    @@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-
-    #team {
-        background: #eee !important;
+    .backside {
+        transform: rotateY(-180deg);
+        box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
     }
 
-    .btn-primary:hover,
-    .btn-primary:focus {
-        background-color: #108d6f;
-        border-color: #108d6f;
-        box-shadow: none;
-        outline: none;
-    }
-
-    .btn-primary {
-        color: #fff;
-        background-color: #007b5e;
-        border-color: #007b5e;
-    }
-
-    section {
-        padding: 60px 0;
-    }
-
-        section .section-title {
-            text-align: center;
-            color: #007b5e;
-            margin-bottom: 50px;
-            text-transform: uppercase;
-        }
-
+    /* Kart İç Tasarımı */
     #team .card {
+        height: 100%; /* Kartın içini %100 yap */
         border: none;
-        background: #ffffff;
+        background: #1a1a2e; /* Koyu tema */
+        display: flex;
+        flex-direction: column;
     }
 
-    .image-flip:hover .backside,
-    .image-flip.hover .backside {
-        -webkit-transform: rotateY(0deg);
-        -moz-transform: rotateY(0deg);
-        -o-transform: rotateY(0deg);
-        -ms-transform: rotateY(0deg);
-        transform: rotateY(0deg);
-        border-radius: .25rem;
+    #team .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* İçeriği kartın geneline yay (Eşitlik sağlar) */
+        padding: 20px;
     }
 
-    .image-flip:hover .frontside,
-    .image-flip.hover .frontside {
-        -webkit-transform: rotateY(180deg);
-        -moz-transform: rotateY(180deg);
-        -o-transform: rotateY(180deg);
-        transform: rotateY(180deg);
+    .frontside .card .card-title, .backside .card .card-title {
+        color: #cda45e !important;
+        font-weight: bold;
     }
 
-    .mainflip {
-        -webkit-transition: 1s;
-        -webkit-transform-style: preserve-3d;
-        -ms-transition: 1s;
-        -moz-transition: 1s;
-        -moz-transform: perspective(1000px);
-        -moz-transform-style: preserve-3d;
-        -ms-transform-style: preserve-3d;
-        transition: 1s;
-        transform-style: preserve-3d;
-        position: relative;
+    .frontside .card .card-body img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 2px solid #cda45e;
+        object-fit: cover;
     }
 
-    .frontside {
-        position: relative;
-        -webkit-transform: rotateY(0deg);
-        -ms-transform: rotateY(0deg);
-        z-index: 2;
-        margin-bottom: 30px;
+    .alert-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-color: #dc3545;
+        color: #dc3545;
+        font-size: 14px;
     }
-
-    .backside {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: white;
-        -webkit-transform: rotateY(-180deg);
-        -moz-transform: rotateY(-180deg);
-        -o-transform: rotateY(-180deg);
-        -ms-transform: rotateY(-180deg);
-        transform: rotateY(-180deg);
-        -webkit-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-        -moz-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-        box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-    }
-
-    .frontside,
-    .backside {
-        -webkit-backface-visibility: hidden;
-        -moz-backface-visibility: hidden;
-        -ms-backface-visibility: hidden;
-        backface-visibility: hidden;
-        -webkit-transition: 1s;
-        -webkit-transform-style: preserve-3d;
-        -moz-transition: 1s;
-        -moz-transform-style: preserve-3d;
-        -o-transition: 1s;
-        -o-transform-style: preserve-3d;
-        -ms-transition: 1s;
-        -ms-transform-style: preserve-3d;
-        transition: 1s;
-        transform-style: preserve-3d;
-    }
-
-        .frontside .card,
-        .backside .card {
-            min-height: 312px;
-        }
-
-            .backside .card a {
-                font-size: 18px;
-                color: #007b5e !important;
-            }
-
-            .frontside .card .card-title,
-            .backside .card .card-title {
-                color: #007b5e !important;
-            }
-
-            .frontside .card .card-body img {
-                width: 120px;
-                height: 120px;
-                border-radius: 50%;
-            }
 </style>
 
 
 
-<br />
-<br />
-
-<section id="team" class="pb-5">
-    <div class="container">
-        <h5 class="section-title h1"><b>@ViewBag.il</b> Şubelerimiz</h5>
-        <div class="row">
-            @foreach (var x in Model)
-            {
-                <div class="col-xs-12 col-sm-6 col-md-4">
-                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
-                        <div class="mainflip">
-                            <div class="frontside">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <p><img class=" img-fluid" src="../../images/DRestoran.jpg" alt="card image"></p>
-                                        <h4 class="card-title">@x.SubeAd</h4>
-                                        <p class="card-text">@x.Adres</p>
-                                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="backside">
-                                <div class="card">
-                                    <div class="card-body text-center mt-4">
-                                        <h4 class="card-title">@x.Sehir</h4>
-                                        <div class="alert alert-danger">Tel:@x.Telefon</div>
-                                        <br />
-
-
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item">
-                                                <a class="social-icon text-xs-center" target="_blank" href="#">
-                                                    <i class="fa fa-facebook"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a class="social-icon text-xs-center" target="_blank" href="#">
-                                                    <i class="fa fa-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a class="social-icon text-xs-center" target="_blank" href="#">
-                                                    <i class="fa fa-skype"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a class="social-icon text-xs-center" target="_blank" href="#">
-                                                    <i class="fa fa-google"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-
-        </div>
-    </div>
-</section>
-
-
+<section>
     <div>
         <div class="il-isimleri"></div>
         <div class="svg-turkiye-haritasi">
@@ -740,146 +639,99 @@
         </g>
       </svg>
         </div>
-        <!-- SVG Türkiye Haritası -->
     </div>
+</section>
+
+<!-- Şubeler Listesi (Flip Card) -->
+<section id="team" class="pb-5">
+    <div class="container">
+        <h5 class="section-title h1"><b>@ViewBag.il</b> Şubelerimiz</h5>
+        <div class="row">
+            @foreach (var x in Model)
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 mb-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card shadow">
+                                    <div class="card-body text-center">
+                                        <p><img class="img-fluid" src="~/images/DRestoran.jpg" alt="şube görseli"></p>
+                                        <h4 class="card-title">@x.SubeAd</h4>
+                                        <p class="card-text">@x.Adres</p>
+                                        <div class="mt-auto">
+                                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Detay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card shadow">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">@x.Sehir</h4>
+                                        <div class="alert alert-danger">Tel: @x.Telefon</div>
+
+                                        <ul class="list-inline mt-3">
+                                            <li class="list-inline-item">
+                                                <a class="social-icon" target="_blank" href="#"><i class="fa fa-facebook"></i></a>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <a class="social-icon" target="_blank" href="#"><i class="fa fa-twitter"></i></a>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <a class="social-icon" target="_blank" href="#"><i class="fa fa-instagram"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="mt-auto pb-3">
+                                            <a href="/Index/Rezerve" class="btn btn-primary btn-sm">Hemen Rezervasyon</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
 
 <script>
-    function svgturkiyeharitasi() {
+    document.addEventListener("DOMContentLoaded", function () {
         const element = document.querySelector('#svg-turkiye-haritasi');
         const info = document.querySelector('.il-isimleri');
 
-        element.addEventListener(
-            'mouseover',
-            function (event) {
+        if (element && info) {
+            element.addEventListener('mouseover', function (event) {
                 if (event.target.tagName === 'path' && event.target.parentNode.id !== 'guney-kibris') {
-                    info.innerHTML = [
-                        '<div>',
-                        event.target.parentNode.getAttribute('data-iladi'),
-                        '</div>'
-                    ].join('');
+                    const ilAdi = event.target.parentNode.getAttribute('data-iladi');
+                    if (ilAdi) {
+                        info.style.display = 'block';
+                        info.innerHTML = '<div>' + ilAdi + '</div>';
+                    }
                 }
-            }
-        );
+            });
 
-        element.addEventListener(
-            'mousemove',
-            function (event) {
-                info.style.top = event.pageY + 25 + 'px';
-                info.style.left = event.pageX + 'px';
-            }
-        );
+            element.addEventListener('mousemove', function (event) {
+                const mapContainer = document.getElementById('map-container').getBoundingClientRect();
+                info.style.top = (event.clientY - mapContainer.top - 40) + 'px';
+                info.style.left = (event.clientX - mapContainer.left + 15) + 'px';
+            });
 
-        element.addEventListener(
-            'mouseout',
-            function (event) {
+            element.addEventListener('mouseout', function (event) {
+                info.style.display = 'none';
                 info.innerHTML = '';
-            }
-        );
+            });
 
-        element.addEventListener(
-            'click',
-            function (event) {
+            element.addEventListener('click', function (event) {
                 if (event.target.tagName === 'path') {
                     const parent = event.target.parentNode;
                     const id = parent.getAttribute('id');
-
-
-
-
-
-                    var aa = $(this).data('id');
-
-                    var url = "/Index/İletisim?sehir=" + id;
-                    window.location.href = url;
-                    if (
-                        id === 'guney-kibris'
-                    ) {
-                        return;
+                    if (id && id !== 'guney-kibris') {
+                        window.location.href = "/Index/İletisim?sehir=" + id;
                     }
-
-                    window.location.href = (
-                        '#'
-                        + id
-                        + '-'
-                        + parent.getAttribute('data-plakakodu')
-                    );
-
                 }
-            }
-        );
-    }
+            });
+        }
+    });
 </script>
-<script>
-    svgturkiyeharitasi();
-</script>
-
-
-<style>
-    /* Harita Stilleri */
-    .svg-turkiye-haritasi {
-        max-width: 1140px;
-        margin: 0 auto;
-        text-align: center;
-    }
-    .svg-turkiye-haritasi svg {
-        width: 100%;
-        height: auto;
-    }
-    .il-isimleri {
-        position: absolute;
-        z-index: 99;
-    }
-    .il-isimleri div {
-        background: #1094F6;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 13px;
-    }
-    #svg-turkiye-haritasi path {
-        cursor: pointer;
-        fill: #333; /* İllerin varsayılan rengi */
-        transition: fill 0.3s;
-    }
-    #svg-turkiye-haritasi path:hover {
-        fill: #ffc107; /* Üzerine gelince layout ile uyumlu sarı */
-    }
-
-    /* Kart Flipping Stilleri - Arka planlar temizlendi */
-    .image-flip:hover .backside, .image-flip.hover .backside {
-        transform: rotateY(0deg);
-    }
-    .image-flip:hover .frontside, .image-flip.hover .frontside {
-        transform: rotateY(180deg);
-    }
-    .mainflip {
-        transition: 1s;
-        transform-style: preserve-3d;
-        position: relative;
-    }
-    .frontside, .backside {
-        backface-visibility: hidden;
-        transition: 1s;
-        transform-style: preserve-3d;
-    }
-    .backside {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: rotateY(-180deg);
-    }
-    .frontside .card, .backside .card {
-        min-height: 312px;
-        background: rgba(255, 255, 255, 0.9); /* Kartlar okunabilsin diye hafif şeffaf beyaz */
-    }
-    .section-title {
-        color: #ffc107;
-    }
-</style>
-
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
