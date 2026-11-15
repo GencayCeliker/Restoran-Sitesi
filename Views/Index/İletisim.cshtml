@@ -83,7 +83,6 @@
                         <label class="text-dark small font-weight-bold">Güvenlik Doğrulaması</label>
                         <div class="captcha-container">
                             <div id="captchaBox">
-                                @* ViewBag'den gelen kod burada gösterilecek *@
                                 @(ViewBag.GosterilenKod ?? "HATA")
                             </div>
                             <button type="button" onclick="location.reload();" class="captcha-refresh" title="Kodu Yenile">
@@ -106,13 +105,11 @@
     </div>
 </section>
 <style>
-    /* Harita Alanı: Siyah çerçeve olmaması için */
     .map-wrap iframe {
         width: 100% !important;
         height: 100% !important;
     }
 
-    /* Form Input Güzelleştirme */
     .custom-input {
         border-radius: 10px !important;
         border: 1px solid #eee !important;
@@ -127,7 +124,6 @@
             box-shadow: 0 0 8px rgba(205, 164, 94, 0.2) !important;
         }
 
-    /* Captcha Tasarımı (Resimdeki Görünüm) */
     .captcha-container {
         display: flex;
         align-items: center;
@@ -147,7 +143,7 @@
         font-size: 20px;
         min-width: 130px;
         text-align: center;
-        text-decoration: line-through; /* Güvenlik kodu havası verir */
+        text-decoration: line-through;
     }
 
     .captcha-refresh {
@@ -182,6 +178,7 @@
         }
     };
 </script>
+
 <div class="map-header-section">
     <span class="map-subtitle">Lezzet Duraklarımız</span>
     <h2 class="map-title">Türkiye'deki <span>Şubelerimiz</span></h2>
@@ -192,9 +189,7 @@
     </div>
 </div>
 
-
 <style>
-    /* Başlık Alanı Stilleri */
     .map-header-section {
         text-align: center;
         margin-top: 50px;
@@ -203,7 +198,7 @@
 
     .map-subtitle {
         display: block;
-        font-family: 'Dancing Script', cursive; /* Layout'unda olan font */
+        font-family: 'Dancing Script', cursive;
         color: #cda45e;
         font-size: 26px;
         margin-bottom: 0px;
@@ -221,7 +216,6 @@
             color: #cda45e;
         }
 
-    /* Ayırıcı Çizgi ve İkon */
     .map-divider {
         display: flex;
         align-items: center;
@@ -241,9 +235,6 @@
             font-size: 20px;
         }
 
-
-
-    /* --- HARİTA STİLLERİ --- */
     .svg-turkiye-haritasi {
         max-width: 1140px;
         margin: 0 auto;
@@ -286,7 +277,6 @@
         pointer-events: none;
     }
 
-    /* --- EŞİT BOYUTLU FLIP CARD STİLLERİ --- */
     #team .section-title {
         text-align: center;
         color: #cda45e;
@@ -295,9 +285,8 @@
         font-weight: 800;
     }
 
-    /* Kartların yüksekliklerini burada sabitliyoruz */
     .image-flip, .mainflip {
-        height: 480px; /* İçeriğine göre bu değeri artırıp azaltabilirsin */
+        height: 480px;
         width: 100%;
     }
 
@@ -320,7 +309,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%; /* Kapsayıcıyı tam doldur */
+        height: 100%;
         backface-visibility: hidden;
         transition: 1s;
         transform-style: preserve-3d;
@@ -331,11 +320,10 @@
         box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
     }
 
-    /* Kart İç Tasarımı */
     #team .card {
-        height: 100%; /* Kartın içini %100 yap */
+        height: 100%;
         border: none;
-        background: #1a1a2e; /* Koyu tema */
+        background: #1a1a2e;
         display: flex;
         flex-direction: column;
     }
@@ -343,7 +331,7 @@
     #team .card-body {
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* İçeriği kartın geneline yay (Eşitlik sağlar) */
+        justify-content: space-between;
         padding: 20px;
     }
 
@@ -367,8 +355,6 @@
         font-size: 14px;
     }
 </style>
-
-
 
 <section>
     <div>
@@ -642,10 +628,9 @@
     </div>
 </section>
 
-<!-- Şubeler Listesi (Flip Card) -->
 <section id="team" class="pb-5">
     <div class="container">
-        <h5 class="section-title h1"><b>@ViewBag.il</b> Şubelerimiz</h5>
+        <h5 class="section-title h1"><b>@(ViewBag.il ?? "İstanbul")</b> Şubelerimiz</h5>
         <div class="row">
             @foreach (var x in Model)
             {
@@ -670,7 +655,7 @@
                                         <h4 class="card-title">@x.Sehir</h4>
                                         <div class="alert alert-danger">Tel: @x.Telefon</div>
 
-                                        <ul class="list-inline mt-3">
+                                        <ul class="list-inline mt-4">
                                             <li class="list-inline-item">
                                                 <a class="social-icon" target="_blank" href="#"><i class="fa fa-facebook"></i></a>
                                             </li>
@@ -695,8 +680,30 @@
     </div>
 </section>
 
+<section class="ftco-section bg-light pb-5" id="havaDurumuAlani">
+    <div class="container text-center">
+        <h2 class="mb-4">Güncel Hava Durumu</h2>
+
+        <div class="yukleniyor" id="yukleniyorSpinner" style="display:none;">
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw text-primary"></i>
+            <span class="sr-only">Yükleniyor...</span>
+        </div>
+
+        <div class="result shadow-sm p-4 bg-white" id="havaDurumuSonuc" style="display:none; max-width: 600px; margin: 0 auto; border-radius: 15px;">
+            <h4 id="lokasyon" class="font-weight-bold" style="color: #cda45e;"></h4>
+            <p id="aciklama" class="lead text-dark"></p>
+            <p id="sicaklik" class="h2 mb-3 text-dark"></p>
+            <div class="d-flex justify-content-around mt-4 text-muted">
+                <p id="hissedilenP"></p>
+                <p id="nemP"></p>
+                <p id="ruzgarP"></p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script>
+    // 1. HARİTA İŞLEMLERİ
     document.addEventListener("DOMContentLoaded", function () {
         const element = document.querySelector('#svg-turkiye-haritasi');
         const info = document.querySelector('.il-isimleri');
@@ -713,7 +720,7 @@
             });
 
             element.addEventListener('mousemove', function (event) {
-                const mapContainer = document.getElementById('map-container').getBoundingClientRect();
+                const mapContainer = document.querySelector('.svg-turkiye-haritasi').getBoundingClientRect();
                 info.style.top = (event.clientY - mapContainer.top - 40) + 'px';
                 info.style.left = (event.clientX - mapContainer.left + 15) + 'px';
             });
@@ -725,13 +732,83 @@
 
             element.addEventListener('click', function (event) {
                 if (event.target.tagName === 'path') {
-                    const parent = event.target.parentNode;
-                    const id = parent.getAttribute('id');
-                    if (id && id !== 'guney-kibris') {
-                        window.location.href = "/Index/İletisim?sehir=" + id;
+                    const ilAdi = event.target.parentNode.getAttribute('data-iladi');
+
+                    if (ilAdi && ilAdi !== 'Güney Kıbrıs') {
+                        window.location.href = "/Index/İletisim?sehir=" + encodeURIComponent(ilAdi);
                     }
                 }
             });
         }
     });
+
+    // 2. HAVA DURUMU İŞLEMLERİ
+    function havaDurumuCek(sehir) {
+        const spinner = document.getElementById('yukleniyorSpinner');
+        const sonucDiv = document.getElementById('havaDurumuSonuc');
+
+        if (!sehir || sehir.trim() === '') {
+            return;
+        }
+
+        // Türkçe dil desteği ile birlikte hava durumunu getir
+        const apiUrl = `https://wttr.in/${encodeURIComponent(sehir)}?format=j1&lang=tr`;
+
+        spinner.style.display = 'block';
+        sonucDiv.style.display = 'none';
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('API yanıt vermedi');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Güvenli veri kontrolü (hata vermesini engeller)
+                const alan = data.nearest_area?.[0]?.areaName?.[0]?.value || sehir;
+                const bolge = data.nearest_area?.[0]?.region?.[0]?.value || '';
+                const ulke = data.nearest_area?.[0]?.country?.[0]?.value || 'Türkiye';
+                const suan = data.current_condition?.[0];
+
+                if (!suan) throw new Error('Geçersiz veri');
+
+                const havaDurumu = suan.lang_tr?.[0]?.value || suan.weatherDesc?.[0]?.value || 'Bilinmiyor';
+
+                document.getElementById('lokasyon').textContent = `📍 ${alan}, ${bolge}, ${ulke}`;
+                document.getElementById('aciklama').textContent = `🌤️ Durum: ${havaDurumu}`;
+                document.getElementById('sicaklik').textContent = `🌡️ Sıcaklık: ${suan.temp_C}°C`;
+                document.getElementById('hissedilenP').textContent = `🤔 Hissedilen: ${suan.FeelsLikeC}°C`;
+                document.getElementById('nemP').textContent = `💧 Nem: %${suan.humidity}`;
+                document.getElementById('ruzgarP').textContent = `💨 Rüzgar: ${suan.windspeedKmph} km/s ${suan.winddir16Point}`;
+
+                sonucDiv.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                // API çökerse boş kutu kalmasın, kullanıcıya bilgi verelim
+                sonucDiv.innerHTML = '<p class="text-danger">Hava durumu servisine şu an ulaşılamıyor.</p>';
+                sonucDiv.style.display = 'block';
+            })
+            .finally(() => {
+                spinner.style.display = 'none';
+            });
+    }
+
+    // Sayfa yüklendiğinde çalışacak kısım
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        let haritadanGelenSehir = urlParams.get('sehir');
+
+        // Eğer adres çubuğunda şehir bilgisi YOKSA, varsayılan olarak İstanbul'u ayarla
+        if (!haritadanGelenSehir) {
+            haritadanGelenSehir = 'İstanbul';
+        }
+
+        // Hava durumu bölümünü gösterip veriyi çek
+        document.getElementById('havaDurumuAlani').style.display = 'block';
+        havaDurumuCek(haritadanGelenSehir);
+    });
 </script>
+
+<link href="~/hava-durumu-main/style.css" rel="stylesheet" />

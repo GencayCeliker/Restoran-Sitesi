@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "hava";
+    Layout = "~/Views/Shared/RestourantLayout.cshtml";
+}
+
+<h2>hava</h2>
+
+@{
+    ViewBag.Title = "Hava Durumu";
+    var sehir = "van"; // MVC'den gelen şehir
+}
+
+
+
+<div class="container">
+
+    <h2>Hava Durumu</h2>
+
+    <div class="yukleniyor" id="yukleniyorSpinner"></div>
+
+    <div class="result" id="havaDurumuSonuc" style="display:none;">
+        <p id="lokasyon"></p>
+        <p id="aciklama"></p>
+        <p id="sicaklik"></p>
+        <p id="hissedilenP"></p>
+        <p id="nemP"></p>
+        <p id="ruzgarP"></p>
+    </div>
+
+</div>
+
+<script>
+
+        function havaDurumuCek(sehir) {
+
+            const spinner = document.getElementById('yukleniyorSpinner');
+            const sonucDiv = document.getElementById('havaDurumuSonuc');
+
+            if (!sehir || sehir.trim() === '') {
+                alert('Şehir bilgisi bulunamadı.');
+                return;
+            }
+
+            const apiUrl = `https://wttr.in/${encodeURIComponent(sehir)}?format=j1`;
+
+            spinner.style.display = 'block';
+            sonucDiv.style.display = 'none';
+
+            fetch(apiUrl)
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error('API yanıt vermedi');
+                    }
+
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    if (!data.nearest_area || !data.current_condition) {
+                        throw new Error('Geçersiz veri');
+                    }
+
+                    const alan = data.nearest_area[0].areaName[0].value;
+                    const bolge = data.nearest_area[0].region[0].value;
+                    const ulke = data.nearest_area[0].country[0].value;
+
+                    const suan = data.current_condition[0];
+
+                    const havaDurumu =
+                        suan.lang_tr?.[0]?.value ||
+                        suan.weatherDesc?.[0]?.value ||
+                        'Bilinmiyor';
+
+                    const sicaklikC = suan.temp_C;
+                    const hissedilenC = suan.FeelsLikeC;
+                    const nem = suan.humidity;
+                    const ruzgarKmph = suan.windspeedKmph;
+                    const ruzgarYonu = suan.winddir16Point;
+
+                    document.getElementById('lokasyon').textContent =
+                        `📍 ${alan}, ${bolge}, ${ulke}`;
+
+                    document.getElementById('aciklama').textContent =
+                        `🌤️ Durum: ${havaDurumu}`;
+
+                    document.getElementById('sicaklik').textContent =
+                        `🌡️ Sıcaklık: ${sicaklikC}°C`;
+
+                    document.getElementById('hissedilenP').textContent =
+                        `🤔 Hissedilen: ${hissedilenC}°C`;
+
+                    document.getElementById('nemP').textContent =
+                        `💧 Nem: ${nem}%`;
+
+                    document.getElementById('ruzgarP').textContent =
+                        `💨 Rüzgar: ${ruzgarKmph} km/h ${ruzgarYonu}`;
+
+                    sonucDiv.style.display = 'block';
+                })
+
+                .catch(error => {
+
+                    console.error('Hata:', error);
+
+                    alert('Hava durumu alınamadı.');
+                })
+
+                .finally(() => {
+
+                    spinner.style.display = 'none';
+                });
+        }
+
+        // MVC'den gelen şehir
+        const sehir = '@sehir';
+
+        // Sayfa açılınca otomatik çalıştır
+        havaDurumuCek(sehir);
+
+</script>
+
+
+
+<script src="script.js"></script>
+<script src="~/hava-durumu-main/script.js"></script>
+<link href="~/hava-durumu-main/style.css" rel="stylesheet" />

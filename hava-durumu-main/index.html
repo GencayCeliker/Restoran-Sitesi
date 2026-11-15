@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Hava Durumu</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Hava Durumu</h1>
+    <input type="text" id="yerGir" placeholder="Yer adı girin (örn: Istanbul)">
+    <button onclick="havaDurumuCek()">Göster</button>
+    <div class="yukleniyor" id="yukleniyorSpinner"></div>
+    <div class="result" id="havaDurumuSonuc" style="display:none;">
+      <p id="lokasyon"></p>
+      <p id="aciklama"></p>
+      <p id="sicaklik"></p>
+      <p id="hissedilenP"></p>
+      <p id="nemP"></p>
+      <p id="ruzgarP"></p>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>

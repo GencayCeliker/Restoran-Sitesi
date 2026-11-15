@@ -13,7 +13,7 @@ using System.Web.Security;
 namespace Restorant_Sitesi.Controllers
 {
     [Authorize]
-    public class AdminController : Controller 
+    public class AdminController : Controller
     {
         WRestourantDBEntities db = new WRestourantDBEntities();
         public AdminController()
@@ -35,7 +35,7 @@ namespace Restorant_Sitesi.Controllers
                 filterContext.Result = RedirectToAction("GirisYap", "Index");
             }
         }
-      
+
         public ActionResult Index()
         {
             var gecmisRezervasyonlar = db.REZARVASYONLAR
@@ -68,7 +68,7 @@ namespace Restorant_Sitesi.Controllers
             var sonBlogYorumlar = db.DUYURUBLOGYORUMLARI.OrderByDescending(x => x.YorumID).Take(10).ToList();
             return View(Tuple.Create(sonRezervasyonlar, sonYorumlar, sonBlogYorumlar));
         }
-        public ActionResult RezervasyonGelmedi(int id,string returnUrl)
+        public ActionResult RezervasyonGelmedi(int id, string returnUrl)
         {
             var rez = db.REZARVASYONLAR.Find(id);
             if (rez != null)
@@ -364,19 +364,19 @@ namespace Restorant_Sitesi.Controllers
 
             var liste = db.REZARVASYONLAR.ToList();
 
-           
+
             if (!string.IsNullOrEmpty(aramaMetni))
             {
                 liste = liste.Where(x => x.MusteriAdSoyad.ToLower().Contains(aramaMetni.ToLower())).ToList();
             }
 
-           
+
             if (aramaTarihi != null)
             {
                 liste = liste.Where(x => x.Tarih == aramaTarihi).ToList();
             }
 
-           
+
             return View(liste.OrderByDescending(x => x.RezervasyonID).ToList());
         }
         public ActionResult YorumOnayla(int id)
@@ -821,36 +821,36 @@ namespace Restorant_Sitesi.Controllers
         }
 
         [HttpPost]
-public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
-{
-    if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
-    {
-        // 1. Klasör yolunu belirle
-        string klasörYolu = Server.MapPath("~/ResimlerMenu/");
-
-        // 2. Klasör fiziksel olarak yoksa OLUŞTUR (Hatanın kökten çözümü burası)
-        if (!System.IO.Directory.Exists(klasörYolu))
+        public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         {
-            System.IO.Directory.CreateDirectory(klasörYolu);
+            if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
+            {
+                // 1. Klasör yolunu belirle
+                string klasörYolu = Server.MapPath("~/ResimlerMenu/");
+
+                // 2. Klasör fiziksel olarak yoksa OLUŞTUR (Hatanın kökten çözümü burası)
+                if (!System.IO.Directory.Exists(klasörYolu))
+                {
+                    System.IO.Directory.CreateDirectory(klasörYolu);
+                }
+
+                // 3. Dosya adını ve tam yolu belirle
+                string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
+                string tamYol = Path.Combine(klasörYolu, dosyaAdi);
+
+                // 4. Kaydet
+                ResimDosyasi.SaveAs(tamYol);
+
+                // Veritabanına kaydedilecek yol
+                u.Resim = "/ResimlerMenu/" + dosyaAdi;
+            }
+
+            u.Durum = true;
+            db.URUNLER.Add(u);
+            db.SaveChanges();
+            TempData["Basarili"] = "Ürün başarıyla eklendi!";
+            return RedirectToAction("UrunListesi");
         }
-
-        // 3. Dosya adını ve tam yolu belirle
-        string dosyaAdi = Path.GetFileName(ResimDosyasi.FileName);
-        string tamYol = Path.Combine(klasörYolu, dosyaAdi);
-
-        // 4. Kaydet
-        ResimDosyasi.SaveAs(tamYol);
-        
-        // Veritabanına kaydedilecek yol
-        u.Resim = "/ResimlerMenu/" + dosyaAdi;
-    }
-
-    u.Durum = true;
-    db.URUNLER.Add(u);
-    db.SaveChanges();
-    TempData["Basarili"] = "Ürün başarıyla eklendi!";
-    return RedirectToAction("UrunListesi");
-}
 
         public ActionResult UrunSil(int id)
         {
@@ -931,12 +931,12 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         // 1. İÇERİKLERİ LİSTELEME
         public ActionResult IcerikYonetimi()
         {
-          
+
             var icerikler = db.ICERIKLER.OrderByDescending(x => x.IcerikID).ToList();
             return View(icerikler);
         }
 
-       
+
         public ActionResult IcerikEkle()
         {
             return View();
@@ -947,7 +947,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
 
         public ActionResult IcerikEkle(ICERIKLER model, HttpPostedFileBase RESIM, HttpPostedFileBase KAPAK)
         {
-           
+
             if (RESIM != null && RESIM.ContentLength > 0)
             {
                 string filename = Guid.NewGuid().ToString() + Path.GetExtension(RESIM.FileName);
@@ -968,7 +968,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
             db.SaveChanges();
             TempData["Basarili"] = "İçerik ve Dosya Başarıyla Eklendi.";
             return RedirectToAction("IcerikYonetimi");
-          
+
         }
 
         //public ActionResult IcerikEkle(ICERIKLER model, HttpPostedFileBase RESIM)
@@ -1073,7 +1073,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         {
             var silinecek = db.ICERIKLER.Find(id);
 
-           
+
             if (!string.IsNullOrEmpty(silinecek.Dosya))
             {
                 string yol = Request.MapPath("~/" + silinecek.Dosya);
@@ -1096,7 +1096,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
             return View();
         }
 
-        
+
         [HttpPost]
         public ActionResult MasaEkle(MASALAR yeniMasa)
         {
@@ -1106,7 +1106,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
                 return View();
             }
 
-           
+
             var varMi = db.MASALAR.FirstOrDefault(x => x.MasaNo == yeniMasa.MasaNo);
             if (varMi != null)
             {
@@ -1116,7 +1116,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
 
             try
             {
-               
+
                 yeniMasa.Durum = false;
 
                 db.MASALAR.Add(yeniMasa);
@@ -1131,14 +1131,14 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
             }
         }
 
-       
+
         public ActionResult MasaGuncelle(int id)
         {
             var masa = db.MASALAR.Find(id);
             return View(masa);
         }
 
-     
+
         [HttpPost]
         public ActionResult MasaGuncelle(MASALAR guncelMasa)
         {
@@ -1149,18 +1149,18 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
             return RedirectToAction("Masalar");
         }
 
-      
+
         public ActionResult MasaSil(int id)
         {
             var masa = db.MASALAR.Find(id);
-           
+
             if (masa.Durum == false)
             {
                 db.MASALAR.Remove(masa);
                 db.SaveChanges();
                 TempData["Basarili"] = "Masa tamamen silindi.";
             }
-           
+
             return RedirectToAction("Masalar");
         }
         public ActionResult KSefler()
@@ -1175,7 +1175,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
         }
 
         [HttpPost]
-    
+
         public ActionResult KSefEkle(SEFLER p, HttpPostedFileBase ResimDosyasi)
         {
             if (ResimDosyasi != null && ResimDosyasi.ContentLength > 0)
@@ -1329,11 +1329,11 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
                 k.Durum = true;
                 k.KayitTarihi = DateTime.Now;
 
-                db.SUBELER.Add(k); 
+                db.SUBELER.Add(k);
                 db.SaveChanges();
 
                 TempData["ekle"] = 1;
-                return RedirectToAction("Index"); 
+                return RedirectToAction("Index");
             }
             catch (Exception)
             {
@@ -1341,6 +1341,7 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
                 return View(k);
             }
         }
+
         public void SehirListesiGetir()
         {
             var iller = new List<string>() { "Adana", "Adıyaman", "Afyon", "Ağrı", "Amasya", "Ankara",
@@ -1353,7 +1354,52 @@ public ActionResult UrunEkle(URUNLER u, HttpPostedFileBase ResimDosyasi)
                 "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan",
                 "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce" };
             ViewBag.sehirler = iller;
-        
+
         }
+
+
+        public ActionResult Iletisim()
+        {
+
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Ayarlar()
+        {
+            var mevcutAyarlar = db.SITE_AYARLARI.FirstOrDefault();
+
+            if (mevcutAyarlar == null)
+            {
+                mevcutAyarlar = new SITE_AYARLARI();
+            }
+
+            return View(mevcutAyarlar);
+
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult AyarlarKaydet(SITE_AYARLARI a) // Formdan gelen verileri "a" parametresiyle yakalıyoruz
+        {
+            // 1. Veritabanındaki mevcut kaydı bul
+            var veri = db.SITE_AYARLARI.Find(a.AyarID);
+
+            if (veri == null)
+            {
+                return HttpNotFound("Ayar kaydı bulunamadı.");
+            }
+
+            // 2. Formdan gelen güncel verileri, veritabanındaki mevcut verinin üzerine yaz
+            // Bu kod, "a" içindeki tüm özellikleri (isimleri eşleşenleri) "veri" nesnesine aktarır.
+            // Tek tek (veri.SiteBaslik = a.SiteBaslik;) yazmaktan kurtarır.
+            db.Entry(veri).CurrentValues.SetValues(a);
+
+            // 3. Değişiklikleri kaydet
+            db.SaveChanges();
+
+            // İşlem başarılı mesajını gönder ve sayfayı yenile
+            TempData["Basarili"] = "Ayarlar başarıyla güncellendi!";
+            return RedirectToAction("Ayarlar");
+        }
+
     }
 }

@@ -245,14 +245,17 @@ namespace Restorant_Sitesi.Controllers
         public ActionResult İletisim(string sehir)
         {
             GuvenlikKoduUret();
-            var uyeler = db.SUBELER
+            var subeler = db.SUBELER
                    .Where(x => x.Sehir.ToLower() == (sehir ?? "").ToLower() && x.Durum == true)
                    .ToList();
 
             ViewBag.il = sehir?.ToUpper();
-
-            return View(uyeler);
-
+          
+            return View(subeler);
+        }
+        public ActionResult hava()
+        {
+            return View();
         }
         [HttpPost]
         public ActionResult MesajGonder(MESAJLAR p, string captchaInput)
