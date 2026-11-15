@@ -883,6 +883,11 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="hava-durumu-main\gorsel\baslangic.png" />
+    <Content Include="hava-durumu-main\gorsel\sonuc.png" />
+    <Content Include="hava-durumu-main\index.html" />
+    <Content Include="hava-durumu-main\script.js" />
+    <Content Include="hava-durumu-main\style.css" />
     <Content Include="images\about-1.jpg" />
     <Content Include="images\about-2.jpg" />
     <Content Include="images\about-3.jpg" />
@@ -1086,6 +1091,8 @@
     <Content Include="Content\summernote\font\summernote.woff" />
     <Content Include="Content\summernote\font\summernote.ttf" />
     <Content Include="Content\summernote\font\summernote.eot" />
+    <Content Include="hava-durumu-main\LICENSE" />
+    <Content Include="hava-durumu-main\README.md" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -1424,6 +1431,8 @@
     <Content Include="Views\Admin\KSefEkle.cshtml" />
     <Content Include="Views\Admin\KSefGuncelle.cshtml" />
     <Content Include="Views\Index\İletisim.cshtml" />
+    <Content Include="Views\Index\hava.cshtml" />
+    <Content Include="Views\Admin\Ayarlar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
