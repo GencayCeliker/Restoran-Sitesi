@@ -20,6 +20,21 @@ namespace Restorant_Sitesi.Controllers
         {
 
         }
+
+        // [Authorize] sadece giriş yapılmış olmasını kontrol eder.
+        // Yönetim paneline yalnızca "Admin" yetkili kullanıcılar girebilsin.
+        protected override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            base.OnAuthorization(filterContext);
+            if (filterContext.Result != null) return; // Giriş yapılmamış: [Authorize] zaten yönlendirdi
+
+            var yetki = Session["Yetki"] as string;
+            if (yetki != "Admin")
+            {
+                TempData["LoginError"] = "Yönetim paneline erişmek için yönetici hesabıyla giriş yapmalısınız.";
+                filterContext.Result = RedirectToAction("GirisYap", "Index");
+            }
+        }
       
         public ActionResult Index()
         {
