@@ -191,3 +191,7 @@ SQL Server varsayılan örnek olarak kuruluysa `data source=.\SQLEXPRESS` yerine
 ## 📌 Not
 
 Bu proje, ASP.NET MVC ile full-stack web geliştirme öğrenme sürecinin bir parçası olarak geliştirilmiştir.
+
+## 📄 Lisans
+
+Bu proje [MIT](LICENSE) lisansı altında sunulmuştur.
