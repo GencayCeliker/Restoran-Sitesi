@@ -290,10 +290,13 @@
             }
         }
 
-        /* Menü elemanlarının alt satıra geçmesini kesin olarak engeller */
-        #ftco-nav .navbar-nav {
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
+        /* Masaüstünde menü elemanlarının alt satıra geçmesini engeller.
+           Sadece geniş ekranda uygulanır; mobilde açılan menü alt alta dizilir (issue #5). */
+        @@media (min-width: 992px) {
+            #ftco-nav .navbar-nav {
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+            }
         }
 
         /* Menü çok kalabalık olduğu için linkler arası boşluğu biraz daha daraltıyoruz */
