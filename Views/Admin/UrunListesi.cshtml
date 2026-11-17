@@ -42,7 +42,7 @@
                                         <div class="mr-3">
                                             @if (!string.IsNullOrEmpty(x.Resim))
                                             {
-                                                <img src="@x.Resim" class="rounded-circle shadow-sm" width="50" height="50" style="object-fit: cover; border: 2px solid #fff;">
+                                                <img loading="lazy" src="@x.Resim" class="rounded-circle shadow-sm" width="50" height="50" style="object-fit: cover; border: 2px solid #fff;">
                                             }
                                             else
                                             {
