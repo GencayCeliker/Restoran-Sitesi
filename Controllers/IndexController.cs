@@ -52,36 +52,6 @@ namespace Restorant_Sitesi.Controllers
         }
 
         [HttpPost]
-        public ActionResult RezarvasyonYap(REZARVASYONLAR p, string Tarih, string Saat)
-        {
-            if (!string.IsNullOrEmpty(Tarih))
-            {
-                DateTime tempTarih;
-                string[] formatlar = { "dd/MM/yyyy", "dd.MM.yyyy", "yyyy-MM-dd" };
-                if (DateTime.TryParseExact(Tarih, formatlar, CultureInfo.InvariantCulture, DateTimeStyles.None, out tempTarih))
-                {
-                    p.Tarih = tempTarih;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(Saat))
-            {
-                TimeSpan tempSaat;
-                if (TimeSpan.TryParse(Saat, out tempSaat))
-                {
-                    p.Saat = tempSaat;
-                }
-            }
-
-            p.DurumID = 1;
-            db.REZARVASYONLAR.Add(p);
-            db.SaveChanges();
-
-            TempData["Mesaj"] = "Rezervasyon talebiniz alındı, onaylanınca size dönüş yapılacaktır.";
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
         public ActionResult YorumYap(string AdSoyad, string Mail, string YorumIcerik, string KullaniciKodu)
         {
 
@@ -232,9 +202,10 @@ namespace Restorant_Sitesi.Controllers
             var icerikbbul = db.ICERIKLER.Find(id);
             return PartialView(icerikbbul);
         }
+        // Eski adres: rezervasyon sayfası RezervasyonController'a taşındı.
         public ActionResult Rezerve()
         {
-            return View();
+            return RedirectToActionPermanent("Index", "Rezervasyon");
         }
        
         public ActionResult Seflerimiz()
