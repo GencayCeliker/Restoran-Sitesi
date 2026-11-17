@@ -125,11 +125,11 @@
                             {
                                 for (int i = 0; i < ortalamaPuan; i++)
                                 {
-                                    <img src="~/images/doluyıldız.png" width="20" class="mr-1" />
+                                    <img src="~/images/doluyıldız.png" width="20" height="20" class="mr-1" alt="Dolu yıldız" />
                                 }
                                 for (int i = 0; i < 5 - ortalamaPuan; i++)
                                 {
-                                    <img src="~/images/bosyıyldız.png" width="20" class="mr-1" />
+                                    <img src="~/images/bosyıyldız.png" width="20" height="20" class="mr-1" alt="Boş yıldız" />
                                 }
                             }
                             else
@@ -137,12 +137,12 @@
                                 int tamKisim = (int)ortalamaPuan;
                                 for (int i = 0; i < tamKisim; i++)
                                 {
-                                    <img src="~/images/doluyıldız.png" width="20" class="mr-1" />
+                                    <img src="~/images/doluyıldız.png" width="20" height="20" class="mr-1" alt="Dolu yıldız" />
                                 }
-                                <img src="~/images/yarımyıldız.png" width="20" class="mr-1" />
+                                <img src="~/images/yarımyıldız.png" width="20" height="20" class="mr-1" alt="Yarım yıldız" />
                                 for (int i = 0; i < 4 - tamKisim; i++)
                                 {
-                                    <img src="~/images/bosyıyldız.png" width="20" class="mr-1" />
+                                    <img src="~/images/bosyıyldız.png" width="20" height="20" class="mr-1" alt="Boş yıldız" />
                                 }
                             }
                         </div>
@@ -186,7 +186,7 @@
                             {
                                 <li class="comment">
                                     <div class="vcard bio">
-                                        <img loading="lazy" src="/images/person_1.jpg" alt="Kullanıcı" class="rounded-circle shadow-sm">
+                                        <img loading="lazy" src="/images/person_1.jpg" width="50" height="50" alt="Kullanıcı" class="rounded-circle shadow-sm">
                                     </div>
                                     <div class="comment-body p-4 bg-light rounded shadow-sm mb-4" style="border-left: 5px solid #d65106;">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -197,11 +197,11 @@
                                                 <div class="rating-stars">
                                                     @for (int i = 0; i < (yorum.Yildiz ?? 0); i++)
                                                     {
-                                                        <img loading="lazy" src="~/images/doluyıldız.png" width="18" class="mr-1" alt="Dolu Yıldız" />
+                                                        <img loading="lazy" src="~/images/doluyıldız.png" width="18" height="18" class="mr-1" alt="Dolu Yıldız" />
                                                     }
                                                     @for (int i = 0; i < 5 - (yorum.Yildiz ?? 0); i++)
                                                     {
-                                                        <img loading="lazy" src="~/images/bosyıyldız.png" width="18" class="mr-1" alt="Boş Yıldız" />
+                                                        <img loading="lazy" src="~/images/bosyıyldız.png" width="18" height="18" class="mr-1" alt="Boş Yıldız" />
                                                     }
                                                 </div>
                                             </div>
