@@ -166,6 +166,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\RezervasyonController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1421,7 +1422,7 @@
     <Content Include="Views\Admin\UrunListesi.cshtml" />
     <Content Include="Views\Admin\UrunGuncelle.cshtml" />
     <Content Include="Views\Admin\UrunEkle.cshtml" />
-    <Content Include="Views\Index\Rezerve.cshtml" />
+    <Content Include="Views\Rezervasyon\Index.cshtml" />
     <Content Include="Views\Admin\Rezervasyonlar.cshtml" />
     <Content Include="SecretSettings.config" />
     <Content Include="Views\Admin\Masalar.cshtml" />

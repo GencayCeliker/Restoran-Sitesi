@@ -45,16 +45,17 @@
 
             @{
                 string aktifSayfa = ViewContext.RouteData.Values["action"].ToString();
+                string aktifController = ViewContext.RouteData.Values["controller"].ToString();
             }
 
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item @(aktifSayfa == "Index" ? "active" : "")">
+                    <li class="nav-item @(aktifController == "Index" && aktifSayfa == "Index" ? "active" : "")">
                         <a href="/Index/Index" class="nav-link">Ana Sayfa</a>
                     </li>
                     <li class="nav-item @(aktifSayfa == "Hakkimizda" ? "active" : "")"><a href="/Index/Hakkimizda" class="nav-link">Hakkımızda</a></li>
                     <li class="nav-item @(aktifSayfa == "Menulerimiz" ? "active" : "")"><a href="/Index/Menulerimiz" class="nav-link">Menü</a></li>
-                    <li class="nav-item  @(aktifSayfa == "Rezerve" ? "active" : "")"><a href="/Index/Rezerve" class="nav-link">Rezervasyon</a></li>
+                    <li class="nav-item @(aktifController == "Rezervasyon" ? "active" : "")"><a href="/Rezervasyon" class="nav-link">Rezervasyon</a></li>
                    
 
                     <li class="nav-item @(aktifSayfa == "Bloglar" || aktifSayfa == "DUYURULABLOGLARDETAY" ? "active" : "")">
