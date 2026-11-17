@@ -186,7 +186,7 @@
                             {
                                 <li class="comment">
                                     <div class="vcard bio">
-                                        <img src="/images/person_1.jpg" alt="Kullanıcı" class="rounded-circle shadow-sm">
+                                        <img loading="lazy" src="/images/person_1.jpg" alt="Kullanıcı" class="rounded-circle shadow-sm">
                                     </div>
                                     <div class="comment-body p-4 bg-light rounded shadow-sm mb-4" style="border-left: 5px solid #d65106;">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -197,11 +197,11 @@
                                                 <div class="rating-stars">
                                                     @for (int i = 0; i < (yorum.Yildiz ?? 0); i++)
                                                     {
-                                                        <img src="~/images/doluyıldız.png" width="18" class="mr-1" alt="Dolu Yıldız" />
+                                                        <img loading="lazy" src="~/images/doluyıldız.png" width="18" class="mr-1" alt="Dolu Yıldız" />
                                                     }
                                                     @for (int i = 0; i < 5 - (yorum.Yildiz ?? 0); i++)
                                                     {
-                                                        <img src="~/images/bosyıyldız.png" width="18" class="mr-1" alt="Boş Yıldız" />
+                                                        <img loading="lazy" src="~/images/bosyıyldız.png" width="18" class="mr-1" alt="Boş Yıldız" />
                                                     }
                                                 </div>
                                             </div>

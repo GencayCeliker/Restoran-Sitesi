@@ -38,7 +38,7 @@
                             @foreach (var x in Model)
                             {
                                 <tr>
-                                    <td><img src="@x.Resim" width="60" class="rounded" /></td>
+                                    <td><img loading="lazy" src="@x.Resim" width="60" class="rounded" /></td>
                                     <td>@Html.Raw(x.Baslik)</td>
                                     <td>
                                         @if (x.HakkimdaID == 1)
