@@ -13,6 +13,23 @@
 
 ---
 
+## 🎬 Demo
+
+![demo-site](docs/demo-site.gif)
+
+**Müşteri sitesi:** ana sayfa, menü ve rezervasyon formu; talep gönderilince "İşlem Başarılı" bildirimi.
+
+![demo-admin](docs/demo-admin.gif)
+
+**Yönetim paneli:** giriş, dashboard'da bekleyen rezervasyon, rezervasyonlar ve şefler.
+
+| Ana sayfa | Rezervasyon formu | Yönetim paneli: rezervasyonlar |
+| --- | --- | --- |
+| ![Ana sayfa](docs/anasayfa.png) | ![Rezervasyon formu](docs/rezervasyon.png) | ![Yönetim paneli: rezervasyonlar](docs/admin-rezervasyonlar.png) |
+
+> Görüntüler, depodaki kurulum script'iyle kurulan örnek veritabanı üzerinde uygulama çalıştırılarak alınmıştır.
+
+
 ## ✨ Özellikler
 
 ### 🌐 Müşteri tarafı (`IndexController`)
