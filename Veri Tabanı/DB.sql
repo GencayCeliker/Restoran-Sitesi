@@ -468,9 +468,9 @@ INSERT [dbo].[DUYURULABLOGLAR] ([DuyuruID], [Baslik], [Icerik], [Tarih], [Resim]
 SET IDENTITY_INSERT [dbo].[DUYURULABLOGLAR] OFF;
 GO
 SET IDENTITY_INSERT [dbo].[DUYURUBLOGYORUMLARI] ON;
-INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (2, 2, N'Yusuf Erdoğan', N'yusuf@gmail.com', CAST(N'2025-10-10T00:00:00.000' AS DateTime), N'Tatlı Çok Güzeldi ', 5, 1);
-INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (3, 3, N'Mustafa Altın', N'mıstk@gmail.com', CAST(N'2026-10-10T00:00:00.000' AS DateTime), N'Tek Tercihimiz', 5, 1);
-INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (4, 4, N'Eyşan Mutlu', N'eysan@gmail.com', CAST(N'2026-10-10T00:00:00.000' AS DateTime), N'Rezervasyon Sistemi Çok Başarlı Olmuş', 4, 1);
+INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (2, 2, N'Yusuf Erdoğan', N'yusuf@mail.com', CAST(N'2025-10-10T00:00:00.000' AS DateTime), N'Tatlı Çok Güzeldi ', 5, 1);
+INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (3, 3, N'Mustafa Altın', N'mıstk@mail.com', CAST(N'2026-10-10T00:00:00.000' AS DateTime), N'Tek Tercihimiz', 5, 1);
+INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (4, 4, N'Eyşan Mutlu', N'eysan@mail.com', CAST(N'2026-10-10T00:00:00.000' AS DateTime), N'Rezervasyon Sistemi Çok Başarlı Olmuş', 4, 1);
 INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (5, 1, N'wqeq', N'wqewqewq@mail.com', CAST(N'2026-02-26T21:27:45.327' AS DateTime), N'qwewqeqw', 4, 1);
 INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (6, 2, N'qwewqe', N'qwewqeq@mail.com', CAST(N'2026-02-26T22:01:43.117' AS DateTime), N'wqeqw', 4, 0);
 INSERT [dbo].[DUYURUBLOGYORUMLARI] ([YorumID], [DuyuruID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Yildiz], [Durum]) VALUES (8, 2, N'asdasda', N'sdsadsa@mail.com', CAST(N'2026-03-04T20:32:14.447' AS DateTime), N'werfwr', 5, 0);
@@ -691,7 +691,7 @@ INSERT [dbo].[YORUMLAR] ([YorumID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMet
 INSERT [dbo].[YORUMLAR] ([YorumID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Durum]) VALUES (8, N'Emrah Çpkan', N'emrah@mail.com', CAST(N'2026-02-20' AS Date), N'Tatlılar Çok Güzeldi.', 1);
 INSERT [dbo].[YORUMLAR] ([YorumID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Durum]) VALUES (9, N'Ahmet Çakar', N'qwewqeqw@mail.com', CAST(N'2026-02-24' AS Date), N'wqeqweqweqwewqewq', 1);
 INSERT [dbo].[YORUMLAR] ([YorumID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Durum]) VALUES (11, N'wewqewqeq', N'qweqwe@mail.com', CAST(N'2026-02-26' AS Date), N'qwewqeqw', 1);
-INSERT [dbo].[YORUMLAR] ([YorumID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Durum]) VALUES (12, N'Adahan karadeniz', N'nahada@gmail.com', CAST(N'2026-04-08' AS Date), N'KomtanLogar', 1);
+INSERT [dbo].[YORUMLAR] ([YorumID], [MusteriAdSoyad], [Mail], [Tarih], [YorumMetni], [Durum]) VALUES (12, N'Adahan karadeniz', N'nahada@mail.com', CAST(N'2026-04-08' AS Date), N'KomtanLogar', 1);
 SET IDENTITY_INSERT [dbo].[YORUMLAR] OFF;
 GO
 
